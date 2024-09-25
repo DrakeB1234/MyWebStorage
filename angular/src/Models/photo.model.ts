@@ -1,3 +1,4 @@
 export interface Photo {
-  file: File  
+  fileName: string,
+  fileLength: number
 }

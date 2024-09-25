@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using api.Data;
 using api.Models;
-using api.Models.Domain;
 using api.Helpers;
 
 namespace api.Controllers
@@ -30,12 +29,20 @@ namespace api.Controllers
         [HttpGet("GetAllPhotos")]
         public IActionResult GetAllPhotos()
         {
+            List<PhotoFile> fileList = new List<PhotoFile>();
+            
+            // LINQ
             var fileNames = from filePath in Directory.GetFiles(strPath, "*", SearchOption.AllDirectories)
-            let filename = Path.GetFileName(filePath)
-            orderby filename
-            select filename;
+                let filename = Path.GetFileName(filePath)
+                select filename;
 
-            return Ok(fileNames);
+            foreach (var item in fileNames)
+            {
+                var fileInfo = new FileInfo(strPath + "/" + item);
+                fileList.Add(new PhotoFile(item, fileInfo.Length));
+            }
+
+            return Ok(fileList);
         }
 
         [HttpGet("GetPhotoFile/{path}")]

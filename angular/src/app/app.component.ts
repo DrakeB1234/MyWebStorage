@@ -3,12 +3,12 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Photo } from '../Models/photo.model';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, AsyncPipe],
+  imports: [RouterOutlet, HttpClientModule, AsyncPipe, DecimalPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
