@@ -12,32 +12,41 @@ namespace api.Controllers
     [ApiController]
     public class PhotosController: ControllerBase
     {
-        // Get Config
-        IConfiguration config = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .AddEnvironmentVariables()
-            .Build();
 
-        private readonly StorageDbContext dbContext;
+        private readonly IConfiguration config;
+        private readonly string strPath;
         
-        public PhotosController(StorageDbContext dbContext)
+        public PhotosController()
         {
-            this.dbContext = dbContext;
+            // Get Config
+            this.config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Build();
+
+            this.strPath = config.GetValue<string>("PhotoUploadPath");
         }
         
-        [HttpGet]
+        [HttpGet("GetAllPhotos")]
         public IActionResult GetAllPhotos()
         {
-            string strPath = config.GetValue<string>("PhotoUploadPath");
-
-            // Get file names from dir, then check if duplicate name
-            var fileNames = Directory.GetFiles(strPath, "*", SearchOption.AllDirectories)
-                .ToList();
+            var fileNames = from filePath in Directory.GetFiles(strPath, "*", SearchOption.AllDirectories)
+            let filename = Path.GetFileName(filePath)
+            orderby filename
+            select filename;
 
             return Ok(fileNames);
         }
 
-        [HttpPost]
+        [HttpGet("GetPhotoFile/{path}")]
+        public IActionResult GetPhotoFile(string path)
+        {
+            var image = System.IO.File.OpenRead(strPath + "/" + path);
+
+            return File(image, "image/jpeg");
+        }
+
+        [HttpPost("AddPhoto")]
         public IActionResult UploadPhoto(IFormFile file)
         {
             return Ok(new UploadHandler().Upload(file));
