@@ -17,11 +17,11 @@
 
 <h2 id="routes">📍 API Endpoints</h2>
 ​
-| route               | description                                          
-|----------------------|-----------------------------------------------------
+| route                                | description                                          
+|--------------------------------------|-----------------------------------------------------
 | <kbd>GET /api/GetAllPhotos</kbd>     | retrieves all photos in specified directory set in backend variable see [response details](#get-all-photos)
 | <kbd>GET /api/GetPhotoFile</kbd>     | retrieves specified photo based on file path see [request details](#get-photo-file)
-| <kbd>POST /api/AddPhoto</kbd>     | adds photo to specified directory see [request details](#add-photo)
+| <kbd>POST /api/AddPhoto</kbd>        | adds photo to specified directory see [request details](#add-photo)
 
 <h3 id="get-all-photos">GET /api/GetAllPhotos</h3>
 
