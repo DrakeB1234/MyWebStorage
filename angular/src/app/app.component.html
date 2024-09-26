@@ -1,22 +1,19 @@
-<div class="grid place-items-center bg-slate-50 w-screen pt-4 pb-4">
-  <div class="flex-col justify-center space-y-4 m-2">
-    @if (photos$ | async; as photos) {
-      @if (photos.length > 0) {
-        @for (item of photos; track $index) {
-          <div class="flex-col bg-slate-100 border-2 border-slate-200 drop-shadow-md rounded-[1em] overflow-hidden">
-            <img
-              class="object-contain object-center w-full max-h-[300px]"
-              src="https://localhost:7160/api/Photos/GetPhotoFile/{{item.fileName}}"
-              alt="nature image"
-            />
-            <p class="p-2 bg-slate-300 text-cyan-950 font-semibold">{{item.fileName}}</p>
-            <p class="p-2 bg-slate-300 text-cyan-900 font-medium">{{item.fileLength / 1024 / 1024| number: "1.0-2"}} mb</p>
-          </div>
-        }
-      }
-      @else {
-        <p>No photos found</p>
-      }
-    }
-  </div>
+<div class="grid place-content-start bg-slate-100 h-screen w-screen overflow-x-hidden no-scrollbar">
+  <app-header></app-header>
+  <div class="flex flex-wrap items-center
+  gap-1 p-2 md:p-6 w-screen place-self-center"
+  *ngIf="!isLoading"
+  >
+    <div class="flex-auto max-w-[400px]" *ngFor="let item of data">
+      <img
+        class="object-cover rounded-md h-[150px] md:h-[200px] w-full"
+        ngSrc="https://localhost:7160/api/Photos/GetPhotoFile/{{item.fileName}}"
+        alt="{{item.fileName}}"
+        width="400"
+        height="250"
+        priority
+      />
+    </div>
+  </div>  
+  <div class="place-self-center text-cyan-950 font-medium text-[1.2rem]" *ngIf="isLoading">Loading Photos...</div>
 </div>
