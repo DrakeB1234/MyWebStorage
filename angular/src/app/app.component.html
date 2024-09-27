@@ -1,5 +1,5 @@
 <div class="grid place-content-start bg-slate-100 h-screen w-screen overflow-x-hidden no-scrollbar">
-  <app-header></app-header>
+  <app-header (toggleAddFilesComponent)="toggleAddFilesModal()"></app-header>
   <div class="flex flex-wrap items-center
   gap-1 p-2 md:p-6 w-screen place-self-center"
   *ngIf="!isLoading"
@@ -7,13 +7,14 @@
     <div class="flex-auto max-w-[400px]" *ngFor="let item of data">
       <img
         class="object-cover rounded-md h-[150px] md:h-[200px] w-full"
-        ngSrc="https://localhost:7160/api/Photos/GetPhotoFile/{{item.fileName}}"
+        src="https://localhost:7160/api/Photos/GetPhotoFile/{{item.fileName}}"
         alt="{{item.fileName}}"
-        width="400"
-        height="250"
         priority
       />
     </div>
   </div>  
-  <div class="place-self-center text-cyan-950 font-medium text-[1.2rem]" *ngIf="isLoading">Loading Photos...</div>
+  <div class="text-center w-screen pt-4 text-cyan-950 font-medium text-[1.2rem]" *ngIf="isLoading">Loading Photos...</div>
 </div>
+
+<!-- Add Files Form Modal -->
+<app-addfilesformmodal *ngIf="isAddFilesModalOpen" (toggleAddFilesComponent)="toggleAddFilesModal()"></app-addfilesformmodal>

@@ -1,12 +1,36 @@
 <header>
-  <div class="flex gap-2 md:gap-4 items-center">
-    <div class="cursor-pointer p-4
-    transition-background ease-in duration-150 bg-none hover:bg-slate-200
-    ">
-      <img class="h-[20px] md:h-[25px]" src="/icons/icon-menu-outline.svg" alt="[]" />
+  <div class="flex gap-2 md:gap-4 items-center justify-start w-screen">
+    <!-- Dropdown and toggle button items -->
+    <div class="relative">
+      <div (click)="toggleDropdown()" class="p-4 cursor-pointer
+      transition-background ease-in duration-150 bg-none hover:bg-slate-300
+      ">
+        <img class="h-[20px] md:h-[25px]" src="/icons/icon-menu-outline.svg" alt="[]" />
+      </div>
+
+      <div [ngClass]="isDropdownOpen ? 'transition ease-out duration-200 transform opacity-100' : 'transition ease-in duration-75 transform opacity-0 scale-x-90'" 
+      class="absolute top-13 left-0 md:left-2 rounded-lg w-screen md:w-[600px]
+      bg-white shadow-2xl shadow-black/50 cursor-default z-10">
+        <div class="p-4">
+          <p class="text-slate-700 font-bold text-lg">Current Directory</p>
+          <div class="flex gap-2 items-center">
+            <img class="h-[20px]" src="/icons/icon-folder-outline.svg" />
+            <p class="text-slate-900 font-light text-base">/Photos</p>
+          </div>
+        </div>
+        <div class="flex justify-center p-4">
+          <button (click)="toggleAddFiles()" class="bg-blue-200 hover:bg-blue-300 w-full rounded-md p-2
+          transition-colors ease-in duration-75
+          ">
+          <span class="text-slate-700 font-semibold text-base">Upload Files to </span><span class="text-slate-900 font-light text-base">/Photos</span>
+        </button>
+        </div>
+      </div>
+
     </div>
     <div class="text-slate-950 font-semibold text-base md:text-xl">
       <p>My Web Storage</p>
     </div>
   </div>
+
 </header>

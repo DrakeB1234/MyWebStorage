@@ -3,11 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import { Photo } from '../Models/photo.model';
 import { AsyncPipe, DecimalPipe, NgOptimizedImage, NgFor, CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
+import { AddfilesformmodalComponent } from './addfilesformmodal/addfilesformmodal.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AsyncPipe, DecimalPipe, NgOptimizedImage, NgFor, CommonModule, HeaderComponent],
+  imports: [RouterOutlet, AsyncPipe, DecimalPipe, NgOptimizedImage, NgFor, CommonModule, HeaderComponent, AddfilesformmodalComponent],
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
@@ -23,5 +24,12 @@ export class AppComponent implements OnInit {
         this.isLoading = false;
         this.data = photosData
       });
+  }
+
+  // Toggles
+  isAddFilesModalOpen: boolean = false;
+
+  toggleAddFilesModal() {
+    this.isAddFilesModalOpen = !this.isAddFilesModalOpen;
   }
 }
