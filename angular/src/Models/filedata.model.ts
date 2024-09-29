@@ -1,4 +1,4 @@
-export interface Photo {
+export interface FileData {
   fileName: string,
   fileLength: number
 }

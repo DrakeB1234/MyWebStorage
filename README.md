@@ -2,55 +2,93 @@
 
 <p align="center">
  <a href="#tech">Technologies</a> • 
-  <a href="#routes">API Endpoints</a> •
+  <a href="#routes">API Endpoints</a>
 </p>
 
 <p align="center">
     <b>This repo includes both frontend and backend services to allow users to deploy their own server at home and save files to a directory of their choosing. I personally created this for my own use and hosting on a raspberry pi!</b>
 </p>
-
+<hr>
 <h2 id="technologies">💻 Technologies</h2>
 
-- Angular17
-- ASP.NET WEB API
+- Angular 18
+- ASPNET WEB API
 - Tailwind
 
+<hr>
 <h2 id="routes">📍 API Endpoints</h2>
+<p align="center">
+ <a href="#getting-files">Getting Files</a> • 
+  <a href="#posting-files">Posting Files</a>
+</p>
 ​
-| route                                | description                                          
-|--------------------------------------|-----------------------------------------------------
-| <kbd>GET /api/GetAllPhotos</kbd>     | retrieves all photos in specified directory set in backend variable see [response details](#get-all-photos)
-| <kbd>GET /api/GetPhotoFile</kbd>     | retrieves specified photo based on file path see [request details](#get-photo-file)
-| <kbd>POST /api/AddPhoto</kbd>        | adds photo to specified directory see [request details](#add-photo)
+<h4 id="getting-files">Getting Files</h4> 
 
-<h3 id="get-all-photos">GET /api/GetAllPhotos</h3>
+<code>/api/GetAllFilePaths</code> 
+<sub><sup>Returns a list of all file paths in root directory</sup></sub>
 
-**RESPONSE**
-```json
-{
-  "fileName": "Capture.png",
-  "fileLength": 19283
-}
-```
+<details>
+ <summary><code>GET</code></summary>
 
-<h3 id="get-all-photos">GET /api/GetAllPhotos</h3>
+##### Parameters
 
-**RESPONSE**
-```json
-{
-  "fileName": "Capture.png",
-  "fileLength": 19283
-}
-```
+> None
 
-<h3 id="add-photo">GET /api/GetPhotoFile</h3>
+##### Responses
 
-**REQUEST**
-```json
-{
-  "file": "C:/DCIM/Dog-19230.jpg",
-}
-```
+> | http code     | content-type                             | response                                                            |
+> |---------------|------------------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json; charset=utf-8`        | String[] FilePaths                                |
+> | `400`         | `application/json`                       | `{"code":"400","message":"Bad Request"}`                            |
+
+</details><br>
+
+<code>/api/GetImage/{path}</code> 
+<sub><sup>Returns an image based on the path in param (Used in html to retrieve image from server)</sup></sub>
+
+<details>
+ <summary><code>GET</code></summary>
+
+##### Parameters
+
+> | name      |  type     | data type               | description                                                           |
+> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
+> | Path      |  required | string   | path of the file recieved from the endpoint 'GetAllFilePaths'  |
+
+##### Responses
+
+> | http code     | content-type                             | response                                                            |
+> |---------------|------------------------------------------|---------------------------------------------------------------------|
+> | `200`         | `image/{extension}`        | File Image                                |
+> | `400`         | `application/json`                       | `{"code":"400","message":"Bad Request"}`                            |
+
+</details><br>
+
+<h4 id="posting-files">Posting Files</h4> 
+
+<code>/api/AddFiles</code> 
+<sub><sup>Add a list of files into the directory specified (If no path provided, then root is assumed)</sup></sub>
+
+<details>
+ <summary><code>POST</code></summary>
+
+##### Parameters
+
+> | name      |  type     | data type               | description                                                           |
+> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
+> | Path      |  not required | string   | path to upload images into based from root  |
+> | Files      |  required | FileList   | List of files from form data  |
+
+##### Responses
+
+> | http code     | content-type                             | response                                                            |
+> |---------------|------------------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json; charset=utf-8`        | `{"code":"200","message":"All files successfully uploaded to {path}"}`                               |
+> | `400`         | `application/json`                       | `{"code":"400","message":"Bad Request"}`                            |
+
+</details><br>
+
+<hr>
 
 <h3>Documentations that might help</h3>
 

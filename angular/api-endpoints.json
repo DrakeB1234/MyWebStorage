@@ -1,0 +1,6 @@
+{
+  "GetAllFilePaths": "https://localhost:7160/api/Files/GetAllFilePaths",
+  "getImage": "https://localhost:7160/api/Files/GetImage/",
+  "postFiles": "https://localhost:7160/api/Files/AddFiles",
+  "getAllDirectories": "https://localhost:7160/api/Folder/GetAllDirectories/"
+}
