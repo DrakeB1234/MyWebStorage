@@ -25,7 +25,7 @@
 <h4 id="getting-files">Getting Files</h4> 
 
 <code>/api/GetAllFilePaths</code> 
-<sub><sup>Returns a list of all file paths in root directory</sup></sub>
+<sub>Returns a list of all file paths in root directory</sub>
 
 <details>
  <summary><code>GET</code></summary>
@@ -44,7 +44,7 @@
 </details><br>
 
 <code>/api/GetImage/{path}</code> 
-<sub><sup>Returns an image based on the path in param (Used in html to retrieve image from server)</sup></sub>
+<sub>Returns an image based on the path in param (Used in html to retrieve image from server)</sub>
 
 <details>
  <summary><code>GET</code></summary>
@@ -67,7 +67,7 @@
 <h4 id="posting-files">Posting Files</h4> 
 
 <code>/api/AddFiles</code> 
-<sub><sup>Add a list of files into the directory specified (If no path provided, then root is assumed)</sup></sub>
+<sub>Add a list of files into the directory specified (If no path provided, then root is assumed)</sub>
 
 <details>
  <summary><code>POST</code></summary>

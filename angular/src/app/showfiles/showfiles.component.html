@@ -1,0 +1,16 @@
+<div class="flex flex-wrap items-center
+gap-1 p-2 md:p-6 w-screen place-self-center"
+>
+    @for(file of files; track file.fileName) {
+      <div class="flex-auto max-w-[180px] md:max-w-[400px] ">
+        <img
+          class="object-cover rounded-md h-[120px] md:h-[150px] w-full"
+          src="{{apiEndpoints.getImage}}{{file.fileName}}"
+          alt="{{file.fileName}}"
+          priority
+        />
+      </div>
+    } @empty {
+      <p class="text-center w-screen pt-4 text-cyan-950 font-medium text-[1.2rem]">No Files Found!</p>
+    }
+</div>  

@@ -1,21 +1,6 @@
 <div class="grid place-content-start bg-slate-100 h-screen w-screen overflow-x-hidden no-scrollbar">
-  <app-header (toggleAddFilesComponent)="toggleAddFilesModal()" (refreshFileData)="getFilesData()"></app-header>
-  <div class="flex flex-wrap items-center
-  gap-1 p-2 md:p-6 w-screen place-self-center"
-  >
-      @for(file of files; track $index) {
-        <div class="flex-auto max-w-[180px] md:max-w-[400px] ">
-          <img
-            class="object-cover rounded-md h-[150px] md:h-[200px] w-full"
-            src="{{apiEndpoints.getImage}}{{file.fileName}}"
-            alt="{{file.fileName}}"
-            priority
-          />
-        </div>
-      } @empty {
-        <p class="text-center w-screen pt-4 text-cyan-950 font-medium text-[1.2rem]">No Files Found!</p>
-      }
-  </div>  
+  <app-header (toggleAddFilesComponent)="toggleAddFilesModal()"></app-header>
+  <app-showfiles></app-showfiles>
 </div>
 
 <!-- Add Files Form Modal -->

@@ -2,32 +2,38 @@
   <div class="flex gap-2 md:gap-4 items-center justify-start w-screen">
     <!-- Dropdown and toggle button items -->
     <div class="relative">
-      <div (click)="toggleDropdown()" class="p-4 cursor-pointer
+      <div (click)="toggleDropdown()" class="p-3 cursor-pointer
       transition-background ease-in duration-150 bg-none hover:bg-slate-300
       ">
-        <img class="h-[20px] md:h-[25px]" src="/icons/icon-menu-outline.svg" alt="[]" />
+        <img class="h-[25px]" src="/icons/icon-menu-outline.svg" alt="[]" />
       </div>
 
       <div *ngIf="isDropdownOpen" class="absolute top-13 left-0 md:left-2 rounded-lg w-screen md:w-[450px]
       bg-white shadow-lg shadow-black/50 cursor-default z-10">
         <div class="p-4">
-          <p class="text-slate-700 font-bold text-lg">Current Directory</p>
+          <p class="text-slate-700 font-bold text-base">Current Directory</p>
           <div class="flex gap-2 items-center">
             <img class="h-[20px]" src="/icons/icon-folder-outline.svg" />
-            <p class="text-slate-900 font-light text-base">/Photos</p>
+            <p class="text-slate-800 font-light text-sm">/</p>
           </div>
         </div>
-        <div class="flex justify-center p-4">
-          <button (click)="toggleAddFiles()" class="bg-blue-200 hover:bg-blue-300 w-full rounded-md p-2
-          transition-colors ease-in duration-75
-          ">
-          <span class="text-slate-700 font-semibold text-base">Upload Files to </span><span class="text-slate-900 font-light text-base">/Photos</span>
-        </button>
+        <!-- Buttons -->
+         <div class="grid grid-cols-3 p-2 gap-1 [&>button]:h-[100px]">
+          <button (click)="toggleAddFiles()" class="flex flex-col justify-between items-center
+          p-4 bg-slate-200 hover:bg-blue-300 rounded-md transition-colors ease-in duration-75">
+            <img class="max-h-[40px]" src="/icons/icon-fileupload-outline.svg" />
+            <span class="text-slate-900 font-semibold text-sm">Upload Files</span>
+          </button>
+          <button (click)="toggleAddFiles()" class="flex flex-col justify-between items-center
+          p-4 bg-slate-200 hover:bg-blue-300 rounded-md transition-colors ease-in duration-75">
+            <img class="max-h-[40px]" src="/icons/icon-folderupload-outline.svg" />
+            <span class="text-slate-900 font-semibold text-sm">Add Folder</span>
+          </button>
         </div>
-      </div>
 
+      </div>
     </div>
-    <div class="text-slate-950 font-semibold text-base md:text-xl">
+    <div class="text-slate-800 font-semibold text-base md:text-xl">
       <p>My Web Storage</p>
     </div>
   </div>

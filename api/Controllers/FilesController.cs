@@ -39,7 +39,7 @@ namespace api.Controllers
             foreach (var item in fileNames)
             {
                 var fileInfo = new FileInfo(strPath + "/" + item);
-                fileList.Add(new FileModel(item, fileInfo.Length));
+                fileList.Add(new FileModel { FileName = item, FileLength = fileInfo.Length });
             }
 
             // Prevent errors on Angular HttpClient by ensuring response is in JSON
@@ -63,11 +63,11 @@ namespace api.Controllers
             switch (res.Status)
             {
                 case 200:
-                    return Ok(res.Message);
+                    return Ok(new { message = res.Message });
                 case 400:
-                    return BadRequest(res.Message);
+                    return BadRequest(new { message = res.Message });
                 default:
-                    return StatusCode(res.Status, res.Message);
+                    return StatusCode(res.Status, new { message = res.Message });
             }
         }
     }

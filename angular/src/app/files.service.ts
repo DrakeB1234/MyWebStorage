@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import apiEndpoints from '../../api-endpoints.json';
 import { FileData } from '../Models/filedata.model';
 
@@ -14,18 +14,20 @@ export class FilesService {
   private http = inject(HttpClient);
   apiEndpoints = apiEndpoints;
 
+  private refreshFilesSubject = new BehaviorSubject<boolean>(false);
+  refreshFiles$ = this.refreshFilesSubject.asObservable();
+
   getFiles(): Observable<FileData[]> {
-    return this.http.get<FileData[]>(apiEndpoints.GetAllFilePaths).pipe(catchError(this.handleError));
+    return this.http.get<FileData[]>(apiEndpoints.GetAllFilePaths);
   }
 
-  postFiles(data: any) {
-    console.log(data)
+  postFiles(data: any): Observable<any> {
     const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
     return this.http.post(apiEndpoints.postFiles, data, { headers });
   }
 
-  private handleError(err: any) {
-    console.log(err);
-    return throwError(() => new Error('Something went wrong'));
+  refreshFiles() {
+    console.log(this.refreshFilesSubject.next);
+    this.refreshFilesSubject.next(true);
   }
 }

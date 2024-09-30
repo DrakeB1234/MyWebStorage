@@ -1,37 +1,18 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+// Components
 import { HeaderComponent } from './header/header.component';
 import { AddfilesformmodalComponent } from './addfilesformmodal/addfilesformmodal.component';
-import { FilesService } from './files.service';
-import { FileData } from '../Models/filedata.model';
+import { ShowfilesComponent } from './showfiles/showfiles.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, AddfilesformmodalComponent],
+  imports: [CommonModule, HeaderComponent, AddfilesformmodalComponent, ShowfilesComponent],
   templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit {
-
-  filesService = inject(FilesService);
-  apiEndpoints: any = this.filesService.apiEndpoints;
-  files: FileData[] = [];
-
-  ngOnInit(): void {
-    this.getFilesData();
-  }
-
-  getFilesData() {
-    console.log('hello')
-    this.filesService.getFiles().subscribe({
-      next: (data: FileData[]) => {
-        this.files = data;
-      },
-      error: (err: any) => {
-        console.log(err);
-      }
-    })
-  }
+export class AppComponent {
 
   // Toggles
   isAddFilesModalOpen: boolean = false;

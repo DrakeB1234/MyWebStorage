@@ -1,11 +1,12 @@
 import { Component, Output, EventEmitter, HostListener, inject } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FilesService } from '../files.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-addfilesformmodal',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './addfilesformmodal.component.html',
 })
 export class AddfilesformmodalComponent {
@@ -13,6 +14,7 @@ export class AddfilesformmodalComponent {
 
   filesForm: FormGroup;
   selectedFiles: File[] = [];
+  postFilesLoading: boolean = false;
 
   constructor() {
     // Initialize the form group and its controls
@@ -22,7 +24,6 @@ export class AddfilesformmodalComponent {
   }
   
   @Output() toggleAddFilesComponent = new EventEmitter<void>();
-  @Output() refreshFileData = new EventEmitter<void>();
 
   // Form Handler
 
@@ -45,13 +46,19 @@ export class AddfilesformmodalComponent {
     this.selectedFiles.forEach(e => {
       formData.append('files', e);
     });
+
+    // Add loading attr to disable submit button and loading symbol
+    this.postFilesLoading = true;
     
     if (this.filesForm.valid) {
+      console.log(formData.getAll('files'))
       this.filesService.postFiles(formData).subscribe({
         next: (data: any) => {
-          // Handle successful post
-          console.log(data);
-          this.refreshFileData.emit();
+          // Close form and stop loading
+          this.postFilesLoading = false;
+          this.toggleAddFiles();
+          // Refresh files data
+          this.refreshFilesData();
         },
         error: (err: any) => {
           // Handle Errors
@@ -59,6 +66,11 @@ export class AddfilesformmodalComponent {
         }
       });
     }
+  }
+
+  // Function to trigger a files data refresh
+  refreshFilesData(): void {
+    this.filesService.refreshFiles();
   }
 
   // Toggle Dropdown
@@ -72,7 +84,7 @@ export class AddfilesformmodalComponent {
     const clickedInside = target.closest('.relative');
 
     if (!clickedInside) {
-      this.toggleAddFiles()
+      this.toggleAddFiles();
     }
   }
 }
