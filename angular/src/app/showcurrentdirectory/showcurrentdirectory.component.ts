@@ -9,8 +9,11 @@ import { FilesService } from '../files.service';
   templateUrl: './showcurrentdirectory.component.html',
 })
 export class ShowcurrentdirectoryComponent implements OnInit {
+
   filesService = inject(FilesService);
   currentPath: string = "";
+  // Regex to remove last folder in path
+  regexRemoveLastPath: RegExp = /[\/\\][^\\\/]+?$/;
 
   ngOnInit(): void {
     this.getCurrentPath();
@@ -25,12 +28,25 @@ export class ShowcurrentdirectoryComponent implements OnInit {
 
   getCurrentPath() {
     // If empty path, then assume root
-    var tempCurrentPath = this.filesService.currentPath
+    let tempCurrentPath = this.filesService.currentPath
     if (tempCurrentPath === "") {
       this.currentPath = "My Web Storage"
     }
     else {
       this.currentPath = this.filesService.currentPath;
     }
+  }
+
+  previousPath() {
+    // Check if path is not from root (no slashes), then set current path to empty
+    if (!this.currentPath.includes('/')) {
+      this.filesService.updatePath("");
+    }
+    else {
+      this.filesService.updatePath(this.currentPath.replace(this.regexRemoveLastPath, ""));
+    }
+
+    // Refresh path
+    this.filesService.refreshCurrentPath();
   }
 }

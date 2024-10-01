@@ -15,6 +15,7 @@ export class AddfilesformmodalComponent {
   filesForm: FormGroup;
   selectedFiles: File[] = [];
   postFilesLoading: boolean = false;
+  errorMessage: string = "";
 
   constructor() {
     // Initialize the form group and its controls
@@ -40,12 +41,16 @@ export class AddfilesformmodalComponent {
   submitFiles() {
 
     let formData = new FormData();
-    formData.append('uploadPath', 'a');
+    // Get current path
+    formData.append('uploadPath', this.filesService.currentPath);
 
     // Append each file to form data
     this.selectedFiles.forEach(e => {
       formData.append('files', e);
     });
+
+    // Reset error messages
+    this.errorMessage = "";
 
     // Add loading attr to disable submit button and loading symbol
     this.postFilesLoading = true;
@@ -61,7 +66,9 @@ export class AddfilesformmodalComponent {
         },
         error: (err: any) => {
           // Handle Errors
-          console.log(err);
+          console.log(err)
+          this.postFilesLoading = false;
+          this.errorMessage = err.error.message;
         }
       });
     }

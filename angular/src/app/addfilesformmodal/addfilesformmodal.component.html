@@ -2,6 +2,11 @@
   <div class="flex flex-col gap-10 relative bg-white h-fit w-screen md:max-w-[600px] m-2 md:m-16 p-4 rounded-md shadow-lg shadow-black/50">
     <p class="text-slate-800 font-medium text-lg">Select your files to upload</p>
     <form [formGroup]="filesForm" (ngSubmit)="submitFiles()" class="flex flex-col">
+      <!-- Errors -->
+      <div *ngIf="this.errorMessage !== ''" class="text-red-700 bg-red-200 mb-2 p-2 text-sm">
+        {{ this.errorMessage }}
+      </div>
+
       <label for="files" class="sr-only">Choose files</label>
       <input type="file" name="file-input" id="files" (change)="onFileSelect($event)" enctype="multipart/form-data" multiple
       class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm

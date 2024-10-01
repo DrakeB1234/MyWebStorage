@@ -55,9 +55,9 @@ namespace api.Controllers
         }
 
         [HttpPost("AddFiles")]
-        public IActionResult AddFiles([FromForm] UploadFile files)
+        public IActionResult AddFiles([FromForm] UploadFile fileData)
         {            
-            var res = new UploadHandler().UploadFiles(files.files);
+            var res = new UploadHandler().UploadFiles(fileData);
 
             // Read response from helper to determine type of response
             switch (res.Status)

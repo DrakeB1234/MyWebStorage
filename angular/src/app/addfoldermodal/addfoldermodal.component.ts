@@ -15,6 +15,7 @@ export class AddfoldermodalComponent {
 
   folderForm: FormGroup;
   postFolderLoading: boolean = false;
+  errorMessage: string = "";
 
   constructor() {
     // Initialize the form group and its controls
@@ -41,6 +42,9 @@ export class AddfoldermodalComponent {
 
     // Adding to empty form data, so api can read values
     let formData = new FormData();
+
+    // Reset error messages
+    this.errorMessage = "";
     
     // Ensures that folder data has a value set
     if (this.folderForm.valid) {
@@ -57,7 +61,8 @@ export class AddfoldermodalComponent {
         },
         error: (err: any) => {
           // Handle Errors
-          console.log(err);
+          this.postFolderLoading = false;
+          this.errorMessage = err.error.message;
         }
       });
     }

@@ -28,8 +28,17 @@ namespace api.Helpers
             MaxFileRequestSize = config.GetValue<int>("MaxFileRequestSize");
         }
         
-        public UploadFilesResponse UploadFiles(IList<IFormFile> files)
+        public UploadFilesResponse UploadFiles([FromForm] UploadFile fileData)
         {
+            IList<IFormFile> files = fileData.files;
+            var uploadPath = rootPath + "/" + fileData.UploadPath + "/";
+
+            // Check if path in form req exists in directory
+            if (!Directory.Exists(uploadPath))
+            {
+                return new UploadFilesResponse { Status = 400, Message = $"Bad Request: Provided folder path does not exist." };
+            }
+            
             // If no files are uploaded, then return
             if (files == null || files.Count == 0)
             {
@@ -43,7 +52,7 @@ namespace api.Helpers
             }
 
             // Get file names from dir, to later check uploaded files for duplicate names
-            var fileNames = from filePath in Directory.GetFiles(rootPath, "*", SearchOption.TopDirectoryOnly)
+            var fileNames = from filePath in Directory.GetFiles(uploadPath, "*", SearchOption.TopDirectoryOnly)
                 let filename = Path.GetFileName(filePath)
                 orderby filename
                 select filename;
@@ -69,19 +78,21 @@ namespace api.Helpers
                         continue;
                     }
 
+                    // Add upload path from form req, then add file name
                     // Check uploaded file for duplicate name
-                    var uploadPath = rootPath + "/" + file.FileName;
+                    var uploadPathFile = uploadPath + file.FileName;
+
                     foreach (var item in fileNames)
                     {
                         // If name matches what is in directory, then create a random GUID to put in filename
                         // To avoid rewriting existing files
                         if (item == file.FileName)
                         {
-                            uploadPath = rootPath + "/" + Path.GetFileNameWithoutExtension(file.FileName) + "-" + Guid.NewGuid() + extension;
+                            uploadPathFile = uploadPath + Path.GetFileNameWithoutExtension(file.FileName) + "-" + Guid.NewGuid() + extension;
                         }
                     }
 
-                    using FileStream stream = new FileStream(uploadPath, FileMode.Create);
+                    using FileStream stream = new FileStream(uploadPathFile, FileMode.Create);
                     file.CopyTo(stream);
 
                     // If above code is ran successfully, add to list to keep track of sucessful file uploads
@@ -89,7 +100,7 @@ namespace api.Helpers
                 }
 
                 // If loop runs above, then return success message
-                return new UploadFilesResponse { Status = 200, Message = $"All files successfully uploaded to {rootPath}" };
+                return new UploadFilesResponse { Status = 200, Message = $"All files successfully uploaded to {uploadPath}" };
             }
             catch (Exception ex)
             {

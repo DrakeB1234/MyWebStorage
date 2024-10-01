@@ -17,6 +17,7 @@ export class FilesService {
   // Keeps track of the current directory that user is on
   // If empty, then root path is implied
   currentPath: string = "";
+  currentPathFolderName: string = "";
 
   private refreshFilesSubject = new BehaviorSubject<boolean>(false);
   refreshFiles$ = this.refreshFilesSubject.asObservable();
