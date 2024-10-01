@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using api.Models;
@@ -13,7 +14,7 @@ namespace api.Controllers
         // Get config from appsettings
         private readonly IConfiguration config;
         
-        private readonly string strPath;
+        private readonly string rootPath;
         
         public FilesController()
         {
@@ -23,22 +24,27 @@ namespace api.Controllers
                 .AddEnvironmentVariables()
                 .Build();
 
-            this.strPath = config.GetValue<string>("FileUploadPath");
+            this.rootPath = config.GetValue<string>("FileUploadPath");
         }
         
-        [HttpGet("GetAllFilePaths")]
-        public IActionResult GetAllFilePaths()
+        [HttpGet("GetAllFilePaths/{_paramspath?}")]
+        public IActionResult GetAllFilePaths(string? _paramspath)
         {
             List<FileModel> fileList = new List<FileModel>();
-            
+
+            // Decode url encoding from _parampath to make readable by code
+            _paramspath = WebUtility.UrlDecode(_paramspath);
+
+            var getPath = rootPath + "/" + _paramspath;
+                        
             // LINQ
-            var fileNames = from filePath in Directory.GetFiles(strPath, "*", SearchOption.TopDirectoryOnly)
+            var fileNames = from filePath in Directory.GetFiles(getPath, "*", SearchOption.TopDirectoryOnly)
                 let filename = Path.GetFileName(filePath)
                 select filename;
 
             foreach (var item in fileNames)
             {
-                var fileInfo = new FileInfo(strPath + "/" + item);
+                var fileInfo = new FileInfo(getPath + "/" + item);
                 fileList.Add(new FileModel { FileName = item, FileLength = fileInfo.Length });
             }
 
@@ -46,10 +52,13 @@ namespace api.Controllers
             return Ok(fileList);
         }
 
-        [HttpGet("GetImage/{path}")]
-        public IActionResult GetImage(string path)
+        [HttpGet("GetImage/{_paramspath}")]
+        public IActionResult GetImage(string _paramspath)
         {
-            var image = System.IO.File.OpenRead(strPath + "/" + path);
+            // Decode url encoding from _parampath to make readable by code
+            _paramspath = WebUtility.UrlDecode(_paramspath);
+
+            var image = System.IO.File.OpenRead(rootPath + "/" + _paramspath);
 
             return File(image, "image/jpeg");
         }

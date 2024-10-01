@@ -27,6 +27,10 @@ export class ShowfilesComponent implements OnInit {
   }
 
   getFilesData() {
+    // Reset files to empty list to prevent trying to get old list of files 
+    // Before get req is resolved
+    this.files = [];
+    
     this.filesService.getFiles().subscribe({
       next: (data: FileData[]) => {
         this.files = data;

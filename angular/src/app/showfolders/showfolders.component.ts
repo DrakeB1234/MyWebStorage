@@ -24,7 +24,7 @@ export class ShowfoldersComponent implements OnInit {
   }
 
   getFoldersData() {
-    this.filesService.getFolders('').subscribe({
+    this.filesService.getFolders().subscribe({
       next: (data: FolderData[]) => {
         this.folders = data;
       },
@@ -37,7 +37,11 @@ export class ShowfoldersComponent implements OnInit {
   openFolderPath(path: string): void {
     this.filesService.updatePath(path);
 
-    // Refresh path data
-    this.filesService.refreshCurrentPath();
+    // Refresh data across app
+    this.filesService.refreshAllData();
+  }
+
+  openFolderSettings(): void {
+    console.log('Pressed');
   }
 }

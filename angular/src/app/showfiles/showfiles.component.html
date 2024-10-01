@@ -4,11 +4,11 @@
 <div class="flex flex-wrap
 gap-[0.1rem] p-2 md:p-6 w-screen place-self-center"
 >
-    @for(file of files; track file.fileName) {
-      <div class="flex-auto max-w-[200px] md:max-w-[400px]">
+    @for(file of files; track $index) {
+      <div class="flex-auto max-w-[200px] md:max-w-[250px]">
         <img
           class="object-cover rounded-md h-[120px] md:h-[150px] w-full"
-          src="{{apiEndpoints.getImage}}{{file.fileName}}"
+          [src]="this.filesService.currentPath == '' ? this.apiEndpoints.getImage + file.fileName : this.apiEndpoints.getImage + this.filesService.currentPath + '%2f' + file.fileName"
           alt="{{file.fileName}}"
           priority
         />

@@ -47,6 +47,6 @@ export class ShowcurrentdirectoryComponent implements OnInit {
     }
 
     // Refresh path
-    this.filesService.refreshCurrentPath();
+    this.filesService.refreshAllData();
   }
 }

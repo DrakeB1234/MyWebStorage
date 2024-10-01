@@ -20,8 +20,7 @@ export class AddfoldermodalComponent {
   constructor() {
     // Initialize the form group and its controls
     this.folderForm = new FormGroup({
-      FolderName: new FormControl("", [Validators.required]),
-      FolderPath: new FormControl("")
+      FolderName: new FormControl("", [Validators.required])
     });
   }
   
@@ -49,7 +48,7 @@ export class AddfoldermodalComponent {
     // Ensures that folder data has a value set
     if (this.folderForm.valid) {
       formData.append('FolderName', this.folderForm.value.FolderName);
-      formData.append('FolderPath', this.folderForm.value.FolderPath);
+      formData.append('FolderPath', this.filesService.currentPath);
 
       this.filesService.postFolder(formData).subscribe({
         next: (data: any) => {
