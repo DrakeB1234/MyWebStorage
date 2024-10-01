@@ -51,7 +51,6 @@ export class AddfilesformmodalComponent {
     this.postFilesLoading = true;
     
     if (this.filesForm.valid) {
-      console.log(formData.getAll('files'))
       this.filesService.postFiles(formData).subscribe({
         next: (data: any) => {
           // Close form and stop loading

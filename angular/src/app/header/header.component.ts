@@ -26,11 +26,17 @@ export class HeaderComponent {
     }
   }
 
-  // Add Files
+  // Toggles
   @Output() toggleAddFilesComponent = new EventEmitter<void>();
+  @Output() toggleAddFolderComponent = new EventEmitter<void>();
 
   toggleAddFiles() {
     this.toggleAddFilesComponent.emit();
+    this.isDropdownOpen = false;
+  }
+
+  toggleAddFolder() {
+    this.toggleAddFolderComponent.emit();
     this.isDropdownOpen = false;
   }
 }

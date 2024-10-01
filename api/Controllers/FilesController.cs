@@ -32,7 +32,7 @@ namespace api.Controllers
             List<FileModel> fileList = new List<FileModel>();
             
             // LINQ
-            var fileNames = from filePath in Directory.GetFiles(strPath, "*", SearchOption.AllDirectories)
+            var fileNames = from filePath in Directory.GetFiles(strPath, "*", SearchOption.TopDirectoryOnly)
                 let filename = Path.GetFileName(filePath)
                 select filename;
 

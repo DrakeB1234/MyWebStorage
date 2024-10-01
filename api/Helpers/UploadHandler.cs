@@ -43,7 +43,7 @@ namespace api.Helpers
             }
 
             // Get file names from dir, to later check uploaded files for duplicate names
-            var fileNames = from filePath in Directory.GetFiles(rootPath, "*", SearchOption.AllDirectories)
+            var fileNames = from filePath in Directory.GetFiles(rootPath, "*", SearchOption.TopDirectoryOnly)
                 let filename = Path.GetFileName(filePath)
                 orderby filename
                 select filename;

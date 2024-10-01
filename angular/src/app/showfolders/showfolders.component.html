@@ -1,0 +1,17 @@
+<div class="flex pl-2 pr-2 md:pl-6 md:pr-6 mt-4 text-slate-600 text-lg md:text-xl">
+  <p>Folders</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-1 p-2 md:p-6">
+
+  <!-- Folders -->
+  @for(folder of folders; track $index) {
+    <div class="flex flex-row items-center gap-2 bg-white p-2 rounded-md cursor-pointer
+    hover:bg-slate-300 transition-colors ease-in duration-75
+    ">
+      <img src="icons/icon-folder-outline.svg" class="h-[20px]"/>
+      <p>{{folder.folderName}}</p>
+    </div>
+  } @empty {
+  }
+
+</div>

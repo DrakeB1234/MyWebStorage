@@ -35,7 +35,8 @@ namespace api.Controllers
             // Remove drive path from root path to compare parameter
             string parsedRootPath = rootPath.Substring(Path.GetPathRoot(rootPath).Length);
             
-            string[] directoryList = [];
+            List<FolderModel> FolderList = new List<FolderModel>();
+            string[] tempFolderList = [];
 
             try
             {
@@ -43,11 +44,17 @@ namespace api.Controllers
                 // Check if passed path is null, then return root dirs
                 if (_paramspath == null) 
                 {
-                    directoryList = Directory.GetDirectories(rootPath);
+                    tempFolderList = Directory.GetDirectories(rootPath);
                 }
                 else 
                 {
-                    directoryList = Directory.GetDirectories(Path.Combine(rootPath, _paramspath));
+                    tempFolderList = Directory.GetDirectories(Path.Combine(rootPath, _paramspath));
+                }
+
+                foreach (var item in tempFolderList)
+                {
+                    // Remove root path from directory name
+                    FolderList.Add(new FolderModel {FolderName = item.Replace(rootPath + "\\", "")});
                 }
             }
             catch (Exception ex)
@@ -60,7 +67,7 @@ namespace api.Controllers
             }
 
             // Prevent errors on Angular HttpClient by ensuring response is in JSON
-            return Ok(directoryList);
+            return Ok(FolderList);
         }
     }
 }
