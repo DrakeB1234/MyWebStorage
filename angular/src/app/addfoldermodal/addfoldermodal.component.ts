@@ -14,14 +14,13 @@ export class AddfoldermodalComponent {
   filesService = inject(FilesService);
 
   folderForm: FormGroup;
-  folderData: FolderPostData | null = null;
   postFolderLoading: boolean = false;
 
   constructor() {
     // Initialize the form group and its controls
     this.folderForm = new FormGroup({
-      folderName: new FormControl('', [Validators.required]),
-      folderPath: new FormControl('', [Validators.required])
+      FolderName: new FormControl("", [Validators.required]),
+      FolderPath: new FormControl("")
     });
   }
   
@@ -29,21 +28,26 @@ export class AddfoldermodalComponent {
 
   // Form Handler
 
-  // Function to handle file selection
-  onFolderFormChange(event: any) {
-    // Get the selected files from the event
-    this.folderData = { folderName: event.target.folderName, folderPath: event.target.folderPath } as FolderPostData;
+  // Getters for form validation
+  get FolderName() {
+    return this.folderForm.get('FolderName');
   }
 
-  // Submit File Function
-  submitFiles() {
+  // Submit Folder Function
+  submitFolder() {
 
     // Add loading attr to disable submit button and loading symbol
     this.postFolderLoading = true;
+
+    // Adding to empty form data, so api can read values
+    let formData = new FormData();
     
     // Ensures that folder data has a value set
-    if (this.folderForm.valid && this.folderData) {
-      this.filesService.postFolder(this.folderData).subscribe({
+    if (this.folderForm.valid) {
+      formData.append('FolderName', this.folderForm.value.FolderName);
+      formData.append('FolderPath', this.folderForm.value.FolderPath);
+
+      this.filesService.postFolder(formData).subscribe({
         next: (data: any) => {
           // Close form and stop loading
           this.postFolderLoading = false;
@@ -57,11 +61,14 @@ export class AddfoldermodalComponent {
         }
       });
     }
+    else {
+      this.postFolderLoading = false;
+    }
   }
 
   // Function to trigger a files data refresh
   refreshFolderData(): void {
-    this.filesService.refreshFiles();
+    this.filesService.refreshFolders();
   }
 
   // Toggle Dropdown

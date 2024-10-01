@@ -12,8 +12,10 @@ export class FilesService {
 
   constructor() {}
 
-  private http = inject(HttpClient);
-  apiEndpoints = apiEndpoints;
+  private http: HttpClient = inject(HttpClient);
+  apiEndpoints: typeof apiEndpoints = apiEndpoints;
+  // Keeps track of the current directory that user is on
+  currentPath: string = "";
 
   private refreshFilesSubject = new BehaviorSubject<boolean>(false);
   refreshFiles$ = this.refreshFilesSubject.asObservable();
@@ -38,8 +40,8 @@ export class FilesService {
     return this.http.get<FolderData[]>(apiEndpoints.getAllDirectories);
   }
 
-  postFolder(data: FolderData): Observable<any> {
-    const headers = new HttpHeaders().append('Content-Type', 'application/json');
+  postFolder(data: any): Observable<any> {
+    const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
     return this.http.post(apiEndpoints.postDirectory, data, { headers });
   }
 

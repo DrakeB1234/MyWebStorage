@@ -1,4 +1,4 @@
 export interface FolderPostData {
-  folderName: string
-  folderPath: string
+  FolderName: string
+  FolderPath: string
 }

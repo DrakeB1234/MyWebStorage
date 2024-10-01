@@ -16,11 +16,11 @@ export class ShowfoldersComponent implements OnInit {
     this.getFoldersData();
 
     // Subscribe to the refresh event and re-fetch data when triggered
-    // this.filesService.refreshFiles$.subscribe((shouldRefresh) => {
-    //   if (shouldRefresh) {
-    //     this.getFoldersData();
-    //   }
-    // });
+    this.filesService.refreshFolders$.subscribe((shouldRefresh) => {
+      if (shouldRefresh) {
+        this.getFoldersData();
+      }
+    });
   }
 
   getFoldersData() {

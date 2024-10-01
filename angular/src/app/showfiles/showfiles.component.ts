@@ -12,7 +12,7 @@ import { AsyncPipe } from '@angular/common';
 export class ShowfilesComponent implements OnInit {
 
   filesService = inject(FilesService);
-  apiEndpoints: any = this.filesService.apiEndpoints;
+  apiEndpoints: typeof this.filesService.apiEndpoints = this.filesService.apiEndpoints;
   files: FileData[] = [];
 
   ngOnInit(): void {

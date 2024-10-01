@@ -69,5 +69,22 @@ namespace api.Controllers
             // Prevent errors on Angular HttpClient by ensuring response is in JSON
             return Ok(FolderList);
         }
+
+        [HttpPost("PostDirectory")]
+        public IActionResult PostDirectory([FromForm] UploadFolder folderData)
+        {                        
+            var res = new UploadHandler().UploadFolder(folderData);
+
+            // Read response from helper to determine type of response
+            switch (res.Status)
+            {
+                case 200:
+                    return Ok(new { message = res.Message });
+                case 400:
+                    return BadRequest(new { message = res.Message });
+                default:
+                    return StatusCode(res.Status, new { message = res.Message });
+            }
+        }
     }
 }

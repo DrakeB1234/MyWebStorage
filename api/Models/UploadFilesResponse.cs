@@ -2,7 +2,7 @@ namespace api.Models
 {
     public class UploadFilesResponse
     {
-        public int Status;
-        public string Message;
+        public int Status { get; set; }
+        public string Message { get; set; }
     }
 }

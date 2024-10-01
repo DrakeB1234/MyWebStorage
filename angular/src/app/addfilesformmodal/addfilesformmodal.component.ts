@@ -65,6 +65,9 @@ export class AddfilesformmodalComponent {
         }
       });
     }
+    else {
+      this.postFilesLoading = false;
+    }
   }
 
   // Function to trigger a files data refresh

@@ -28,7 +28,7 @@ namespace api.Helpers
             MaxFileRequestSize = config.GetValue<int>("MaxFileRequestSize");
         }
         
-        public UploadFilesResponse Upload(IList<IFormFile> files)
+        public UploadFilesResponse UploadFiles(IList<IFormFile> files)
         {
             // If no files are uploaded, then return
             if (files == null || files.Count == 0)
@@ -100,5 +100,45 @@ namespace api.Helpers
                 return new UploadFilesResponse { Status = 500, Message = $"Internal server error: No Files in request were uploaded. Error: {ex.Message}." };
             }
         }
-}
+
+        public UploadFilesResponse UploadFolder([FromForm] UploadFolder folderData)
+        {
+            string uploadPath = "";
+
+            // Check if upload path is in req, then add path to upload path, else use root
+            if (folderData.FolderPath != null)
+            {
+                uploadPath = Path.Combine(rootPath, folderData.FolderPath);
+
+                // Check if provided folder path already exists to prevent creating sub dirs
+                if (!Directory.Exists(uploadPath))
+                {
+                    return new UploadFilesResponse { Status = 400, Message = $"Bad Request: Provided folder path does not exist." };
+                }
+            }
+            else 
+            {
+                uploadPath = rootPath;
+            }
+
+            try
+            {
+                // Combine upload path with the new folder name from req
+                if (!Directory.Exists(Path.Combine(uploadPath, folderData.FolderName)))
+                {
+                    Directory.CreateDirectory(Path.Combine(uploadPath, folderData.FolderName));
+                }
+                else
+                {
+                    return new UploadFilesResponse { Status = 400, Message = $"Bad Request: Duplicate folder name." };
+                }
+
+                return new UploadFilesResponse { Status = 200, Message = $"Folder added to {uploadPath}" };
+            }
+            catch (Exception ex)
+            {
+                return new UploadFilesResponse { Status = 500, Message = $"Internal server error: Failed to add folder. Error: {ex.Message}." };
+            }
+        }
+    }   
 }
