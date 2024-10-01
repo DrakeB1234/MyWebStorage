@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
@@ -34,6 +35,9 @@ namespace api.Controllers
         {
             // Remove drive path from root path to compare parameter
             string parsedRootPath = rootPath.Substring(Path.GetPathRoot(rootPath).Length);
+
+            // Decode url encoding from _parampath to make readable by code
+            _paramspath = WebUtility.UrlDecode(_paramspath);
             
             List<FolderModel> FolderList = new List<FolderModel>();
             string[] tempFolderList = [];
@@ -53,8 +57,11 @@ namespace api.Controllers
 
                 foreach (var item in tempFolderList)
                 {
+                    // Parse folder path with /
+                    var parsedFolderPath = item.Replace('\\', '/');
+                    
                     // Remove root path from directory name
-                    FolderList.Add(new FolderModel {FolderName = item.Replace(rootPath + "\\", "")});
+                    FolderList.Add(new FolderModel { FolderName = Regex.Match(item, @"[^/\\]+(?=[/\\]?$)").Value, FolderPath = parsedFolderPath.Replace(rootPath, "") });
                 }
             }
             catch (Exception ex)
@@ -70,8 +77,8 @@ namespace api.Controllers
             return Ok(FolderList);
         }
 
-        [HttpPost("PostDirectory")]
-        public IActionResult PostDirectory([FromForm] UploadFolder folderData)
+        [HttpPost("AddDirectory")]
+        public IActionResult AddDirectory([FromForm] UploadFolder folderData)
         {                        
             var res = new UploadHandler().UploadFolder(folderData);
 

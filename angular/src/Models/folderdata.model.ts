@@ -1,3 +1,4 @@
 export interface FolderData {
-  folderName: string
+  folderName: string,
+  folderPath: string
 }

@@ -33,4 +33,11 @@ export class ShowfoldersComponent implements OnInit {
       }
     });
   }
+
+  openFolderPath(path: string): void {
+    this.filesService.updatePath(path);
+
+    // Refresh path data
+    this.filesService.refreshCurrentPath();
+  }
 }

@@ -18,8 +18,10 @@
 <hr>
 <h2 id="routes">📍 API Endpoints</h2>
 <p align="center">
- <a href="#getting-files">Getting Files</a> • 
-  <a href="#posting-files">Posting Files</a>
+  <a href="#getting-files">Getting Files</a> • 
+  <a href="#posting-files">Posting Files</a> •
+  <a href="#getting-files">Getting Folders</a> •
+  <a href="#posting-folders">Posting Folders</a>
 </p>
 ​
 <h4 id="getting-files">Getting Files</h4> 
@@ -84,6 +86,53 @@
 > | http code     | content-type                             | response                                                            |
 > |---------------|------------------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json; charset=utf-8`        | `{"code":"200","message":"All files successfully uploaded to {path}"}`                               |
+> | `400`         | `application/json`                       | `{"code":"400","message":"Bad Request"}`                            |
+
+</details><br>
+
+<h4 id="getting-folders">Getting Folders</h4> 
+
+<code>/api/GetAllDirectories</code> 
+<sub>Returns a list of folders in specified directory</sub>
+
+<details>
+ <summary><code>GET</code></summary>
+
+##### Parameters
+
+> | name      |  type     | data type               | description                                                           |
+> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
+> | Path      |  not required | string   | path to recieve directories from, assumes 'root' if none is provided  |
+
+##### Responses
+
+> | http code     | content-type                             | response                                                            |
+> |---------------|------------------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`        | `{ FolderName: "" }[]`                              |
+> | `400`         | `application/json`                       | `{"code":"400","message":"Bad Request"}`                            |
+
+</details><br>
+
+<h4 id="posting-folders">Posting Folders</h4> 
+
+<code>/api/AddDirectory</code> 
+<sub>Adds a folder in specified directory</sub>
+
+<details>
+ <summary><code>POST</code></summary>
+
+##### Parameters
+
+> | name      |  type     | data type               | description                                                           |
+> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
+> | Folder Name      |  required | string   | Name of the folder  |
+> | Folder Path      |  not required | string   | path to add folder to, assumes 'root' if none is provided  |
+
+##### Responses
+
+> | http code     | content-type                             | response                                                            |
+> |---------------|------------------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`        | `{"code":"200","message":"Folder added successfully to {path}"}`                             |
 > | `400`         | `application/json`                       | `{"code":"400","message":"Bad Request"}`                            |
 
 </details><br>

@@ -133,7 +133,7 @@ namespace api.Helpers
                     return new UploadFilesResponse { Status = 400, Message = $"Bad Request: Duplicate folder name." };
                 }
 
-                return new UploadFilesResponse { Status = 200, Message = $"Folder added to {uploadPath}" };
+                return new UploadFilesResponse { Status = 200, Message = $"Folder successfully added to {uploadPath}" };
             }
             catch (Exception ex)
             {

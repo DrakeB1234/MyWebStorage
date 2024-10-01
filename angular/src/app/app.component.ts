@@ -7,11 +7,12 @@ import { AddfilesformmodalComponent } from './addfilesformmodal/addfilesformmoda
 import { ShowfilesComponent } from './showfiles/showfiles.component';
 import { ShowfoldersComponent } from './showfolders/showfolders.component';
 import { AddfoldermodalComponent } from './addfoldermodal/addfoldermodal.component';
+import { ShowcurrentdirectoryComponent } from './showcurrentdirectory/showcurrentdirectory.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, AddfilesformmodalComponent, ShowfilesComponent, ShowfoldersComponent, AddfoldermodalComponent],
+  imports: [CommonModule, HeaderComponent, AddfilesformmodalComponent, ShowfilesComponent, ShowfoldersComponent, AddfoldermodalComponent, ShowcurrentdirectoryComponent],
   templateUrl: './app.component.html',
 })
 export class AppComponent {

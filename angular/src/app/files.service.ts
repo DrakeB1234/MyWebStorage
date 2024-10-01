@@ -15,6 +15,7 @@ export class FilesService {
   private http: HttpClient = inject(HttpClient);
   apiEndpoints: typeof apiEndpoints = apiEndpoints;
   // Keeps track of the current directory that user is on
+  // If empty, then root path is implied
   currentPath: string = "";
 
   private refreshFilesSubject = new BehaviorSubject<boolean>(false);
@@ -22,6 +23,11 @@ export class FilesService {
 
   private refreshFoldersSubject = new BehaviorSubject<boolean>(false);
   refreshFolders$ = this.refreshFoldersSubject.asObservable();
+
+  private refreshCurrentPathSubject = new BehaviorSubject<boolean>(false);
+  refreshCurrentPath$ = this.refreshCurrentPathSubject.asObservable();
+
+  // Files
 
   getFiles(): Observable<FileData[]> {
     return this.http.get<FileData[]>(apiEndpoints.GetAllFilePaths);
@@ -36,6 +42,8 @@ export class FilesService {
     this.refreshFilesSubject.next(true);
   }
 
+  // Folders
+
   getFolders(path: string): Observable<FolderData[]> {
     return this.http.get<FolderData[]>(apiEndpoints.getAllDirectories);
   }
@@ -47,5 +55,16 @@ export class FilesService {
 
   refreshFolders() {
     this.refreshFoldersSubject.next(true);
+  }
+
+  // Path
+
+  updatePath(path: string): void {
+    // If empty path, then assume root
+    this.currentPath = path;
+  }
+
+  refreshCurrentPath() {
+    this.refreshCurrentPathSubject.next(true);
   }
 }
