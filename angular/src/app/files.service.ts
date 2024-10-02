@@ -61,6 +61,16 @@ export class FilesService {
 
   // Path
 
+  getCurrentPath(): string {
+    // If empty path, then assume root
+    if (this.currentPath === "") {
+      return "My Web Storage"
+    }
+    else {
+      return this.currentPath;
+    }
+  }
+
   updatePath(path: string): void {
     // If empty path, then assume root
     this.currentPath = path;

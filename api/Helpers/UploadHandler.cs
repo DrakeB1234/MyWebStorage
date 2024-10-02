@@ -58,7 +58,7 @@ namespace api.Helpers
                 select filename;
 
             // Keep track of successful file uploads in case file in request throws error
-            List<String> successfulFileUploads = new List<String>();
+            List<string> successfulFileUploads = new List<string>();
 
             try
             {
@@ -68,14 +68,32 @@ namespace api.Helpers
                     string extension = Path.GetExtension(file.FileName);
                     if (!validExtensions.Contains(extension))
                     {
-                        // Continue to next itx of loop for failed files
-                        continue;
+                        // Send error, add any successful files that uploaded
+                        List<string> successfulUploads = new List<string>();
+                        if (successfulFileUploads.Count > 0) {
+                            foreach (var item in successfulFileUploads)
+                            {
+                                successfulUploads.Add($"{file.FileName}, ");
+                            }
+                        }
+                        return new UploadFilesResponse { Status = 400, Message = $"File '{file.FileName}' doesn't have valid extension.", SuccessfulFiles = successfulUploads };
                     }
 
                     // Check if file doesn't exceed size limit (30 mb)
                     if (file.Length > MaxFileUploadSize) {
-                        // Continue to next itx of loop for failed files
-                        continue;
+                        // Send error, add any successful files that uploaded
+                        List<string> successfulUploads = new List<string>();
+                        
+                        if (successfulFileUploads.Count > 0) {
+                            foreach (var item in successfulFileUploads)
+                            {
+                                successfulUploads.Add(item);
+                            }
+                        }
+                        var byteConversion = (MaxFileUploadSize /  1024) / 1024; 
+
+                        // Divide upload limit to match mb size
+                        return new UploadFilesResponse { Status = 400, Message = $"File '{file.FileName}' exceeds upload limit of {byteConversion} mb.", SuccessfulFiles = successfulUploads };                        continue;
                     }
 
                     // Add upload path from form req, then add file name

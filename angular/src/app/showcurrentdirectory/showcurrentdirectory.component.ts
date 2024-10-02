@@ -28,13 +28,7 @@ export class ShowcurrentdirectoryComponent implements OnInit {
 
   getCurrentPath() {
     // If empty path, then assume root
-    let tempCurrentPath = this.filesService.currentPath
-    if (tempCurrentPath === "") {
-      this.currentPath = "My Web Storage"
-    }
-    else {
-      this.currentPath = this.filesService.currentPath;
-    }
+    this.currentPath = this.filesService.getCurrentPath();
   }
 
   previousPath() {

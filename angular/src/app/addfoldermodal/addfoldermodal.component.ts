@@ -16,6 +16,7 @@ export class AddfoldermodalComponent {
   folderForm: FormGroup;
   postFolderLoading: boolean = false;
   errorMessage: string = "";
+  currentPath: string = this.filesService.getCurrentPath();
 
   constructor() {
     // Initialize the form group and its controls

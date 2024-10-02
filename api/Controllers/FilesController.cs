@@ -73,8 +73,8 @@ namespace api.Controllers
             {
                 case 200:
                     return Ok(new { message = res.Message });
-                case 400:
-                    return BadRequest(new { message = res.Message });
+                case 400: 
+                    return BadRequest(new { message = res.Message, successfulFiles = res.SuccessfulFiles });
                 default:
                     return StatusCode(res.Status, new { message = res.Message });
             }
