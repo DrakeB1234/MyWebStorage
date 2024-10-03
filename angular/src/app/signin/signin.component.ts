@@ -13,7 +13,7 @@ export class SigninComponent {
   filesService = inject(FilesService);
 
   loginForm: FormGroup;
-  loginLoading: boolean = false;
+  signInLoading: boolean = false;
   errorMessage: string = "";
 
   constructor() {
@@ -37,7 +37,7 @@ export class SigninComponent {
   submitLogin() {
 
     // Add loading attr to disable submit button and loading symbol
-    this.loginLoading = true;
+    this.signInLoading = true;
 
     // Adding to empty form data, so api can read values
     let formData = new FormData();
@@ -49,9 +49,25 @@ export class SigninComponent {
     if (this.loginForm.valid) {
       formData.append('Username', this.loginForm.value.Username);
       formData.append('Password', this.loginForm.value.Password);
+
+      this.filesService.signIn(formData).subscribe({
+        next: (data: any) => {
+          // Close form and stop loading
+          this.signInLoading = false;
+
+          console.log(data);
+        },
+        error: (err: any) => {
+          // Handle Errors
+          this.signInLoading = false;
+
+          // Set error message and display files that were successfully uploaded
+          this.errorMessage = err.error.message;
+        }
+      });
     }
     else {
-      this.loginLoading = false;
+      this.signInLoading = false;
       this.loginForm.markAllAsTouched();
     }
   }

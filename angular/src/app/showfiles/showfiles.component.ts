@@ -32,8 +32,8 @@ export class ShowfilesComponent implements OnInit {
     this.files = [];
     
     this.filesService.getFiles().subscribe({
-      next: (data: FileData[]) => {
-        this.files = data;
+      next: (data: any) => {
+        this.files = data.files;
       },
       error: (err: any) => {
         console.log(err);

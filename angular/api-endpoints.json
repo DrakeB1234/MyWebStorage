@@ -1,7 +1,8 @@
 {
-  "GetAllFilePaths": "https://localhost:7160/api/Files/GetAllFilePaths/",
-  "getImage": "https://localhost:7160/api/Files/GetImage/",
-  "postFiles": "https://localhost:7160/api/Files/AddFiles",
-  "getAllDirectories": "https://localhost:7160/api/Folder/GetAllDirectories/",
-  "postDirectory": "https://localhost:7160/api/Folder/AddDirectory"
+  "getAllFilePaths": "Files/GetAllFilePaths/",
+  "getImage": "Files/GetImage/",
+  "postFiles": "Files/AddFiles",
+  "getAllDirectories": "Folder/GetAllDirectories/",
+  "postDirectory": "Folder/AddDirectory",
+  "signIn": "Auth/Authenticate"
 }

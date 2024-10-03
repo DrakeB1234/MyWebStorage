@@ -7,6 +7,10 @@
   class="flex flex-col gap-4 md:gap-6 p-4 md:p-6 w-full max-w-[600px]
   bg-white rounded-md shadow">
     <p class="pt-2 text-xl font-bold text-gray-950 md:text-2xl dark:text-white">Sign in</p>
+    <!-- Errors -->
+    <div *ngIf="this.errorMessage !== ''" class="text-red-700 bg-red-200 mb-1 p-2 text-sm">
+      {{ this.errorMessage }}
+    </div>
     <div>
       <label for="Username" class="block mb-2 text-gray-950 font-normal text-base">Username</label>
       <input type="text" name="Username-input" id="Username" placeholder="username" formControlName="Username"
@@ -24,11 +28,11 @@
     </div>
 
     <div class="pt-4">
-      <button type="sumbit" *ngIf="!loginLoading"
+      <button type="sumbit" *ngIf="!signInLoading"
       class="primary bg-blue-500 hover:bg-blue-400 w-full rounded-md p-2.5 transition-colors ease-in duration-75 cursor-pointer">
         <p class="text-white font-semibold text-lg">Sign in</p>
       </button>
-      <button type="button" class="flex justify-center items-center gap-1 bg-blue-500 w-full rounded-md p-2.5"  *ngIf="loginLoading">
+      <button type="button" class="flex justify-center items-center gap-1 bg-blue-500 w-full rounded-md p-2.5"  *ngIf="signInLoading">
         <svg class="mr-3 h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

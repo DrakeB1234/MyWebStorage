@@ -49,7 +49,7 @@ namespace api.Controllers
             }
 
             // Prevent errors on Angular HttpClient by ensuring response is in JSON
-            return Ok(fileList);
+            return Ok(new { Files = fileList });
         }
 
         [HttpGet("GetImage/{_paramspath}")]
