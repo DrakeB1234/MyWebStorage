@@ -1,7 +1,6 @@
 import { Component, EventEmitter, HostListener, inject, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FilesService } from '../files.service';
-import { FolderPostData } from '../../Models/folderpost.model';
 import { CommonModule } from '@angular/common';
 
 @Component({

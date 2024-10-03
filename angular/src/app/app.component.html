@@ -1,10 +1,1 @@
-<div class="grid place-content-start pb-8 bg-slate-100 h-screen w-screen overflow-x-hidden no-scrollbar">
-  <app-header (toggleAddFilesComponent)="toggleAddFilesModal()" (toggleAddFolderComponent)="toggleAddFolderModal()"></app-header>
-  <app-showcurrentdirectory></app-showcurrentdirectory>
-  <app-showfolders></app-showfolders>
-  <app-showfiles></app-showfiles>
-</div>
-
-<!-- Form Modals -->
-<app-addfilesformmodal *ngIf="isAddFilesModalOpen" (toggleAddFilesComponent)="toggleAddFilesModal()"></app-addfilesformmodal>
-<app-addfoldermodal *ngIf="isAddFolderModalOpen" (toggleAddFolderComponent)="toggleAddFolderModal()"></app-addfoldermodal>
+<router-outlet></router-outlet>
