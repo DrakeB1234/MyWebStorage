@@ -1,11 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import apiEndpoints from '../../api-endpoints.json';
-import { FileData } from '../Models/filedata.model';
-import { FolderData } from '../Models/folderdata.model';
-import { environment } from '../environments/environment.development';
-import { LoginData } from '../Models/logindata.model';
+import apiEndpoints from '../../../api-endpoints.json';
+import { FileData } from '../../Models/filedata.model';
+import { FolderData } from '../../Models/folderdata.model';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +23,7 @@ export class FilesService {
   currentPath: string = "";
   currentPathFolderName: string = "";
 
+  // Subscribables to check for changes of data from api
   private refreshFilesSubject = new BehaviorSubject<boolean>(false);
   refreshFiles$ = this.refreshFilesSubject.asObservable();
 
@@ -32,11 +32,6 @@ export class FilesService {
 
   private refreshCurrentPathSubject = new BehaviorSubject<boolean>(false);
   refreshCurrentPath$ = this.refreshCurrentPathSubject.asObservable();
-
-  // Auth
-  signIn(data: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl + apiEndpoints.signIn, data);
-  }
 
   // Files
 

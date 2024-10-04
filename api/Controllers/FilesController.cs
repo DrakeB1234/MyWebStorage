@@ -1,12 +1,14 @@
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.StaticFiles;
 using api.Models;
 using api.Helpers;
 
 namespace api.Controllers
 {
-
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FilesController: ControllerBase
@@ -36,22 +38,44 @@ namespace api.Controllers
             _paramspath = WebUtility.UrlDecode(_paramspath);
 
             var getPath = rootPath + "/" + _paramspath;
-                        
+
+            // Used to determine file type
+            var provider = new FileExtensionContentTypeProvider();
+     
             // LINQ
             var fileNames = from filePath in Directory.GetFiles(getPath, "*", SearchOption.TopDirectoryOnly)
                 let filename = Path.GetFileName(filePath)
                 select filename;
 
+            var imageExtensions = config.GetSection("ImageExtensions").Get<List<string>>();
+            var videoExtensions = config.GetSection("VideoExtensions").Get<List<string>>();
+
             foreach (var item in fileNames)
             {
                 var fileInfo = new FileInfo(getPath + "/" + item);
-                fileList.Add(new FileModel { FileName = item, FileLength = fileInfo.Length });
+                var fileExtension = fileInfo.Extension.ToLower();
+
+                // Check what type of file
+                if (imageExtensions.Contains(fileExtension))
+                {
+                    fileExtension = "image";
+                }
+                else if (videoExtensions.Contains(fileExtension))
+                {
+                    fileExtension = "video";
+                }
+                else {
+                    fileExtension = "file";
+                }
+
+                fileList.Add(new FileModel { FileName = item, FileLength = fileInfo.Length, FileType = fileExtension });
             }
 
             // Prevent errors on Angular HttpClient by ensuring response is in JSON
             return Ok(new { Files = fileList });
         }
 
+        [AllowAnonymous]
         [HttpGet("GetImage/{_paramspath}")]
         public IActionResult GetImage(string _paramspath)
         {

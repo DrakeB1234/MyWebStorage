@@ -1,6 +1,7 @@
-using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Net;
 using System.Text.RegularExpressions;
 using api.Models;
 using api.Helpers;
@@ -8,6 +9,7 @@ using api.Helpers;
 namespace api.Controllers
 {
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FolderController: ControllerBase

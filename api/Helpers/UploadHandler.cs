@@ -65,7 +65,7 @@ namespace api.Helpers
                 foreach (var file in files)
                 {
                     // Check for Valid Extension
-                    string extension = Path.GetExtension(file.FileName);
+                    string extension = Path.GetExtension(file.FileName).ToLower();
                     if (!validExtensions.Contains(extension))
                     {
                         // Send error, add any successful files that uploaded

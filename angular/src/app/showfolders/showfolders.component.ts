@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FilesService } from '../files.service';
+import { FilesService } from '../services/files.service';
 import { FolderData } from '../../Models/folderdata.model';
 
 @Component({

@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { FilesService } from '../files.service';
+import { AuthService } from '../services/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sigin',
@@ -10,13 +11,15 @@ import { CommonModule } from '@angular/common';
   templateUrl: './signin.component.html',
 })
 export class SigninComponent {
-  filesService = inject(FilesService);
+  title = "My Web Storage | Login";
+
+  authService = inject(AuthService);
 
   loginForm: FormGroup;
   signInLoading: boolean = false;
   errorMessage: string = "";
 
-  constructor() {
+  constructor(private router: Router) {
     // Initialize the form group and its controls
     this.loginForm = new FormGroup({
       Username: new FormControl("", Validators.required),
@@ -50,19 +53,29 @@ export class SigninComponent {
       formData.append('Username', this.loginForm.value.Username);
       formData.append('Password', this.loginForm.value.Password);
 
-      this.filesService.signIn(formData).subscribe({
+      this.authService.signIn(formData).subscribe({
         next: (data: any) => {
-          // Close form and stop loading
+          // stop loading and navigate to home
           this.signInLoading = false;
-
-          console.log(data);
+          
+          // Handle token
+          if (data.token) {
+            this.authService.setLocalToken(data.token);
+            this.router.navigate(['']);
+          }
+          else {
+            this.errorMessage = "Failed to generate token, try again later";
+          }
         },
         error: (err: any) => {
           // Handle Errors
           this.signInLoading = false;
-
           // Set error message and display files that were successfully uploaded
           this.errorMessage = err.error.message;
+          // Checks if status was 0, which is a failure to connect
+          if (err.status === 0) {
+            this.errorMessage = "Failed to connect to MyWebStorage";
+          }
         }
       });
     }

@@ -16,6 +16,8 @@ import { ShowcurrentdirectoryComponent } from '../showcurrentdirectory/showcurre
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
+  title = "My Web Storage";
+
   // Toggles
   isAddFilesModalOpen: boolean = false;
   isAddFolderModalOpen: boolean = false;

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FilesService } from '../files.service';
+import { FilesService } from '../services/files.service';
 
 @Component({
   selector: 'app-showcurrentdirectory',

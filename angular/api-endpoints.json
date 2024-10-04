@@ -4,5 +4,6 @@
   "postFiles": "Files/AddFiles",
   "getAllDirectories": "Folder/GetAllDirectories/",
   "postDirectory": "Folder/AddDirectory",
-  "signIn": "Auth/Authenticate"
+  "signIn": "Auth/Signin",
+  "authenticate": "Auth/Authenticate"
 }

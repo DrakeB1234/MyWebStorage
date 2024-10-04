@@ -6,12 +6,19 @@ gap-[0.1rem] p-2 md:p-6 w-screen place-self-center"
 >
     @for(file of files; track $index) {
       <div class="flex-auto max-w-[180px] md:max-w-[250px]">
+        
+        @if(file.fileType === "image") {
         <img
           class="object-cover rounded-md h-[120px] md:h-[150px] w-full"
           src="{{this.filesService.getImage(file.fileName)}}"
           alt="{{file.fileName}}"
           priority
         />
+        }
+        @else {
+          <p>{{file.fileName}}</p>
+        }
+
       </div>
     } @empty {
       <p class="text-center w-screen pt-4 text-cyan-950 font-medium text-[1.2rem]">No Files Found!</p>

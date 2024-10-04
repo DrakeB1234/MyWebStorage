@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FileData } from '../../Models/filedata.model';
-import { FilesService } from '../files.service';
+import { FilesService } from '../services/files.service';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

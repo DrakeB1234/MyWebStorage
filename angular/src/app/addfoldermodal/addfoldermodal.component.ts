@@ -1,6 +1,6 @@
 import { Component, EventEmitter, HostListener, inject, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FilesService } from '../files.service';
+import { FilesService } from '../services/files.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

@@ -1,7 +1,8 @@
 import { NgClass, NgIf } from '@angular/common';
 import { Component, EventEmitter, HostListener, inject, OnInit, Output } from '@angular/core';
 import { AddfilesformmodalComponent } from '../addfilesformmodal/addfilesformmodal.component';
-import { FilesService } from '../files.service';
+import { FilesService } from '../services/files.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -12,6 +13,7 @@ import { FilesService } from '../files.service';
 export class HeaderComponent implements OnInit {
 
   filesService = inject(FilesService);
+  authService = inject(AuthService);
   isDropdownOpen: boolean = false;
   currentPath: string = "";
 
