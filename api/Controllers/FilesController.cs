@@ -1,8 +1,12 @@
 using System.Net;
+using System.Drawing;
+using System.Drawing.Imaging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using api.Models;
 using api.Helpers;
 
@@ -68,16 +72,24 @@ namespace api.Controllers
                     fileExtension = "file";
                 }
 
-                fileList.Add(new FileModel { FileName = item, FileLength = fileInfo.Length, FileType = fileExtension });
+                fileList.Add(new FileModel { 
+                    FileName = item, 
+                    FileLength = fileInfo.Length, 
+                    FileType = fileExtension,
+                    FileCreationDate = fileInfo.CreationTime,
+                    FileDirectoryName = fileInfo.DirectoryName,
+                });
             }
 
             // Prevent errors on Angular HttpClient by ensuring response is in JSON
             return Ok(new { Files = fileList });
         }
 
+        // FIX THIS, temp fix to allow frontend to make req as <img> src tags do not allow headers for auth
+        // Potential solution, use blob urls for frontend (PITA)
         [AllowAnonymous]
-        [HttpGet("GetImage/{_paramspath}")]
-        public IActionResult GetImage(string _paramspath)
+        [HttpGet("GetFullImage/{_paramspath}")]
+        public IActionResult GetFullImage(string _paramspath)
         {
             // Decode url encoding from _parampath to make readable by code
             _paramspath = WebUtility.UrlDecode(_paramspath);
@@ -85,6 +97,34 @@ namespace api.Controllers
             var image = System.IO.File.OpenRead(rootPath + "/" + _paramspath);
 
             return File(image, "image/jpeg");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("GetCompressedImage/{_paramspath}")]
+        public IActionResult GetCompressedImage(string _paramspath)
+        {
+            // Decode url encoding from _parampath to make readable by code
+            _paramspath = WebUtility.UrlDecode(_paramspath);
+
+            var loadImage = System.IO.File.OpenRead(rootPath + "/" + _paramspath);
+
+            using var image = Image.Load(loadImage);
+
+            // Create a new memory stream to hold the compressed image
+            var outputStream = new MemoryStream();
+
+            // Set the encoder options for JPEG compression
+            // Sets quality to half
+            var encoder = new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder
+            {
+                Quality = 40
+            };
+
+            // Save the image to the output stream with compression
+            image.Save(outputStream, encoder);
+            outputStream.Position = 0; // Reset the stream position to the beginning
+
+            return File(outputStream, "image/jpeg");
         }
 
         [HttpPost("AddFiles")]

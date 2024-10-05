@@ -9,7 +9,6 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   // First check if token has been set in localstorage, if not then header won't be added
   // Causing protected routes in api to return 401 error
   let token = authService.getLocalToken() 
-  console.log(req)
   if (token) { 
     const clonedRequest = req.clone({
       headers: req.headers.set(

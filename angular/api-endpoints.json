@@ -1,6 +1,7 @@
 {
   "getAllFilePaths": "Files/GetAllFilePaths/",
-  "getImage": "Files/GetImage/",
+  "getCompressedImage": "Files/GetCompressedImage/",
+  "getFullImage": "Files/getFullImage/",
   "postFiles": "Files/AddFiles",
   "getAllDirectories": "Folder/GetAllDirectories/",
   "postDirectory": "Folder/AddDirectory",

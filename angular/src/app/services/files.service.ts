@@ -48,13 +48,22 @@ export class FilesService {
     this.refreshFilesSubject.next(true);
   }
 
-  getImage(fileName: string): string {
+  getCompressedImage(fileName: string): string {
     // Used by <img> src to get image
     if (this.currentPath == "") {
-      return this.apiUrl + apiEndpoints.getImage + fileName;
+      return this.apiUrl + apiEndpoints.getCompressedImage + fileName;
     }
     // Encode URI after endpoint to ensure GET req can read data
-    return this.apiUrl + apiEndpoints.getImage + encodeURIComponent(this.currentPath + "/" + fileName);
+    return this.apiUrl + apiEndpoints.getCompressedImage + encodeURIComponent(this.currentPath + "/" + fileName);
+  }
+
+  getFullImage(fileName: string): string {
+    // Used by <img> src to get image
+    if (this.currentPath == "") {
+      return this.apiUrl + apiEndpoints.getFullImage + fileName;
+    }
+    // Encode URI after endpoint to ensure GET req can read data
+    return this.apiUrl + apiEndpoints.getFullImage + encodeURIComponent(this.currentPath + "/" + fileName);
   }
 
   // Folders

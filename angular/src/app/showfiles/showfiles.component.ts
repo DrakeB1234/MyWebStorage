@@ -1,12 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FileData } from '../../Models/filedata.model';
 import { FilesService } from '../services/files.service';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
+import { ShowfullfileComponent } from '../showfullfile/showfullfile.component';
 
 @Component({
   selector: 'app-showfiles',
   standalone: true,
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, ShowfullfileComponent, CommonModule],
   templateUrl: './showfiles.component.html',
 })
 export class ShowfilesComponent implements OnInit {
@@ -39,5 +40,18 @@ export class ShowfilesComponent implements OnInit {
         console.log(err);
       }
     });
+  }
+
+  // Toggles
+  isShowFullFileOpen: boolean = true;
+  fullFile: FileData | null = null;
+  
+  openShowFullFile(file: FileData) {
+    this.fullFile = file;
+    this.isShowFullFileOpen = true;
+  }
+
+  closeShowFullFile() {
+    this.isShowFullFileOpen = false;
   }
 }
