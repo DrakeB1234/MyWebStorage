@@ -5,7 +5,7 @@
 gap-[0.1rem] p-2 md:p-6 w-screen place-self-center"
 >
     @for(file of files; track $index) {
-      <div class="flex-auto max-w-[180px] md:max-w-[250px] cursor-pointer" (click)="openShowFullFile(file)">
+      <div class="flex-auto max-w-[180px] md:max-w-[250px] cursor-pointer" (click)="openShowFullFile(file, $index)">
 
         @if(file.fileType === "image") {
         <img
@@ -26,4 +26,4 @@ gap-[0.1rem] p-2 md:p-6 w-screen place-self-center"
 </div>  
 
 <!-- Toggles -->
- <app-showfullfile *ngIf="isShowFullFileOpen" (closeShowFullFile)="closeShowFullFile()" [file]="this.fullFile"></app-showfullfile>
+ <app-showfullfile *ngIf="isShowFullFileOpen" (closeShowFullFile)="closeShowFullFile()" (changeShowFullFile)="changeShowFullFile($event)" [file]="this.fullFile"></app-showfullfile>

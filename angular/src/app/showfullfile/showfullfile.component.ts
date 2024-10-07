@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 export class ShowfullfileComponent implements OnInit {
   @Input() file!: FileData | null;
   @Output() closeShowFullFile = new EventEmitter<void>();
+  @Output() changeShowFullFile = new EventEmitter<number>();
 
   filesService = inject(FilesService);
   fileCreationDate: Date | null = null;
@@ -86,6 +87,10 @@ export class ShowfullfileComponent implements OnInit {
         }
       })
     }
+  }
+
+  changeFile(itr: number): void {
+    this.changeShowFullFile.emit(itr);
   }
 
   // Toggles

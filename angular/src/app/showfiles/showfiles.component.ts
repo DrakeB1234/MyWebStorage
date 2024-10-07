@@ -45,10 +45,32 @@ export class ShowfilesComponent implements OnInit {
   // Toggles
   isShowFullFileOpen: boolean = false;
   fullFile: FileData | null = null;
+  fullFileIndex: number | null = null;
   
-  openShowFullFile(file: FileData) {
+  openShowFullFile(file: FileData, index: number) {
     this.fullFile = file;
+    this.fullFileIndex = index;
     this.isShowFullFileOpen = true;
+  }
+
+  changeShowFullFile(itr?: number) {
+    if (itr && this.fullFileIndex !== null) {
+      // Determine if index is in valid range
+      this.fullFileIndex += itr;
+      if (this.fullFileIndex > this.files.length - 1) {
+        this.fullFileIndex = 0;
+        this.fullFile = this.files[this.fullFileIndex];
+        this.isShowFullFileOpen = true;
+      }
+      else if (this.fullFileIndex < 0) {
+        // Reset index, don't rerender
+        this.fullFileIndex = 0;
+      }
+      else {
+        this.fullFile = this.files[this.fullFileIndex];
+        this.isShowFullFileOpen = true;
+      }
+    }
   }
 
   closeShowFullFile() {

@@ -1,28 +1,28 @@
 <div class="absolute inset-0 z-30">
-  <div class="flex flex-col h-screen bg-zinc-900 overflow-y-scroll">
+  <div class="flex flex-col h-screen bg-zinc-900 overflow-y-scroll no-scrollbar">
     <!-- Controls -->
     <div class="flex justify-between w-full bg-zinc-800 text-white p-3">
-      <div class="flex gap-2">
+      <div class="flex gap-2 z-[31]">
         <div (click)="toggleShowFileFunctions()" class="p-2 rounded-md hover:bg-zinc-700 cursor-pointer transition-colors ease-in duration-75">
           <img class="h-[20px]" src="/icons/icon-info-outline.svg" />
           
           <!-- File Functions Dropdown -->
           <div *ngIf="showFileFunctions" class="absolute bg-zinc-600 top-[60px] left-[0] w-screen max-w-[300px] cursor-default">
-            <div class="flex flex-col gap-2 z-[32]">
+            <div class="flex flex-col gap-2 p-2 pb-4 z-[32]">
               @if (this.file !== null) {
-                <div class="flex justify-end cursor-pointer p-5 pb-0">
+                <div class="flex justify-end cursor-pointer p-3 pb-0 rounded-md">
                   <img class="h-[20px]" src="/icons/icon-exit-outline.svg" />
                 </div>
-                <div (click)="downloadFile()" class="flex items-center gap-2 p-5 hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
-                  <img class="h-[25px]" src="/icons/icon-upload-outline.svg" />
+                <div (click)="downloadFile()" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
+                  <img class="h-[20px]" src="/icons/icon-upload-outline.svg" />
                   <p class="font-semibold">Download File</p>
                 </div>
-                <div (click)="moveFile()" class="flex items-center gap-2 p-5 hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
-                  <img class="h-[25px]" src="/icons/icon-transfer-outline.svg" />
+                <div (click)="moveFile()" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
+                  <img class="h-[20px]" src="/icons/icon-transfer-outline.svg" />
                   <p class="font-semibold">Move File</p>
                 </div>
-                <div (click)="deleteFile()" class="flex items-center gap-2 p-5 hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
-                  <img class="h-[25px]" src="/icons/icon-exit-outline.svg" />
+                <div (click)="deleteFile()" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
+                  <img class="h-[20px]" src="/icons/icon-exit-outline.svg" />
                   <p class="font-semibold">Delete File</p>
                 </div>
               }
@@ -57,7 +57,7 @@
             </div>
         </div>
       </div>
-      <div (click)="this.toggleShowFullFile()" class="p-2 rounded-md hover:bg-zinc-700 cursor-pointer transition-colors ease-in duration-75">
+      <div (click)="this.toggleShowFullFile()" class="p-2 rounded-md hover:bg-zinc-700 cursor-pointer transition-colors ease-in duration-75 z-[31]">
         <img class="h-[20px]" src="/icons/icon-exit-outline.svg" />
       </div>
     </div>
@@ -72,6 +72,27 @@
             priority
           />
         }
+
+        <!-- Navigate Files Controls -->
+          <div>
+
+            <div (click)="changeFile(-1)" class="absolute top-0 start-0 flex items-center justify-center h-full px-2 md:px-4 lg:px-[20%]" (focus)="true">
+              <button class="bg-white/35 rounded-full p-4 hover:bg-white/50">
+                <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                </svg>
+              </button>
+            </div>
+
+            <div (click)="changeFile(1)" class="absolute top-0 end-0 flex items-center justify-center h-full px-2 md:px-4 lg:px-[20%]" (focus)="true">
+              <button class="bg-white/35 rounded-full p-4 hover:bg-white/50">
+                <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+              </svg>
+              </button>
+            </div>
+
+        </div>
       }
       @else {
         <p>Failed to retrieve file</p>
