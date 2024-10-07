@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, EventEmitter, HostListener, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, inject, Output } from '@angular/core';
 import { AddfilesformmodalComponent } from '../addfilesformmodal/addfilesformmodal.component';
 import { FilesService } from '../services/files.service';
 import { AuthService } from '../services/auth.service';
@@ -10,28 +10,11 @@ import { AuthService } from '../services/auth.service';
   imports: [NgClass, AddfilesformmodalComponent, NgIf],
   templateUrl: './header.component.html',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
   filesService = inject(FilesService);
   authService = inject(AuthService);
   isDropdownOpen: boolean = false;
-  currentPath: string = "";
-
-  ngOnInit(): void {
-    this.getCurrentPath();
-
-    // Subscribe to the refresh event and re-fetch data when triggered
-    this.filesService.refreshCurrentPath$.subscribe((shouldRefresh) => {
-      if (shouldRefresh) {
-        this.getCurrentPath();
-      }
-    });
-  }
-
-  getCurrentPath() {
-    // If empty path, then assume root
-    this.currentPath = this.filesService.getCurrentPath();
-  }
   
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;

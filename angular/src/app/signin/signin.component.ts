@@ -14,6 +14,7 @@ export class SigninComponent {
   title = "My Web Storage | Login";
 
   authService = inject(AuthService);
+  showPassword: boolean = false;
 
   loginForm: FormGroup;
   signInLoading: boolean = false;
@@ -83,5 +84,9 @@ export class SigninComponent {
       this.signInLoading = false;
       this.loginForm.markAllAsTouched();
     }
+  }
+
+  toggleShowPassword(): void {
+    this.showPassword = !this.showPassword;
   }
 }

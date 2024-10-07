@@ -78,12 +78,12 @@ export class ShowfullfileComponent implements OnInit {
     if (this.file) {
       this.filesService.deleteFile(this.file.fileName).subscribe({
         next: (data: any) => {
+          // Switch to next file to left
+          this.changeFile(1);
           // Close full file and refresh data
           this.filesService.refreshFiles();
-          this.toggleShowFullFile();
         },
         error: (err: any) => {
-          console.log(err);
         }
       })
     }

@@ -1,44 +1,56 @@
 <header>
-  <div class="flex gap-2 md:gap-4 items-center justify-start w-screen">
+  <div class="flex gap-2 items-center justify-start w-screen">
     <!-- Dropdown and toggle button items -->
     <div class="relative">
       <div (click)="toggleDropdown()" class="p-3 cursor-pointer
       transition-background ease-in duration-150 bg-none hover:bg-slate-300
       ">
-        <img class="h-[25px]" src="/icons/icon-menu-outline.svg" alt="[]" />
+        <img class="h-[18px]" src="/icons/icon-menu-outline.svg" alt="[]" />
       </div>
 
-      <div *ngIf="isDropdownOpen" class="absolute top-13 left-0 md:left-2 rounded-lg w-screen md:w-[450px]
-      bg-white shadow-lg shadow-black/50 cursor-default z-10">
-        <div class="p-4">
-          <p class="text-slate-700 font-bold text-base">Current Directory</p>
-          <div class="flex gap-2 items-center">
-            <img class="h-[20px]" src="/icons/icon-folder-outline.svg" />
-            <p class="text-slate-800 font-light text-sm">{{ currentPath }}</p>
-          </div>
+      <div *ngIf="isDropdownOpen" class="absolute w-screen max-w-[350px]
+      bg-white rounded-r-md shadow-xl shadow-black/60 cursor-default z-10 [&>:not(:last-child)]:border-b-[1px] [&>:not(:first-child)]:py-3">
+
+      <div class="flex items-center gap-2 p-2 pb-4 pt-4 bg-slate-200">
+        <img src="pictures/MyWebStorage.png" class="h-10" />
+        <p class="text-base text-gray-950">MyWebStorage</p>
+      </div>
+        
+        <!-- Functions -->
+         <div class="flex flex-col gap-1 p-1 [&>button]:h-[40px] [&>button]:p-2">
+          <button (click)="toggleAddFiles()" class="flex gap-2 items-center
+          p-4 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+            <img class="max-h-[25px]" src="/icons/icon-fileupload-outline.svg" />
+            <span class="text-slate-900 text-sm">Upload Files</span>
+          </button>
+          <button (click)="toggleAddFolder()" class="flex gap-2 items-center
+          p-4 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+            <img class="max-h-[25px]" src="/icons/icon-folderupload-outline.svg" />
+            <span class="text-slate-900 text-sm">Add Folder</span>
+          </button>
         </div>
-        <!-- Buttons -->
-         <div class="grid grid-cols-3 p-2 gap-1 [&>button]:h-[100px]">
-          <button (click)="toggleAddFiles()" class="flex flex-col justify-between items-center
-          p-4 bg-slate-200 hover:bg-blue-300 rounded-md transition-colors ease-in duration-75">
-            <img class="max-h-[40px]" src="/icons/icon-fileupload-outline.svg" />
-            <span class="text-slate-900 font-semibold text-sm">Upload Files</span>
+
+        <!-- Stats -->
+        <div class="flex flex-col gap-1 p-1 [&>button]:h-[40px] [&>button]:p-2">
+          <button class="flex gap-2 items-center
+          p-4 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+            <img class="max-h-[25px]" src="/icons/icon-server-outline.svg" />
+            <span class="text-slate-900 text-sm">Server Info</span>
           </button>
-          <button (click)="toggleAddFolder()" class="flex flex-col justify-between items-center
-          p-4 bg-slate-200 hover:bg-blue-300 rounded-md transition-colors ease-in duration-75">
-            <img class="max-h-[40px]" src="/icons/icon-folderupload-outline.svg" />
-            <span class="text-slate-900 font-semibold text-sm">Add Folder</span>
-          </button>
-          <button (click)="this.authService.deleteLocalToken()" class="flex flex-col justify-between items-center
-          p-4 bg-slate-200 hover:bg-blue-300 rounded-md transition-colors ease-in duration-75">
-            <img class="max-h-[40px]" src="/icons/icon-folderupload-outline.svg" />
-            <span class="text-slate-900 font-semibold text-sm">Sign out</span>
+        </div>
+
+        <!-- Signout -->
+        <div class="flex flex-col gap-1 p-1 [&>button]:h-[40px] [&>button]:p-2">
+          <button (click)="this.authService.deleteLocalToken()" class="flex gap-2 items-center
+          p-4 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+            <img class="max-h-[25px]" src="/icons/icon-signout-outline.svg" />
+            <span class="text-slate-900 text-sm">Sign Out</span>
           </button>
         </div>
 
       </div>
     </div>
-    <div class="text-slate-800 font-semibold text-base md:text-lg">
+    <div class="text-slate-800 font-semibold text-base">
       <p>My Web Storage</p>
     </div>
   </div>

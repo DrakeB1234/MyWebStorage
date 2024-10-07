@@ -1,16 +1,18 @@
 <section class="flex flex-col items-center h-screen p-2 pb-6 bg-slate-100">
   <div class="flex justify-center items-center gap-2 w-full p-2 pb-4">
-    <img src="pictures/MyWebStorage.png" class="h-16" />
-    <p class="text-2xl font-semibold text-gray-950">MyWebStorage</p>
+    <img src="pictures/MyWebStorage.png" class="h-14" />
+    <p class="text-xl font-semibold text-gray-950">MyWebStorage</p>
   </div>
   <form [formGroup]="loginForm" (ngSubmit)="submitLogin()"
-  class="flex flex-col gap-4 md:gap-6 p-4 md:p-6 w-full max-w-[600px]
+  class="flex flex-col gap-4 md:gap-6 p-4 md:p-8 w-full max-w-[500px]
   bg-white rounded-md shadow">
-    <p class="pt-2 text-xl font-bold text-gray-950 md:text-2xl">Sign in</p>
     <!-- Errors -->
     <div *ngIf="this.errorMessage !== ''" class="text-red-700 bg-red-200 mb-1 p-2 text-sm">
       {{ this.errorMessage }}
     </div>
+
+    <p class="pt-2 text-xl font-bold text-gray-950">Sign in</p>
+    
     <div>
       <label for="Username" class="block mb-2 text-gray-950 font-normal text-base">Username</label>
       <input type="text" name="Username-input" id="Username" placeholder="Username" formControlName="Username" autocomplete="off"
@@ -19,20 +21,30 @@
       <p *ngIf="Username?.invalid && Username?.touched" class="text-red-700 text-sm">Username is required</p>
     </div>
 
-    <div>
+    <div class="relative">
       <label for="Password" class="block mb-2 text-gray-950 font-normal text-base">Password</label>
-      <input type="password" name="Password-input" id="Password" placeholder="••••••••" formControlName="Password"
-      class="block w-full text-lg p-2.5 font-medium placeholder:font-normal rounded-md bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-600 focus:border-blue-600"
+      <input [type]="showPassword ? 'text' : 'password'" name="Password-input" id="Password" placeholder="••••••••" formControlName="Password"
+      class="block w-full text-lg p-2.5 pr-14 font-medium placeholder:font-normal rounded-md bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-600 focus:border-blue-600"
       >
       <p *ngIf="Password?.invalid && Password?.touched" class="text-red-700 text-sm">Password is required</p>
+
+      <!-- Password show toggle -->
+      <div (click)="toggleShowPassword()" class="absolute right-[1px] top-[33px] flex items-center h-[47px] pr-2 pl-2 rounded-r-md cursor-pointer hover:bg-gray-100">
+        @if (!showPassword) {
+          <img class="h-8" src="/icons/icon-eyeshow-outline.svg" />
+        }
+        @else {
+          <img class="h-8" src="/icons/icon-eyehidden-outline.svg" />
+        }
+      </div>
     </div>
 
     <div class="pt-4">
       <button type="sumbit" *ngIf="!signInLoading"
-      class="primary bg-blue-500 hover:bg-blue-400 w-full rounded-md p-2.5 transition-colors ease-in duration-75 cursor-pointer">
+      class="primary bg-blue-500 hover:bg-blue-400 w-full rounded-md p-2 transition-colors ease-in duration-75 cursor-pointer">
         <p class="text-white font-semibold text-lg">Sign in</p>
       </button>
-      <button type="button" class="flex justify-center items-center gap-1 bg-blue-500 w-full rounded-md p-2.5"  *ngIf="signInLoading">
+      <button type="button" class="flex justify-center items-center gap-1 bg-blue-500 w-full rounded-md p-2"  *ngIf="signInLoading">
         <svg class="mr-3 h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

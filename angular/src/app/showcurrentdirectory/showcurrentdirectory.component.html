@@ -1,11 +1,11 @@
-<div class="flex bg-slate-300 text-slate-900 font-medium text-md md:text-lg md:pl-6">
+<div class="flex bg-slate-300 text-slate-900 text-md md:pl-6">
   <button *ngIf="currentPath !== 'My Web Storage'" (click)="previousPath()"
-  class="p-4 pr-2 hover:bg-slate-200 transition-colors ease-in duration-75
+  class="p-3 hover:bg-slate-200 transition-colors ease-in duration-75
   ">
-    <img src="icons/icon-left-outline.svg" class="h-[20px]"/>
+    <img src="icons/icon-left-outline.svg" class="h-[15px]"/>
   </button>
-  <div class="flex items-center gap-2 p-4">
-    <img src="icons/icon-folder-outline.svg" class="h-[20px]"/>
-    <p>{{ currentPathParse }}</p>
+  <div class="flex items-center gap-2 p-3">
+    <img src="icons/icon-folder-outline.svg" class="h-[18px]"/>
+    <p><span *ngIf="currentPath !== 'My Web Storage'">MWS</span>{{ currentPath }}</p>
   </div>
 </div>

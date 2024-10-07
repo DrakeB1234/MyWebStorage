@@ -106,7 +106,7 @@ export class AddfilesformmodalComponent {
     const target = event.target as HTMLElement;
     const clickedInside = target.closest('.relative');
 
-    if (!clickedInside) {
+    if (!clickedInside && !this.postFilesLoading) {
       this.toggleAddFiles();
     }
   }
