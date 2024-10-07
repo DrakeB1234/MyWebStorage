@@ -59,7 +59,8 @@ namespace api.Controllers
                 }
                 else 
                 {
-                    tempFolderList = Directory.GetDirectories(Path.Combine(rootPath, _paramspath));
+                    // For whatever reason path.combine not working, so for now explicity combine paths
+                    tempFolderList = Directory.GetDirectories(rootPath + _paramspath);
                 }
 
                 foreach (var item in tempFolderList)
@@ -68,7 +69,7 @@ namespace api.Controllers
                     var parsedFolderPath = item.Replace('\\', '/');
                     
                     // Remove root path from directory name
-                    FolderList.Add(new FolderModel { FolderName = Regex.Match(item, @"[^/\\]+(?=[/\\]?$)").Value, FolderPath = parsedFolderPath.Replace(rootPath, "") });
+                    FolderList.Add(new FolderModel { FolderName = Regex.Match(item, @"[^\/\\]+(?=[\/\\]?$)").Value, FolderPath = parsedFolderPath.Replace(rootPath, "") });
                 }
             }
             catch (Exception ex)

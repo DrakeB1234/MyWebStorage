@@ -37,7 +37,8 @@ export class FilesService {
   // Files
 
   getFiles(): Observable<FileData[]> {
-    return this.http.get<FileData[]>(this.apiUrl + apiEndpoints.getAllFilePaths + `${this.currentPath}`);
+    // Encode path to ensure proper data is sent
+    return this.http.get<FileData[]>(this.apiUrl + apiEndpoints.getAllFilePaths + encodeURIComponent(this.currentPath));
   }
 
   addFile(data: any): Observable<any> {
@@ -85,7 +86,8 @@ export class FilesService {
 
   getFolders(): Observable<FolderData[]> {
     // Gets path that is set in filesservice, path updates from the component 'showfolders'
-    return this.http.get<FolderData[]>(this.apiUrl + apiEndpoints.getAllDirectories + `${this.currentPath}`);
+    // Encode path to ensure proper data is sent
+    return this.http.get<FolderData[]>(this.apiUrl + apiEndpoints.getAllDirectories + encodeURIComponent(this.currentPath));
   }
 
   postFolder(data: any): Observable<any> {

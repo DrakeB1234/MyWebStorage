@@ -39,6 +39,8 @@ namespace api.Controllers
             this.ImageCacheTimeDays = TimeSpan.FromDays(config.GetValue<int>("ImageCacheTimeDays"));
             this.ImageCacheTimeSeconds = this.ImageCacheTimeDays.TotalSeconds;
         }
+
+        // HAVE TO HAVE WAY TO FIX ENTERING IN SUB DIRS!!!
         
         [HttpGet("GetAllFilePaths/{_paramspath?}")]
         public IActionResult GetAllFilePaths(string? _paramspath)

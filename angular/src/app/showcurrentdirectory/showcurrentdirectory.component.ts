@@ -12,6 +12,7 @@ export class ShowcurrentdirectoryComponent implements OnInit {
 
   filesService = inject(FilesService);
   currentPath: string = "";
+  currentPathParse: string = "";
   // Regex to remove last folder in path
   regexRemoveLastPath: RegExp = /[\/\\][^\\\/]+?$/;
 
@@ -29,6 +30,11 @@ export class ShowcurrentdirectoryComponent implements OnInit {
   getCurrentPath() {
     // If empty path, then assume root
     this.currentPath = this.filesService.getCurrentPath();
+    // Get only last folder name with regex
+    let folderName = this.currentPath.match(/[^\/\\]+(?=[\/\\]?$)/);
+    if (folderName) {
+      this.currentPathParse = folderName[0];
+    }
   }
 
   previousPath() {
