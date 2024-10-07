@@ -5,6 +5,7 @@ import apiEndpoints from '../../../api-endpoints.json';
 import { FileData } from '../../Models/filedata.model';
 import { FolderData } from '../../Models/folderdata.model';
 import { environment } from '../../environments/environment.development';
+import { MoveFile } from '../../Models/movefile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,9 +40,23 @@ export class FilesService {
     return this.http.get<FileData[]>(this.apiUrl + apiEndpoints.getAllFilePaths + `${this.currentPath}`);
   }
 
-  postFiles(data: any): Observable<any> {
+  addFile(data: any): Observable<any> {
     const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
-    return this.http.post(this.apiUrl + apiEndpoints.postFiles, data, { headers });
+    return this.http.post(this.apiUrl + apiEndpoints.addFile, data, { headers });
+  }
+
+  moveFile(FileData: MoveFile): Observable<any> {
+    const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+    return this.http.patch(this.apiUrl + apiEndpoints.moveFile, FileData, { headers });
+  }
+
+  downloadFile(fileName: string): Observable<any> {
+    return this.http.get(this.apiUrl + apiEndpoints.downloadFile + encodeURIComponent(this.currentPath + `/${fileName}`), { responseType: 'blob' });
+  }
+
+  deleteFile(fileName: string): Observable<any> {
+    const headers = new HttpHeaders().append('Content-Type', 'application/json');
+    return this.http.delete(this.apiUrl + apiEndpoints.deleteFile, { body: { FileName: this.currentPath + `/${fileName}` }, headers: headers });
   }
 
   refreshFiles() {

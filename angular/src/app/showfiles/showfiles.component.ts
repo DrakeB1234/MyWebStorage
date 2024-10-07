@@ -43,7 +43,7 @@ export class ShowfilesComponent implements OnInit {
   }
 
   // Toggles
-  isShowFullFileOpen: boolean = true;
+  isShowFullFileOpen: boolean = false;
   fullFile: FileData | null = null;
   
   openShowFullFile(file: FileData) {

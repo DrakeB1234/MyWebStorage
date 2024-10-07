@@ -3,6 +3,6 @@ namespace api.Models
     public class UploadFile
     {
         public string? UploadPath { get; set; }
-        public IList<IFormFile> files { get; set; }
+        public IFormFile file { get; set; }
     }
 }

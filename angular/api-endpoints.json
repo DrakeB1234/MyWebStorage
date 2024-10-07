@@ -2,9 +2,12 @@
   "getAllFilePaths": "Files/GetAllFilePaths/",
   "getCompressedImage": "Files/GetCompressedImage/",
   "getFullImage": "Files/getFullImage/",
-  "postFiles": "Files/AddFiles",
+  "addFile": "Files/AddFile",
   "getAllDirectories": "Folder/GetAllDirectories/",
   "postDirectory": "Folder/AddDirectory",
+  "moveFile": "Files/MoveFile",
+  "downloadFile": "Files/DownloadFile/",
+  "deleteFile": "Files/DeleteFile",
   "signIn": "Auth/Signin",
   "authenticate": "Auth/Authenticate"
 }

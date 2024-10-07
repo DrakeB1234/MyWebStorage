@@ -39,11 +39,67 @@ export class ShowfullfileComponent implements OnInit {
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
   }
 
+  // File Functions
+
+  moveFile(): void {
+    if (this.file) {
+      this.filesService.moveFile({ fileName: this.file.fileName, fileDestination: this.file.fileName }).subscribe({
+        next: (data: any) => {
+          console.log(data)
+        },
+        error: (err: any) => {
+          console.log(err);
+        }
+      })
+    }  
+  }
+
+  downloadFile(): void {
+    if (this.file) {
+      this.filesService.downloadFile(this.file.fileName).subscribe({
+        next: (data: any) => {
+          if (this.file) {
+            const downloadURL = URL.createObjectURL(data);
+            const link = document.createElement('a');
+            link.href = downloadURL;
+            link.download = this.file.fileName;
+            link.click();
+          }
+        },
+        error: (err: any) => {
+          console.log(err);
+        }
+      })
+    }
+  }
+
+  deleteFile(): void {
+    if (this.file) {
+      this.filesService.deleteFile(this.file.fileName).subscribe({
+        next: (data: any) => {
+          // Close full file and refresh data
+          this.filesService.refreshFiles();
+          this.toggleShowFullFile();
+        },
+        error: (err: any) => {
+          console.log(err);
+        }
+      })
+    }
+  }
+
   // Toggles
   showFileDetails: boolean = false;
+  showFileFunctions: boolean = false;
 
   toggleShowFileDetail() {
     this.showFileDetails = !this.showFileDetails;
+    this.showFileFunctions = false;
+  }
+
+  toggleShowFileFunctions() {
+    this.showFileFunctions = !this.showFileFunctions;
+    this.showFileDetails = false;
   }
 
   toggleShowFullFile() {

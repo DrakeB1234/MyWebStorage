@@ -1,6 +1,7 @@
 using System.Net;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -21,6 +22,8 @@ namespace api.Controllers
         private readonly IConfiguration config;
         
         private readonly string rootPath;
+        private readonly TimeSpan ImageCacheTimeDays;
+        private readonly double ImageCacheTimeSeconds;
         
         public FilesController()
         {
@@ -31,6 +34,10 @@ namespace api.Controllers
                 .Build();
 
             this.rootPath = config.GetValue<string>("FileUploadPath");
+
+            // Convert cache time into days, then seconds
+            this.ImageCacheTimeDays = TimeSpan.FromDays(config.GetValue<int>("ImageCacheTimeDays"));
+            this.ImageCacheTimeSeconds = this.ImageCacheTimeDays.TotalSeconds;
         }
         
         [HttpGet("GetAllFilePaths/{_paramspath?}")]
@@ -96,7 +103,7 @@ namespace api.Controllers
 
             var image = System.IO.File.OpenRead(rootPath + "/" + _paramspath);
 
-            return File(image, "image/jpeg");
+            return File(image, "image/jpeg", _paramspath);
         }
 
         [AllowAnonymous]
@@ -106,31 +113,49 @@ namespace api.Controllers
             // Decode url encoding from _parampath to make readable by code
             _paramspath = WebUtility.UrlDecode(_paramspath);
 
-            var loadImage = System.IO.File.OpenRead(rootPath + "/" + _paramspath);
+            var loadImagePath = rootPath + "/" + _paramspath;
 
-            using var image = Image.Load(loadImage);
-
-            // Create a new memory stream to hold the compressed image
-            var outputStream = new MemoryStream();
-
-            // Set the encoder options for JPEG compression
-            // Sets quality to half
             var encoder = new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder
             {
                 Quality = 40
             };
 
-            // Save the image to the output stream with compression
-            image.Save(outputStream, encoder);
-            outputStream.Position = 0; // Reset the stream position to the beginning
+            try
+            {
+                // Using automatically closes streams when done, this prevents the image from locking up and not being able to be
+                // modified once ran through this code
+                using (var imageStream = new FileStream(loadImagePath, FileMode.Open, FileAccess.Read))
+                {
+                    // Load the image from the file stream
+                    using (var image = Image.Load(imageStream))
+                    {
+                        // Save the processed image to a memory stream
+                        using (var outputStream = new MemoryStream())
+                        {
+                            // Save the compressed image to the memory stream
+                            image.Save(outputStream, encoder);
 
-            return File(outputStream, "image/jpeg");
+                            // Add cache header to improve load times on client 
+                            Response.Headers.Add("Cache-Control", $"public,max-age={ImageCacheTimeSeconds}");
+                            Response.Headers.Add("Expires", DateTime.UtcNow.Add(ImageCacheTimeDays).ToString("R"));
+                            Response.Headers.Add("Pragma", "cache");
+
+                            // Return the compressed image as a file
+                            return File(outputStream.ToArray(), "image/jpeg", _paramspath);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Error processing image: {ex.Message}" });
+            }
         }
 
-        [HttpPost("AddFiles")]
-        public IActionResult AddFiles([FromForm] UploadFile fileData)
+        [HttpPost("AddFile")]
+        public IActionResult AddFile([FromForm] UploadFile fileData)
         {            
-            var res = new UploadHandler().UploadFiles(fileData);
+            var res = new UploadHandler().UploadFile(fileData);
 
             // Read response from helper to determine type of response
             switch (res.Status)
@@ -138,10 +163,61 @@ namespace api.Controllers
                 case 200:
                     return Ok(new { message = res.Message });
                 case 400: 
-                    return BadRequest(new { message = res.Message, successfulFiles = res.SuccessfulFiles });
+                    return BadRequest(new { message = res.Message });
                 default:
                     return StatusCode(res.Status, new { message = res.Message });
             }
+        }
+
+        [HttpPatch("MoveFile")]
+        public IActionResult MoveFile([FromForm] MoveFile fileData)
+        {            
+            return Ok(new { message = fileData });
+        }
+
+        [HttpGet("DownloadFile/{downloadPath}")]
+        public IActionResult DownloadFile(string downloadPath)
+        {            
+            // Decode url encoding from _parampath to make readable by code
+            downloadPath = WebUtility.UrlDecode(downloadPath);
+            var checkPath = rootPath + $"/{downloadPath}";
+
+            // Check if file exists
+            if (System.IO.File.Exists(checkPath))
+            {
+                var image = System.IO.File.OpenRead(rootPath + $"/{downloadPath}");
+
+                return File(image, "image/jpeg", downloadPath);
+            }
+            else
+            {
+                return NotFound(new { message = "File does not exist" });
+            }
+        }
+
+        [HttpDelete("DeleteFile")]
+        public IActionResult DeleteFile([FromBody] DownloadFileModel downloadPath)
+        {            
+            // Decode url encoding from _parampath to make readable by code
+            var checkPath = rootPath + $"/{downloadPath.FileName}";
+
+            // Check if file exists
+            if (System.IO.File.Exists(checkPath))
+            {
+                try
+                {
+                    System.IO.File.Delete(checkPath);
+                    return Ok(new { message = "File deleted successfully." });
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, new { message = $"Error deleting file: {ex.Message}" });
+                }
+            }
+            else
+            {
+                return NotFound(new { message = "File does not exist" });
+            }        
         }
     }
 }

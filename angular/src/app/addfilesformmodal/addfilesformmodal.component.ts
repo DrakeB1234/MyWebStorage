@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter, HostListener, inject } from '@angular/
 import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FilesService } from '../services/files.service';
 import { CommonModule } from '@angular/common';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-addfilesformmodal',
@@ -15,8 +16,9 @@ export class AddfilesformmodalComponent {
   filesForm: FormGroup;
   selectedFiles: File[] = [];
   postFilesLoading: boolean = false;
-  errorMessage: string = "";
-  errorMessageSuccessfulFiles: string[] = [];
+  errorMessage: string[] = [];
+  uploadedFilesCount: number = 0;
+  uploadedFilesCurrCount: number = 0;
   currentPath: string = this.filesService.getCurrentPath();
 
   constructor() {
@@ -40,42 +42,49 @@ export class AddfilesformmodalComponent {
   }
 
   // Submit File Function
-  submitFiles() {
+  async submitFiles() {
 
-    let formData = new FormData();
-    // Get current path
-    formData.append('uploadPath', this.filesService.currentPath);
-
-    // Append each file to form data
-    this.selectedFiles.forEach(e => {
-      formData.append('files', e);
-    });
-
-    // Reset error messages
-    this.errorMessage = "";
-    this.errorMessageSuccessfulFiles = [];
-
-    // Add loading attr to disable submit button and loading symbol
-    this.postFilesLoading = true;
-    
     if (this.filesForm.valid) {
-      this.filesService.postFiles(formData).subscribe({
-        next: (data: any) => {
-          // Close form and stop loading
-          this.postFilesLoading = false;
-          this.toggleAddFiles();
-          // Refresh files data
-          this.refreshFilesData();
-        },
-        error: (err: any) => {
-          // Handle Errors
-          this.postFilesLoading = false;
 
-          // Set error message and display files that were successfully uploaded
-          this.errorMessage = err.error.message;
-          this.errorMessageSuccessfulFiles = err.error.successfulFiles;
+      let formData = new FormData();
+      // Get current path
+      formData.append('uploadPath', this.filesService.currentPath);
+
+      // Reset error messages and file count to show in UI
+      this.errorMessage = [];
+      this.uploadedFilesCount = this.selectedFiles.length;
+      this.uploadedFilesCurrCount = 0;
+
+      // Add loading attr to disable submit button and loading symbol
+      this.postFilesLoading = true;
+
+      // Iterate over every file in form, make separate req for each to keep track of upload progress
+      for (let data of this.selectedFiles) {
+        // Create a temp formdata to add file into
+        let tempFormData = formData;
+        tempFormData.set('file', data);
+
+        try {
+          const response = await firstValueFrom(this.filesService.addFile(tempFormData));
+          // Subtract count from waiting files
+          this.uploadedFilesCurrCount++;
+
+        } catch (error: any) {
+          // Subtract count from waiting files
+          this.uploadedFilesCurrCount++;
+
+          // Append error message
+          this.errorMessage.push(error.error.message);
         }
-      });
+      }
+
+      // Close form and stop loading
+      this.postFilesLoading = false;
+      // Refresh files data
+      this.refreshFilesData();
+
+      // If no errors, then toggle container, otherwise keep open to show errors
+      if (this.errorMessage.length < 1) this.toggleAddFiles();
     }
     else {
       this.postFilesLoading = false;

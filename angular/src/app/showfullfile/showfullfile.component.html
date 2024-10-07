@@ -3,15 +3,41 @@
     <!-- Controls -->
     <div class="flex justify-between w-full bg-zinc-800 text-white p-3">
       <div class="flex gap-2">
-        <div class="p-2 rounded-md hover:bg-zinc-700 cursor-pointer transition-colors ease-in duration-75">
+        <div (click)="toggleShowFileFunctions()" class="p-2 rounded-md hover:bg-zinc-700 cursor-pointer transition-colors ease-in duration-75">
           <img class="h-[20px]" src="/icons/icon-info-outline.svg" />
+          
+          <!-- File Functions Dropdown -->
+          <div *ngIf="showFileFunctions" class="absolute bg-zinc-600 top-[60px] left-[0] w-screen max-w-[300px] cursor-default">
+            <div class="flex flex-col gap-2 z-[32]">
+              @if (this.file !== null) {
+                <div class="flex justify-end cursor-pointer p-5 pb-0">
+                  <img class="h-[20px]" src="/icons/icon-exit-outline.svg" />
+                </div>
+                <div (click)="downloadFile()" class="flex items-center gap-2 p-5 hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
+                  <img class="h-[25px]" src="/icons/icon-upload-outline.svg" />
+                  <p class="font-semibold">Download File</p>
+                </div>
+                <div (click)="moveFile()" class="flex items-center gap-2 p-5 hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
+                  <img class="h-[25px]" src="/icons/icon-transfer-outline.svg" />
+                  <p class="font-semibold">Move File</p>
+                </div>
+                <div (click)="deleteFile()" class="flex items-center gap-2 p-5 hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
+                  <img class="h-[25px]" src="/icons/icon-exit-outline.svg" />
+                  <p class="font-semibold">Delete File</p>
+                </div>
+              }
+              @else {
+                <p>Failed to retrieve file details</p>
+              }
+            </div>
+          </div>
         </div>
         <div (click)="toggleShowFileDetail()" class="relative p-2 rounded-md hover:bg-zinc-700 cursor-pointer transition-colors ease-in duration-75">
           <img class="h-[20px]" src="/icons/icon-details-outline.svg" />
 
             <!-- File Details Dropdown -->
             <div *ngIf="showFileDetails" class="absolute bg-zinc-600 top-[48px] left-[-56px] w-screen max-w-[400px] cursor-default">
-              <div class="flex flex-col gap-1 p-5 z-[32]">
+              <div class="flex flex-col gap-1 p-5">
                 @if (this.file !== null) {
                   <div class="flex justify-between gap-2">
                     <p class="font-bold">{{file.fileName}}</p>

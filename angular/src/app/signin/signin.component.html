@@ -1,19 +1,19 @@
-<section class="flex flex-col items-center h-screen p-2 pb-6 bg-slate-100 dark:bg-slate-900">
+<section class="flex flex-col items-center h-screen p-2 pb-6 bg-slate-100">
   <div class="flex justify-center items-center gap-2 w-full p-2 pb-4">
     <img src="pictures/MyWebStorage.png" class="h-16" />
-    <p class="text-2xl font-semibold text-gray-950 dark:text-white">MyWebStorage</p>
+    <p class="text-2xl font-semibold text-gray-950">MyWebStorage</p>
   </div>
   <form [formGroup]="loginForm" (ngSubmit)="submitLogin()"
   class="flex flex-col gap-4 md:gap-6 p-4 md:p-6 w-full max-w-[600px]
   bg-white rounded-md shadow">
-    <p class="pt-2 text-xl font-bold text-gray-950 md:text-2xl dark:text-white">Sign in</p>
+    <p class="pt-2 text-xl font-bold text-gray-950 md:text-2xl">Sign in</p>
     <!-- Errors -->
     <div *ngIf="this.errorMessage !== ''" class="text-red-700 bg-red-200 mb-1 p-2 text-sm">
       {{ this.errorMessage }}
     </div>
     <div>
       <label for="Username" class="block mb-2 text-gray-950 font-normal text-base">Username</label>
-      <input type="text" name="Username-input" id="Username" placeholder="username" formControlName="Username"
+      <input type="text" name="Username-input" id="Username" placeholder="Username" formControlName="Username" autocomplete="off"
       class="block w-full text-lg p-2.5 font-medium placeholder:font-normal rounded-md bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-600 focus:border-blue-600"
       >
       <p *ngIf="Username?.invalid && Username?.touched" class="text-red-700 text-sm">Username is required</p>

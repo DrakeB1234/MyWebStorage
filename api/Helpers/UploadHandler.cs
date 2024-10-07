@@ -12,7 +12,6 @@ namespace api.Helpers
         private readonly List<string> validExtensions;
         private readonly string rootPath;
         private readonly long MaxFileUploadSize;
-        private readonly int MaxFileRequestSize;
 
         public UploadHandler() 
         {
@@ -25,31 +24,12 @@ namespace api.Helpers
             validExtensions = config.GetSection("AllowedExtensions").Get<List<string>>();
             rootPath = config.GetValue<string>("FileUploadPath");
             MaxFileUploadSize = config.GetValue<long>("MaxFileUploadSize");
-            MaxFileRequestSize = config.GetValue<int>("MaxFileRequestSize");
         }
         
-        public UploadFilesResponse UploadFiles([FromForm] UploadFile fileData)
+        public UploadFilesResponse UploadFile([FromForm] UploadFile fileData)
         {
-            IList<IFormFile> files = fileData.files;
+            IFormFile file = fileData.file;
             var uploadPath = rootPath + "/" + fileData.UploadPath + "/";
-
-            // Check if path in form req exists in directory
-            if (!Directory.Exists(uploadPath))
-            {
-                return new UploadFilesResponse { Status = 400, Message = $"Bad Request: Provided folder path does not exist." };
-            }
-            
-            // If no files are uploaded, then return
-            if (files == null || files.Count == 0)
-            {
-                return new UploadFilesResponse { Status = 400, Message = "No files uploaded." };
-            }
-
-            // Limit uploads to amount set in appsettings.json per request
-            if (files.Count > MaxFileRequestSize)
-            {
-                return new UploadFilesResponse { Status = 400, Message = $"Too many files uploaded at once. Limit per request is {MaxFileRequestSize} files." };
-            }
 
             // Get file names from dir, to later check uploaded files for duplicate names
             var fileNames = from filePath in Directory.GetFiles(uploadPath, "*", SearchOption.TopDirectoryOnly)
@@ -57,76 +37,51 @@ namespace api.Helpers
                 orderby filename
                 select filename;
 
-            // Keep track of successful file uploads in case file in request throws error
-            List<string> successfulFileUploads = new List<string>();
-
             try
             {
-                foreach (var file in files)
+                // Check if path in form req exists in directory
+                if (!Directory.Exists(uploadPath))
                 {
-                    // Check for Valid Extension
-                    string extension = Path.GetExtension(file.FileName).ToLower();
-                    if (!validExtensions.Contains(extension))
-                    {
-                        // Send error, add any successful files that uploaded
-                        List<string> successfulUploads = new List<string>();
-                        if (successfulFileUploads.Count > 0) {
-                            foreach (var item in successfulFileUploads)
-                            {
-                                successfulUploads.Add($"{file.FileName}, ");
-                            }
-                        }
-                        return new UploadFilesResponse { Status = 400, Message = $"File '{file.FileName}' doesn't have valid extension.", SuccessfulFiles = successfulUploads };
-                    }
-
-                    // Check if file doesn't exceed size limit (30 mb)
-                    if (file.Length > MaxFileUploadSize) {
-                        // Send error, add any successful files that uploaded
-                        List<string> successfulUploads = new List<string>();
-                        
-                        if (successfulFileUploads.Count > 0) {
-                            foreach (var item in successfulFileUploads)
-                            {
-                                successfulUploads.Add(item);
-                            }
-                        }
-                        var byteConversion = (MaxFileUploadSize /  1024) / 1024; 
-
-                        // Divide upload limit to match mb size
-                        return new UploadFilesResponse { Status = 400, Message = $"File '{file.FileName}' exceeds upload limit of {byteConversion} mb.", SuccessfulFiles = successfulUploads };                        continue;
-                    }
-
-                    // Add upload path from form req, then add file name
-                    // Check uploaded file for duplicate name
-                    var uploadPathFile = uploadPath + file.FileName;
-
-                    foreach (var item in fileNames)
-                    {
-                        // If name matches what is in directory, then create a random GUID to put in filename
-                        // To avoid rewriting existing files
-                        if (item == file.FileName)
-                        {
-                            uploadPathFile = uploadPath + Path.GetFileNameWithoutExtension(file.FileName) + "-" + Guid.NewGuid() + extension;
-                        }
-                    }
-
-                    using FileStream stream = new FileStream(uploadPathFile, FileMode.Create);
-                    file.CopyTo(stream);
-
-                    // If above code is ran successfully, add to list to keep track of sucessful file uploads
-                    successfulFileUploads.Add(file.FileName);
+                    return new UploadFilesResponse { Status = 400, Message = $"Bad Request: Provided folder path does not exist." };
                 }
 
-                // If loop runs above, then return success message
-                return new UploadFilesResponse { Status = 200, Message = $"All files successfully uploaded to {uploadPath}" };
+                // Check for Valid Extension
+                string extension = Path.GetExtension(file.FileName).ToLower();
+                if (!validExtensions.Contains(extension))
+                {
+                    return new UploadFilesResponse { Status = 400, Message = $"File '{file.FileName}' doesn't have valid extension."};
+                }
+
+                // Check if file doesn't exceed size limit (30 mb)
+                if (file.Length > MaxFileUploadSize) {
+                    var byteConversion = (MaxFileUploadSize /  1024) / 1024; 
+
+                    // Divide upload limit to match mb size
+                    return new UploadFilesResponse { Status = 400, Message = $"File '{file.FileName}' exceeds upload limit of {byteConversion} mb."};
+                }
+
+                // Add upload path from form req, then add file name
+                // Check uploaded file for duplicate name
+                var uploadPathFile = uploadPath + file.FileName;
+
+                foreach (var item in fileNames)
+                {
+                    // If name matches what is in directory, then create a random GUID to put in filename
+                    // To avoid rewriting existing files
+                    if (item == file.FileName)
+                    {
+                        uploadPathFile = uploadPath + Path.GetFileNameWithoutExtension(file.FileName) + "-" + Guid.NewGuid() + extension;
+                    }
+                }
+
+                using FileStream stream = new FileStream(uploadPathFile, FileMode.Create);
+                file.CopyTo(stream);
+
+                return new UploadFilesResponse { Status = 200, Message = $"File successfully uploaded to {uploadPath}" };
             }
             catch (Exception ex)
             {
-                // If any files were successfully uploaded, include them in error message
-                if (successfulFileUploads.Count > 0) {
-                    return new UploadFilesResponse { Status = 500, Message = $"Internal server error: Failed uploads - {files.Count - successfulFileUploads.Count}. Files that uploaded successfully {successfulFileUploads}." };
-                }
-                return new UploadFilesResponse { Status = 500, Message = $"Internal server error: No Files in request were uploaded. Error: {ex.Message}." };
+                return new UploadFilesResponse { Status = 500, Message = $"Internal server error: File failed to upload" };
             }
         }
 

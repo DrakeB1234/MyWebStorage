@@ -4,16 +4,10 @@
     <p class="text-slate-500 font-normal text-base">{{ this.currentPath }}</p>
     <form [formGroup]="filesForm" (ngSubmit)="submitFiles()" class="flex flex-col mt-6">
       <!-- Errors -->
-      <div *ngIf="this.errorMessage !== ''" class="text-red-700 bg-red-200 mb-1 p-2 text-sm">
-        {{ this.errorMessage }}
-      </div>
-
-      <!-- Successful uploads -->
-      <div *ngIf="this.errorMessageSuccessfulFiles.length > 0" class="flex flex-col gap-1 text-blue-900 bg-blue-100 mb-2 p-2 text-sm">
-        <p class="text-base">Files that were successfully uploaded</p>
-        @for (file of errorMessageSuccessfulFiles; track $index) {
+      <div *ngIf="this.errorMessage.length > 0" class="text-red-700 bg-red-200 mb-1 p-2 text-sm max-h-[200px] overflow-y-scroll">
+        @for (file of errorMessage; track $index) {
           <p>{{ file }}</p>
-        }
+        }      
       </div>
 
       <label for="files" class="sr-only">Choose files</label>
@@ -22,6 +16,11 @@
       file:cursor-pointer hover:file:bg-blue-300 file:transition-colors ease-in duration-75 font-light file:font-normal
       file:bg-slate-300 file:border-0 file:me-4 file:p-2 file:px-4>"
       >
+
+      <!-- Progress bar -->
+      <div *ngIf="uploadedFilesCount > 0" class="w-full bg-gray-200 rounded-full h-2.5">
+        <div class="bg-blue-600 h-2.5 rounded-full" [style.width.%]="(uploadedFilesCurrCount / uploadedFilesCount) * 100"></div>
+      </div>
 
       <button type="sumbit" [disabled]="!filesForm.valid" *ngIf="!postFilesLoading"
       class="primary bg-blue-200 hover:bg-blue-300 w-full rounded-md p-2 mt-20 transition-colors ease-in duration-75 cursor-pointer
