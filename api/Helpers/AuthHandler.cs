@@ -13,6 +13,9 @@ namespace api.Helpers
     {
         // Get config from appsettings
         private readonly IConfiguration config;
+
+        public IConfigurationSection? jwtSettings;
+        public string? apiKey;
                 
         public AuthHandler()
         {
@@ -21,12 +24,20 @@ namespace api.Helpers
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables()
                 .Build();
+
+            this.jwtSettings = config.GetSection("JwtSettings");
+            this.apiKey = Environment.GetEnvironmentVariable("API_KEY");
         }
 
         public UploadFilesResponse Signin([FromForm] LoginModel formData)
         {
             var appUser = Environment.GetEnvironmentVariable("MWS_USER");
             var appPass = Environment.GetEnvironmentVariable("MWS_PASS");
+
+            // Check for null config (sastifies complier ig)
+            if (appUser == null || appPass == null || jwtSettings == null || apiKey == null) {
+                return new UploadFilesResponse { Status = 500, Message = "Internal Server Error: App config is not properly set up" };
+            }
             
             if (formData.Username == appUser && formData.Password == appPass)
             {
@@ -42,9 +53,6 @@ namespace api.Helpers
 
         public string GenerateJwtToken(string Username)
         {
-            var jwtSettings = config.GetSection("JwtSettings");
-            var apiKey = Environment.GetEnvironmentVariable("API_KEY");
-
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]

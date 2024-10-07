@@ -1,8 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace api.Models
 {
     public class FolderModel
     {
-        public string FolderName { get; set; }
-        public string FolderPath { get; set; }
+        public required string FolderName { get; set; }
+        public required string FolderPath { get; set; }
     }
 }

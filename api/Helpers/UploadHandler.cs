@@ -9,9 +9,9 @@ namespace api.Helpers
         // Get config from appsettings
         IConfiguration config;
 
-        private readonly List<string> validExtensions;
-        private readonly string rootPath;
-        private readonly long MaxFileUploadSize;
+        private readonly List<string>? validExtensions;
+        private readonly string? rootPath;
+        private readonly long? MaxFileUploadSize;
 
         public UploadHandler() 
         {
@@ -28,6 +28,11 @@ namespace api.Helpers
         
         public UploadFilesResponse UploadFile([FromForm] UploadFile fileData)
         {
+            // Check for null config (sastifies complier ig)
+            if (validExtensions == null || rootPath == null || MaxFileUploadSize == null) {
+                return new UploadFilesResponse { Status = 500, Message = "Internal Server Error: App config is not properly set up" };
+            }
+
             IFormFile file = fileData.file;
             var uploadPath = rootPath + "/" + fileData.UploadPath + "/";
 
@@ -79,7 +84,7 @@ namespace api.Helpers
 
                 return new UploadFilesResponse { Status = 200, Message = $"File successfully uploaded to {uploadPath}" };
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new UploadFilesResponse { Status = 500, Message = $"Internal server error: File failed to upload" };
             }
@@ -87,6 +92,11 @@ namespace api.Helpers
 
         public UploadFilesResponse UploadFolder([FromForm] UploadFolder folderData)
         {
+            // Check for null config (sastifies complier ig)
+            if (rootPath == null) {
+                return new UploadFilesResponse { Status = 500, Message = "Internal Server Error: App config is not properly set up" };
+            }
+
             string uploadPath = "";
 
             // Check if upload path is in req, then add path to upload path, else use root

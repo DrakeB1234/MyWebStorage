@@ -18,7 +18,7 @@ namespace api.Controllers
         // Get config from appsettings
         private readonly IConfiguration config;
         
-        private readonly string rootPath;
+        private readonly string? rootPath;
         
         public FolderController()
         {
@@ -35,6 +35,11 @@ namespace api.Controllers
         [HttpGet("GetAllDirectories/{_paramspath?}")]
         public IActionResult GetAllDirectories(string? _paramspath)
         {
+            // Check for null config (sastifies complier ig)
+            if (rootPath == null) {
+                return StatusCode(500, new { Message = "Internal Server Error: App config is not properly set up" });
+            }
+
             // Remove drive path from root path to compare parameter
             string parsedRootPath = rootPath.Substring(Path.GetPathRoot(rootPath).Length);
 

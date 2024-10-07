@@ -9,6 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Env
 Env.Load();
 
+// Config values
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var apiKey = Environment.GetEnvironmentVariable("API_KEY");
+var frontendURL = Environment.GetEnvironmentVariable("FRONTEND_URL");
+var apiURL = Environment.GetEnvironmentVariable("API_URL");
+
+// Check for null config values, don't build app if there is any null values
+if (jwtSettings == null || apiKey == null || frontendURL == null || apiURL == null) {
+    return;
+}
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -17,9 +28,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Configure JWT authentication
-var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var apiKey = Environment.GetEnvironmentVariable("API_KEY");
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -43,8 +51,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Add CORS
-var frontendURL = Environment.GetEnvironmentVariable("FRONTEND_URL");
-
 builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
     policy =>
     {
@@ -53,8 +59,7 @@ builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
 
 var app = builder.Build();
 
-// Change the URL your API listens on
-var apiURL = Environment.GetEnvironmentVariable("API_URL");
+// Change the URL the API listens on
 if (apiURL != "") {
     app.Urls.Add(apiURL);
 }

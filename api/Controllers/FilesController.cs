@@ -21,7 +21,7 @@ namespace api.Controllers
         // Get config from appsettings
         private readonly IConfiguration config;
         
-        private readonly string rootPath;
+        private readonly string? rootPath;
         private readonly TimeSpan ImageCacheTimeDays;
         private readonly double ImageCacheTimeSeconds;
         
@@ -60,6 +60,11 @@ namespace api.Controllers
 
             var imageExtensions = config.GetSection("ImageExtensions").Get<List<string>>();
             var videoExtensions = config.GetSection("VideoExtensions").Get<List<string>>();
+
+            // Check for null extensions (sastifies complier ig)
+            if (imageExtensions == null || videoExtensions == null) {
+                return StatusCode(500, new { Files = fileList, Message = "Internal Server Error: App config is not properly set up" });
+            }
 
             foreach (var item in fileNames)
             {
@@ -136,9 +141,9 @@ namespace api.Controllers
                             image.Save(outputStream, encoder);
 
                             // Add cache header to improve load times on client 
-                            Response.Headers.Add("Cache-Control", $"public,max-age={ImageCacheTimeSeconds}");
-                            Response.Headers.Add("Expires", DateTime.UtcNow.Add(ImageCacheTimeDays).ToString("R"));
-                            Response.Headers.Add("Pragma", "cache");
+                            Response.Headers["Cache-Control"] = $"public,max-age={ImageCacheTimeSeconds}";
+                            Response.Headers["Expires"] = DateTime.UtcNow.Add(ImageCacheTimeDays).ToString("R");
+                            Response.Headers["Pragma"] = "cache";
 
                             // Return the compressed image as a file
                             return File(outputStream.ToArray(), "image/jpeg", _paramspath);
