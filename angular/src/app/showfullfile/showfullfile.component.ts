@@ -3,11 +3,13 @@ import { FilesService } from '../services/files.service';
 import { FileData } from '../../Models/filedata.model';
 import Exif from 'exif-js';
 import { CommonModule } from '@angular/common';
+import { MoveFile } from '../../Models/movefile.model';
+import { ConfirmdialogComponent } from '../confirmdialog/confirmdialog.component';
 
 @Component({
   selector: 'app-showfullfile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ConfirmdialogComponent],
   templateUrl: './showfullfile.component.html',
 })
 export class ShowfullfileComponent implements OnInit {
@@ -30,6 +32,26 @@ export class ShowfullfileComponent implements OnInit {
     }
   }
 
+  // Confirm Dialog
+  isConfirmDialogOpen: boolean = false;
+  confirmDialogRes: boolean = false;
+  callbackFn: Function | null= null;
+  dialogMessage: string = "";
+
+  confirmDialog(callbackFn: Function, dialogMessage: string) {
+    this.callbackFn = callbackFn;
+    this.dialogMessage = dialogMessage;
+    this.isConfirmDialogOpen = true;
+  }
+
+  closeConfirmDialog() {
+    this.isConfirmDialogOpen = false;
+  }
+
+  handleCallback() {
+    if (this.callbackFn) this.callbackFn();
+  }
+
   convertFileLength(bytes: number, decimals: number): string {
     const k = 1024
     const dm = decimals < 0 ? 0 : decimals
@@ -44,7 +66,7 @@ export class ShowfullfileComponent implements OnInit {
 
   moveFile(): void {
     if (this.file) {
-      this.filesService.moveFile({ fileName: this.file.fileName, fileDestination: this.file.fileName }).subscribe({
+      this.filesService.moveFile({ FileName: this.file.fileName, FileDestination: this.file.fileName } as MoveFile).subscribe({
         next: (data: any) => {
           console.log(data)
         },

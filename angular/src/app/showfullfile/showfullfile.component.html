@@ -21,7 +21,7 @@
                   <img class="h-[20px]" src="/icons/icon-transfer-outline.svg" />
                   <p class="font-semibold">Move File</p>
                 </div>
-                <div (click)="deleteFile()" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
+                <div (click)="confirmDialog(deleteFile, 'Are you sure you want to delete this file?')" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
                   <img class="h-[20px]" src="/icons/icon-exit-outline.svg" />
                   <p class="font-semibold">Delete File</p>
                 </div>
@@ -88,7 +88,7 @@
               <button (click)="changeFile(1)" class="bg-white/40 rounded-full p-4 hover:bg-white/50">
                 <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-              </svg>
+                </svg>
               </button>
             </div>
 
@@ -100,3 +100,5 @@
      </div>
   </div>
 </div>
+
+<app-confirmdialog *ngIf="isConfirmDialogOpen" (callback)="handleCallback()" (closeConfirmDialog)="closeConfirmDialog()" [dialogMessage]="dialogMessage"></app-confirmdialog>

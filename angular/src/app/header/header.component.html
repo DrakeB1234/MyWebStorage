@@ -3,17 +3,17 @@
     <!-- Dropdown and toggle button items -->
     <div class="relative">
       <div (click)="toggleDropdown()" class="p-3 cursor-pointer
-      transition-background ease-in duration-150 bg-none hover:bg-slate-300
+      transition-background ease-in duration-150 bg-none hover:bg-slate-200
       ">
         <img class="h-[18px]" src="/icons/icon-menu-outline.svg" alt="[]" />
       </div>
 
       <div *ngIf="isDropdownOpen" class="absolute w-screen max-w-[350px]
-      bg-white rounded-r-md shadow-xl shadow-black/60 cursor-default z-10 [&>:not(:last-child)]:border-b-[1px] [&>:not(:first-child)]:py-3">
+      bg-white rounded-r-md shadow-xl shadow-black/60 cursor-default z-20 [&>:not(:last-child)]:border-b-[1px] [&>:not(:first-child)]:py-3">
 
-      <div class="flex items-center gap-2 p-2 pb-4 pt-4 bg-slate-200">
-        <img src="pictures/MyWebStorage.png" class="h-10" />
-        <p class="text-base text-gray-950">MyWebStorage</p>
+      <div class="flex items-center gap-2 p-3 bg-slate-200 rounded-tr-md">
+        <img src="favicon.ico" class="h-10" />
+        <p class="text-base text-gray-950">My Web Storage</p>
       </div>
         
         <!-- Functions -->
@@ -50,7 +50,7 @@
 
       </div>
     </div>
-    <div class="text-slate-800 font-semibold text-base">
+    <div class="text-slate-800 font-semibold text-sm">
       <p>My Web Storage</p>
     </div>
   </div>

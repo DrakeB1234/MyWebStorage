@@ -1,7 +1,7 @@
-<div class="flex pl-2 md:pl-6 md:pr-6 mt-4 text-slate-950 font-light text-base">
+<div class="flex mt-4 text-slate-950 font-light text-base p-2 md:p-[5%] md:pt-2 md:pb-2">
   <p>Folders</p>
 </div>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-1 p-2 md:p-6">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-1 p-2 md:p-[5%] md:pt-2 md:pb-2">
 
   <!-- Folders -->
   @for(folder of folders; track $index) {
@@ -10,7 +10,7 @@
     hover:bg-slate-200 transition-colors ease-in duration-75
     ">
       <img src="icons/icon-folder-outline.svg" class="h-[18px]"/>
-      <p class="overflow-hidden truncate">{{folder.folderName}}</p>
+      <p class="text-base overflow-hidden truncate">{{folder.folderName}}</p>
     </div>
   } @empty {
   }

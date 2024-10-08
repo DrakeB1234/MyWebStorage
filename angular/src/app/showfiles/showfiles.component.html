@@ -1,29 +1,79 @@
-<div class="flex pl-2 md:pl-6 md:pr-6 mt-4 text-slate-950 font-light text-base">
-  <p>Files</p>
-</div>
-<div class="flex flex-wrap
-gap-[0.1rem] p-2 md:p-6 w-screen place-self-center"
->
-    @for(file of files; track $index) {
-      <div class="flex-auto max-w-[180px] md:max-w-[250px] cursor-pointer" (click)="openShowFullFile(file, $index)">
+<div class="flex flex-col gap-2 mt-4 w-screen text-slate-950 font-light text-base p-2 md:p-[5%] md:pt-2">
 
-        @if(file.fileType === "image") {
-        <img
-          class="object-cover rounded-md min-w-[100px] md:min-w-[150px] h-[120px] md:h-[150px] w-full"
-          src="{{this.filesService.getCompressedImage(file.fileName)}}"
-          alt="{{file.fileName}}"
-          priority
-        />
-        }
-        @else {
-          <p>{{file.fileName}}</p>
-        }
+  <div class="flex justify-between items-end">
+    <p>Files</p>
+    <div (click)="toggleMultiSelect()" class="flex gap-2 items-center p-1 pr-3 pl-3 rounded-md bg-blue-400 cursor-pointer hover:bg-blue-500">
+      <img class="h-[18px]" src="/icons/icon-select-outline.svg" alt="[]" />
+      <p class="text-sm text-white font-medium">Select</p>
+    </div>
+  </div>
+  
+  <div *ngIf="isMultiSelectOpen" class="flex justify-between items-center bg-white rounded-md shadow-md shadow-black/50 sticky top-2 p-2 text-sm font-medium z-10">
+    <div class="flex items-center gap-2">
 
+      <div (click)="resetFileSelection()" class="flex items-center gap-1 border-2 border-slate-200 hover:bg-slate-100 p-1 pr-2 pl-2 rounded-full cursor-pointer">
+        <img class="h-[15px]" src="/icons/icon-exit-black-outline.svg" alt="[]" />
+        <p>{{selectedFiles.length}} selected</p>
       </div>
-    } @empty {
-      <p class="text-center w-screen pt-4 text-cyan-950 font-light">No Files Found!</p>
-    }
-</div>  
+      <div (click)="addAllToSelection()" class="flex items-center gap-2 border-2 border-slate-200 hover:bg-slate-100 p-1 pr-2 pl-2 rounded-full cursor-pointer">
+        <p>Select All</p>
+      </div>
+      
+    </div>
+    <div (click)="toggleMultiSelectOptions()" class="relative flex items-center gap-2 hover:bg-slate-100 p-2 rounded-md cursor-pointer">
+      <img class="h-[15px]" src="/icons/icon-info-black-outline.svg" alt="[]" />
+
+      <!-- Multi select options -->
+       <div *ngIf="isMultiSelectOptionsOpen" class="flex flex-col absolute top-8 right-0 rounded-md bg-white shadow-md shadow-black/50 p-2 
+       cursor-default w-screen max-w-[175px] text-sm">
+       <button (click)="downloadFileSelection()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+          <img class="h-[20px]" src="/icons/icon-upload-black-outline.svg" />
+          <span class="text-slate-900">Download Files</span>
+        </button>
+        <button class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+          <img class="h-[20px]" src="/icons/icon-transfer-black-outline.svg" />
+          <span class="text-slate-900">Move Files</span>
+        </button>
+        <button (click)="confirmDialog(deleteFileSelection, 'Are you sure you want to delete the selected ' + selectedFiles.length + ' files?')" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+          <img class="h-[20px]" src="/icons/icon-exit-black-outline.svg" />
+          <span class="text-slate-900">Delete Files</span>
+        </button>
+       </div>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap mt-2 w-full
+  gap-[0.1rem] place-self-center"
+  >
+      @for(file of files; track $index) {
+        <div class="relative flex-auto max-w-[180px] md:max-w-[250px] cursor-pointer" (click)="!isMultiSelectOpen ? openShowFullFile(file, $index) : addFileToSelection($index)">
+
+          @if(file.fileType === "image") {
+          <img
+            class="object-cover rounded-md min-w-[100px] h-[120px] md:h-[150px] w-full"
+            src="{{this.filesService.getCompressedImage(file.fileName)}}"
+            alt="{{file.fileName}}"
+            priority
+          />
+          }
+          @else {
+            <p>{{file.fileName}}</p>
+          }
+
+          <!-- If file is selected in multiselect, then show selection -->
+           <div *ngIf="selectedFiles.includes($index)" class="absolute top-1 right-1">
+            <div class="rounded-full p-1 border-2 border-white bg-blue-500">
+              <img class="h-[15px] text-white" src="/icons/icon-checkmark-outline.svg" alt="[]" />
+            </div>
+           </div>
+
+        </div>
+      } @empty {
+        <p class="text-center w-screen pt-4 text-cyan-950 font-light">No Files Found!</p>
+      }
+  </div>  
+</div>
 
 <!-- Toggles -->
  <app-showfullfile *ngIf="isShowFullFileOpen" (closeShowFullFile)="closeShowFullFile()" (changeShowFullFile)="changeShowFullFile($event)" [file]="this.fullFile"></app-showfullfile>
+ <app-confirmdialog *ngIf="isConfirmDialogOpen" (callback)="handleCallback()" (closeConfirmDialog)="closeConfirmDialog()" [dialogMessage]="dialogMessage"></app-confirmdialog>

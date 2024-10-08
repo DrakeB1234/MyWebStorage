@@ -46,9 +46,9 @@ export class FilesService {
     return this.http.post(this.apiUrl + apiEndpoints.addFile, data, { headers });
   }
 
-  moveFile(FileData: MoveFile): Observable<any> {
-    const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
-    return this.http.patch(this.apiUrl + apiEndpoints.moveFile, FileData, { headers });
+  moveFile(fileData: MoveFile): Observable<any> {
+    const headers = new HttpHeaders().append('Content-Type', 'application/json');
+    return this.http.patch(this.apiUrl + apiEndpoints.moveFile, fileData, { headers });
   }
 
   downloadFile(fileName: string): Observable<any> {

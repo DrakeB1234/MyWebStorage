@@ -1,4 +1,4 @@
 export interface MoveFile {
-  fileName: string,
-  fileDestination: string,
+  FileName: string,
+  FileDestination: string,
 }

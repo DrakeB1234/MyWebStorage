@@ -177,7 +177,7 @@ namespace api.Controllers
         }
 
         [HttpPatch("MoveFile")]
-        public IActionResult MoveFile([FromForm] MoveFile fileData)
+        public IActionResult MoveFile([FromBody] MoveFile fileData)
         {            
             return Ok(new { message = fileData });
         }
