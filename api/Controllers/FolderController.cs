@@ -85,6 +85,45 @@ namespace api.Controllers
             return Ok(FolderList);
         }
 
+        // Gets all dirs from root
+        [HttpGet("GetAllRootDirectories")]
+        public IActionResult GetAllRootDirectories()
+        {
+            // Check for null config (sastifies complier ig)
+            if (rootPath == null) {
+                return StatusCode(500, new { Message = "Internal Server Error: App config is not properly set up" });
+            }
+
+            // Remove drive path from root path to compare parameter
+            string parsedRootPath = rootPath.Substring(Path.GetPathRoot(rootPath).Length);
+            
+            List<FolderModel> FolderList = new List<FolderModel>();
+            List<string> tempFolderList = GetDirectoriesRecursive(rootPath);
+
+            try
+            {
+                foreach (var item in tempFolderList)
+                {
+                    // Parse folder path with /
+                    var parsedFolderPath = item.Replace('\\', '/');
+                    
+                    // Remove root path from directory name
+                    FolderList.Add(new FolderModel { FolderName = Regex.Match(item, @"[^\/\\]+(?=[\/\\]?$)").Value, FolderPath = parsedFolderPath.Replace(rootPath, "") });
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Could not find a part of the path"))
+                {
+                    return StatusCode(404, $"Could not find any directories under the path {Path.Combine(rootPath)}");
+                }
+                return StatusCode(500, ex.Message);
+            }
+
+            // Prevent errors on Angular HttpClient by ensuring response is in JSON
+            return Ok(FolderList);
+        }
+
         [HttpPost("AddDirectory")]
         public IActionResult AddDirectory([FromForm] UploadFolder folderData)
         {                        
@@ -100,6 +139,30 @@ namespace api.Controllers
                 default:
                     return StatusCode(res.Status, new { message = res.Message });
             }
+        }
+
+        [HttpDelete("DeleteDirectory")]
+        public IActionResult DeleteDirectory([FromBody] FolderModel folderData)
+        {                        
+            Console.WriteLine(folderData);
+
+            return Ok(new { Message = "Good" });
+        }
+
+        // Helper method to recursively get directories
+        private List<string> GetDirectoriesRecursive(string rootPath)
+        {
+            List<string> directories = new List<string>();
+
+            // Get all directories in the current path
+            foreach (var dir in Directory.GetDirectories(rootPath))
+            {
+                directories.Add(dir);
+                // Recursively get directories in the current subdirectory
+                directories.AddRange(GetDirectoriesRecursive(dir));
+            }
+
+            return directories;
         }
     }
 }

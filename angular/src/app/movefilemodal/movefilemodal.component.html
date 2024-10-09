@@ -1,24 +1,28 @@
-<div class="flex justify-center absolute inset-0 bg-black/60 z-20">
+<div class="flex justify-center absolute inset-0 bg-black/60 z-30">
   <div class="flex flex-col relative bg-white h-fit w-screen md:max-w-[400px] m-2 md:m-16 p-4 rounded-md shadow-lg shadow-black/50">
-    <p class="text-slate-800 font-medium text-lg">Add a Folder to</p>
-    <p class="font-light"><span *ngIf="currentPath !== 'My Web Storage'">MWS</span>{{ currentPath }}</p>
+    <p class="text-slate-800 font-medium text-lg">Move file to</p>
     <form [formGroup]="folderForm" (ngSubmit)="submitFolder()" class="flex flex-col mt-6 gap-2">
       <!-- Errors -->
       <div *ngIf="this.errorMessage !== ''" class="text-red-700 bg-red-200 mb-1 p-2 text-sm">
         {{ this.errorMessage }}
       </div>
 
-      <label for="FolderName" class="text-slate-900 text-sm">Folder Name</label>
-      <input type="text" name="FolderName-input" id="FolderName" placeholder="Folder Name" formControlName="FolderName"
+      <label for="FileDestination" class="text-slate-900 text-sm">Folder</label>
+      <select type="text" name="FileDestination-input" id="FileDestination" placeholder="Folder Name" formControlName="FileDestination"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
       >
-      <div *ngIf="FolderName?.invalid && FolderName?.touched" class="text-red-700 bg-red-200 mt-1 p-2 text-sm">
-        Folder Name is required.
+        <option [value]="''" [defaultSelected]="true">My Web Storage</option>
+        @for (folder of foldersData; track $index) {
+          <option [value]="folder.folderPath">{{"MWS" +folder.folderPath}}</option>
+        }
+      </select>
+      <div *ngIf="FileDestination?.invalid && FileDestination?.touched" class="text-red-700 bg-red-200 mt-1 p-2 text-sm">
+        Folder is required.
       </div>
 
       <button type="sumbit" [disabled]="!folderForm.valid" *ngIf="!postFolderLoading"
       class="primary bg-blue-200 hover:bg-blue-300 w-full rounded-md p-2 mt-12 transition-colors ease-in duration-75 cursor-pointer
-      "><span class="text-slate-700 font-semibold text-sm">Add Folder</span></button>
+      "><span class="text-slate-700 font-semibold text-sm">Move file</span></button>
 
       <button type="button" class="flex justify-center gap-1 bg-blue-400 w-full rounded-md p-2 mt-12"  *ngIf="postFolderLoading" disabled>
         <svg class="mr-3 h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -28,7 +32,7 @@
         <p class="text-white font-bold text-sm">Processing</p>
       </button>
       
-      <button (click)="toggleAddFolder()" type="button" *ngIf="!postFolderLoading"  
+      <button (click)="toggleMoveFileDropdown()" type="button" *ngIf="!postFolderLoading"  
       class="bg-slate-200 hover:bg-slate-300 w-full rounded-md p-2 transition-colors ease-in duration-75
       "><span class="text-slate-950 font-normal text-sm">Back</span></button>
     </form>

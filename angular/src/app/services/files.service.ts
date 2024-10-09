@@ -46,9 +46,9 @@ export class FilesService {
     return this.http.post(this.apiUrl + apiEndpoints.addFile, data, { headers });
   }
 
-  moveFile(fileData: MoveFile): Observable<any> {
-    const headers = new HttpHeaders().append('Content-Type', 'application/json');
-    return this.http.patch(this.apiUrl + apiEndpoints.moveFile, fileData, { headers });
+  moveFile(fileData: any): Observable<any> {
+    const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+    return this.http.post(this.apiUrl + apiEndpoints.moveFile, fileData, { headers });
   }
 
   downloadFile(fileName: string): Observable<any> {
@@ -90,9 +90,20 @@ export class FilesService {
     return this.http.get<FolderData[]>(this.apiUrl + apiEndpoints.getAllDirectories + encodeURIComponent(this.currentPath));
   }
 
+  getAllFolders(): Observable<FolderData[]> {
+    // Gets path that is set in filesservice, path updates from the component 'showfolders'
+    // Encode path to ensure proper data is sent
+    return this.http.get<FolderData[]>(this.apiUrl + apiEndpoints.getAllRootDirectories);
+  }
+
   postFolder(data: any): Observable<any> {
     const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
     return this.http.post(this.apiUrl + apiEndpoints.postDirectory, data, { headers });
+  }
+
+  deleteFolder(data: any): Observable<any> {
+    const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+    return this.http.delete(this.apiUrl + apiEndpoints.deleteDirectory, { body: data, headers: headers });
   }
 
   refreshFolders() {

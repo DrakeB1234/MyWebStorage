@@ -102,7 +102,9 @@ namespace api.Helpers
             // Check if upload path is in req, then add path to upload path, else use root
             if (folderData.FolderPath != null)
             {
-                uploadPath = Path.Combine(rootPath, folderData.FolderPath);
+                uploadPath = rootPath + folderData.FolderPath;
+
+                Console.WriteLine(uploadPath);
 
                 // Check if provided folder path already exists to prevent creating sub dirs
                 if (!Directory.Exists(uploadPath))

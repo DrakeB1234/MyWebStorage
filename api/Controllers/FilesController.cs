@@ -176,10 +176,34 @@ namespace api.Controllers
             }
         }
 
-        [HttpPatch("MoveFile")]
+        [HttpPost("MoveFile")]
         public IActionResult MoveFile([FromBody] MoveFile fileData)
         {            
-            return Ok(new { message = fileData });
+
+            var orgFilePath = fileData.FilePath + "/" + fileData.FileName;
+            var newFilePath = rootPath + "/" + fileData.FileDestination;
+            
+            if (!System.IO.File.Exists(orgFilePath))
+            {
+                return NotFound(new { Message = $"file not found: {fileData.FileName} at {orgFilePath}" });
+            }
+
+            // Ensure destination directory exists
+            if (!Directory.Exists(newFilePath))
+            {
+                return NotFound(new { Message = $"Folder not found: {newFilePath}" });
+            }
+
+            try
+            {
+                System.IO.File.Move(orgFilePath, newFilePath + "/" + fileData.FileName);
+
+                return Ok(new { Message = $"File moved to: {newFilePath}" });
+            }
+            catch (Exception ex)
+            {
+                    return StatusCode(500, new { Message = $"Internal server error: {ex.Message}" });
+            }
         }
 
         [HttpGet("DownloadFile/{downloadPath}")]

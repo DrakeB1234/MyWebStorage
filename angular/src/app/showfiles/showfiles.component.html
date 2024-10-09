@@ -25,18 +25,18 @@
 
       <!-- Multi select options -->
        <div *ngIf="isMultiSelectOptionsOpen" class="flex flex-col absolute top-8 right-0 rounded-md bg-white shadow-md shadow-black/50 p-2 
-       cursor-default w-screen max-w-[175px] text-sm">
+       cursor-default w-screen max-w-[175px] text-sm font-normal">
        <button (click)="downloadFileSelection()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
           <img class="h-[20px]" src="/icons/icon-upload-black-outline.svg" />
-          <span class="text-slate-900">Download Files</span>
+          <span>Download Files</span>
         </button>
-        <button class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+        <button (click)="toggleMoveFile()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
           <img class="h-[20px]" src="/icons/icon-transfer-black-outline.svg" />
-          <span class="text-slate-900">Move Files</span>
+          <span>Move Files</span>
         </button>
         <button (click)="confirmDialog(deleteFileSelection, 'Are you sure you want to delete the selected ' + selectedFiles.length + ' files?')" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
           <img class="h-[20px]" src="/icons/icon-exit-black-outline.svg" />
-          <span class="text-slate-900">Delete Files</span>
+          <span>Delete Files</span>
         </button>
        </div>
     </div>
@@ -75,5 +75,6 @@
 </div>
 
 <!-- Toggles -->
+  <app-movefilemodal *ngIf="showMoveFile" (toggleMoveFile)="toggleMoveFile()" (getMoveFilePath)="getMoveFileData($event)"></app-movefilemodal>
  <app-showfullfile *ngIf="isShowFullFileOpen" (closeShowFullFile)="closeShowFullFile()" (changeShowFullFile)="changeShowFullFile($event)" [file]="this.fullFile"></app-showfullfile>
  <app-confirmdialog *ngIf="isConfirmDialogOpen" (callback)="handleCallback()" (closeConfirmDialog)="closeConfirmDialog()" [dialogMessage]="dialogMessage"></app-confirmdialog>

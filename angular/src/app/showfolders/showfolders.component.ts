@@ -42,6 +42,5 @@ export class ShowfoldersComponent implements OnInit {
   }
 
   openFolderSettings(): void {
-    console.log('Pressed');
   }
 }

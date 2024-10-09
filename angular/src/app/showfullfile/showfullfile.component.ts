@@ -5,11 +5,12 @@ import Exif from 'exif-js';
 import { CommonModule } from '@angular/common';
 import { MoveFile } from '../../Models/movefile.model';
 import { ConfirmdialogComponent } from '../confirmdialog/confirmdialog.component';
+import { MovefilemodalComponent } from '../movefilemodal/movefilemodal.component';
 
 @Component({
   selector: 'app-showfullfile',
   standalone: true,
-  imports: [CommonModule, ConfirmdialogComponent],
+  imports: [CommonModule, ConfirmdialogComponent, MovefilemodalComponent],
   templateUrl: './showfullfile.component.html',
 })
 export class ShowfullfileComponent implements OnInit {
@@ -64,17 +65,21 @@ export class ShowfullfileComponent implements OnInit {
 
   // File Functions
 
-  moveFile(): void {
+  moveFile(formData: MoveFile): void {
     if (this.file) {
-      this.filesService.moveFile({ FileName: this.file.fileName, FileDestination: this.file.fileName } as MoveFile).subscribe({
+      this.filesService.moveFile(formData).subscribe({
         next: (data: any) => {
-          console.log(data)
-        },
+          // Switch to next file to left
+          this.changeFile(1);
+          // Close full file and refresh data
+          this.filesService.refreshFiles();
+          },
         error: (err: any) => {
           console.log(err);
         }
       })
     }  
+    this.toggleMoveFile();
   }
 
   downloadFile(): void {
@@ -118,6 +123,22 @@ export class ShowfullfileComponent implements OnInit {
   // Toggles
   showFileDetails: boolean = false;
   showFileFunctions: boolean = false;
+  showMoveFile: boolean = false;
+
+  toggleMoveFile() {
+    this.showMoveFile = !this.showMoveFile;
+  }
+
+  getMoveFileData(fileDestination: any) {
+    if (this.file) {
+      const formData = { 
+        FileName: this.file.fileName, 
+        FilePath: this.file.fileDirectoryName,
+        FileDestination: fileDestination 
+      } as MoveFile;
+      this.moveFile(formData);
+    }
+  }
 
   toggleShowFileDetail() {
     this.showFileDetails = !this.showFileDetails;

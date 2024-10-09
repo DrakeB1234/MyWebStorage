@@ -13,7 +13,6 @@ export class ConfirmdialogComponent {
 
   handleRes(res: boolean) {
     if (res) {
-      console.log(this.callback)
       this.callback.emit();
     } 
     this.closeConfirmDialog.emit();
