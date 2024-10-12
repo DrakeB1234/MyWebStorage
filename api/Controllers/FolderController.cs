@@ -141,12 +141,80 @@ namespace api.Controllers
             }
         }
 
+        [HttpPatch("RenameDirectory")]
+        public IActionResult RenameDirectory([FromBody] RenameFolderModel folderData)
+        {
+            // Ensure values passed are not empty
+            if (string.IsNullOrWhiteSpace(folderData.NewFolderName) || string.IsNullOrWhiteSpace(folderData.FolderPath)) {
+                return BadRequest(new { Message = "Fields can not be empty"});
+            }
+
+            var oldPath = rootPath + folderData.FolderPath;
+            // Remove last folder name from path with regex, then add new folder name
+            var newPath = Regex.Replace(oldPath, @"[^\/\\]+(?=[\/\\]?$)", string.Empty);
+            newPath += folderData.NewFolderName;
+            
+            try
+            {
+                if (Directory.Exists(oldPath))
+                {
+                    if (!Directory.Exists(newPath))
+                    {
+                        // Rename (move) the directory
+                        Directory.Move(oldPath, newPath);
+
+                        return Ok(new { message = "Directory renamed successfully", newPath = Regex.Replace(folderData.FolderPath, @"[^\/\\]+(?=[\/\\]?$)", folderData.NewFolderName) });
+                    }
+                    else
+                    {
+                        // The new path already exists
+                        return Conflict(new { message = "A directory with the new name already exists" });
+                    }
+                }
+                else
+                {
+                    // Old directory doesn't exist
+                    return NotFound(new { message = "Directory not found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                return StatusCode(500, new { message = $"Internal Server Error: Error {ex.Message}" });
+            }        
+        }
+
         [HttpDelete("DeleteDirectory")]
         public IActionResult DeleteDirectory([FromBody] FolderModel folderData)
-        {                        
-            Console.WriteLine(folderData);
+        {                
+            var path = rootPath + folderData.FolderPath;  
+            try
+            {
+                // Check if directory is not root
+                if (path == this.rootPath) {
+                    return BadRequest(new { message = "Cannot delete root directory" });
+                }
 
-            return Ok(new { Message = "Good" });
+                // Check if directory exists
+                if (Directory.Exists(path))
+                {
+                    // Delete directory, only allowed if directory is empty
+                    Directory.Delete(path, false);
+
+                    // Return success message
+                    return Ok(new { message = "Directory deleted successfully" });
+                }
+                else
+                {
+                    // Directory doesn't exist
+                    return NotFound(new { message = "Directory not found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                return StatusCode(500, new { message = $"Internal Server error: Error: {ex}" });
+            }
         }
 
         // Helper method to recursively get directories

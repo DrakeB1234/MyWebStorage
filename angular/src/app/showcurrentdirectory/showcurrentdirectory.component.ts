@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FilesService } from '../services/files.service';
 import { ModalService } from '../services/modal.service';
 import { RenamefolderformComponent } from '../forms/renamefolderform/renamefolderform.component';
@@ -69,7 +69,14 @@ export class ShowcurrentdirectoryComponent implements OnInit {
   }
 
   deleteFolder() {
-    console.log('delete');
+    this.filesService.deleteFolder({FolderName: this.currentPath, FolderPath: this.currentPath}).subscribe({
+      next: (data: any) => {
+        this.previousPath();
+      },
+      error: (err: any) => {
+        console.log(err)
+      }
+    });
     this.closeModal();
   }
 
@@ -98,5 +105,15 @@ export class ShowcurrentdirectoryComponent implements OnInit {
 
   toggleFolderFunctions() {
     this.isFolderFunctionsOpen = !this.isFolderFunctionsOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const clickedInside = target.closest('.relative');
+
+    if (!clickedInside) {
+      this.isFolderFunctionsOpen = false;
+    }
   }
 }

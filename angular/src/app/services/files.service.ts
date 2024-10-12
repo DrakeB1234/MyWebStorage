@@ -106,6 +106,11 @@ export class FilesService {
     return this.http.delete(this.apiUrl + apiEndpoints.deleteDirectory, { body: data, headers: headers });
   }
 
+  renameFolder(data: any): Observable<any> {
+    const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+    return this.http.patch(this.apiUrl + apiEndpoints.renameDirectory, data, { headers });
+  }
+
   refreshFolders() {
     this.refreshFoldersSubject.next(true);
   }

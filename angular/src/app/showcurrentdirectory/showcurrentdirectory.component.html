@@ -37,5 +37,5 @@
 </ng-template>
 
 <ng-template #renameFolderTemplate>
-  <app-renamefolderform (closeForm)="closeModal()" />
+  <app-renamefolderform (closeForm)="closeModal()" [folderPath]="this.currentPath" />
 </ng-template>

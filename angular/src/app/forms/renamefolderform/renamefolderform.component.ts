@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FilesService } from '../../services/files.service';
 
@@ -10,6 +10,7 @@ import { FilesService } from '../../services/files.service';
   templateUrl: './renamefolderform.component.html',
 })
 export class RenamefolderformComponent {
+  @Input() folderPath: string = "";
   @Output() closeForm = new EventEmitter<void>();
 
   filesService = inject(FilesService);
@@ -30,8 +31,25 @@ export class RenamefolderformComponent {
   }
 
   onSubmit() {
-    if (this.form.valid) {
-      console.log(this.form.value);
+    this.errorMessage = [];
+    if (this.form.valid && this.folderPath) {
+      this.filesService.renameFolder({NewFolderName: this.form.value.folderName, FolderPath: this.folderPath}).subscribe({
+        next: (data: any) => {
+          // Expects newPath on res
+          if (data.newPath) {
+            this.filesService.currentPath = data.newPath;
+            this.filesService.refreshAllData();
+          }
+          else {
+            this.filesService.currentPath = "";
+          }
+          this.closeForm.emit();
+        },
+        error: (err: any) => {
+          console.log(err)
+          this.errorMessage.push(err.error.message);
+        }
+      })
     }
     else {
       this.form.markAllAsTouched();

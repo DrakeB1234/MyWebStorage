@@ -7,6 +7,7 @@
   "getAllRootDirectories": "Folder/GetAllRootDirectories",
   "postDirectory": "Folder/AddDirectory",
   "deleteDirectory": "Folder/DeleteDirectory",
+  "renameDirectory": "Folder/RenameDirectory",
   "moveFile": "Files/MoveFile",
   "downloadFile": "Files/DownloadFile/",
   "deleteFile": "Files/DeleteFile",
