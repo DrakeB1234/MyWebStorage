@@ -1,0 +1,22 @@
+<div class="absolute inset-0 bg-black/50 z-40" *ngIf="isVisible">
+  <div class="flex justify-center p-2">
+    <div class="flex flex-col gap-2 bg-white shadow-md rounded-md p-4 w-screen max-w-[400px]">
+      <div id="title" class="font-semibold">
+        @if (title) {
+          <p>{{ title }}</p>
+        }
+        @else {
+          <p>Title</p>
+        }
+      </div>
+      <div id="message" class="font-light">
+        @if (message) {
+          <p>{{ message }}</p>
+        }
+      </div>
+      <div class="flex flex-col gap-1 pt-2">
+        <ng-container *ngIf="contentTemplate" [ngTemplateOutlet]="contentTemplate"></ng-container>
+      </div>
+    </div>
+  </div>
+</div>

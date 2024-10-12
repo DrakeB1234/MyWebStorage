@@ -1,23 +1,79 @@
-import { NgClass, NgIf } from '@angular/common';
-import { Component, EventEmitter, HostListener, inject, Output } from '@angular/core';
-import { AddfilesformmodalComponent } from '../addfilesformmodal/addfilesformmodal.component';
+import { CommonModule } from '@angular/common';
+import { Component, HostListener, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FilesService } from '../services/files.service';
 import { AuthService } from '../services/auth.service';
+import { ModalService } from '../services/modal.service';
+import { AddfilesformComponent } from "../forms/addfilesform/addfilesform.component";
+import { AddfolderformComponent } from "../forms/addfolderform/addfolderform.component";
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [NgClass, AddfilesformmodalComponent, NgIf],
+  imports: [CommonModule, AddfilesformComponent, AddfolderformComponent],
   templateUrl: './header.component.html',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
   filesService = inject(FilesService);
   authService = inject(AuthService);
+  modalService = inject(ModalService);
+  currentPath = "";
   isDropdownOpen: boolean = false;
+
+  ngOnInit(): void {
+    this.currentPath = this.filesService.getCurrentPath();
+
+    this.filesService.refreshCurrentPath$.subscribe(() => {
+      this.currentPath = this.filesService.getCurrentPath();
+    });
+  }
   
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  // Functions and modals
+  @ViewChild('addFilesTemplate', { static: true }) addFilesTemplate!: TemplateRef<any>;
+  @ViewChild('addFolderTemplate', { static: true }) addFolderTemplate!: TemplateRef<any>;
+
+  addFilesModal() {
+    let newPath = "";
+    if (this.currentPath !== "My Web Storage") {
+      newPath = `MWS${this.currentPath}`;
+    } else {
+      newPath = this.currentPath;
+    }
+
+    this.modalService.open({ 
+      title: `Upload Files to`,
+      message: `${newPath}`, 
+      contentTemplate: this.addFilesTemplate
+    }
+    );
+
+    this.isDropdownOpen = false;
+  }
+
+  addFolderModal() {
+    let newPath = "";
+    if (this.currentPath !== "My Web Storage") {
+      newPath = `MWS${this.currentPath}`;
+    } else {
+      newPath = this.currentPath;
+    }
+
+    this.modalService.open({ 
+      title: `Upload Folder to`,
+      message: `${newPath}`, 
+      contentTemplate: this.addFolderTemplate
+    }
+    );
+
+    this.isDropdownOpen = false;
+  }
+
+  closeModal(): void {
+    this.modalService.close();
   }
 
   @HostListener('document:click', ['$event'])
@@ -28,19 +84,5 @@ export class HeaderComponent {
     if (!clickedInside) {
       this.isDropdownOpen = false;
     }
-  }
-
-  // Toggles
-  @Output() toggleAddFilesComponent = new EventEmitter<void>();
-  @Output() toggleAddFolderComponent = new EventEmitter<void>();
-
-  toggleAddFiles() {
-    this.toggleAddFilesComponent.emit();
-    this.isDropdownOpen = false;
-  }
-
-  toggleAddFolder() {
-    this.toggleAddFolderComponent.emit();
-    this.isDropdownOpen = false;
   }
 }

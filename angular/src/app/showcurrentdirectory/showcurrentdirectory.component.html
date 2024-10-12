@@ -16,11 +16,11 @@
 
     <!-- Folder Functions -->
      <div *ngIf="isFolderFunctionsOpen" class="absolute top-[42px] right-0 p-2 bg-white w-screen max-w-[175px] rounded-md shadow-md text-sm">
-        <button class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md w-full">
+        <button (click)="renameFolderModal()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md w-full">
           <img class="h-[20px]" src="/icons/icon-folder-outline.svg" />
           <span class="text-slate-900">Rename Folder</span>
         </button>
-        <button class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md w-full">
+        <button (click)="deleteFolderModal()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md w-full">
           <img class="h-[20px]" src="/icons/icon-exit-black-outline.svg" />
           <span class="text-slate-900">Delete Folder</span>
         </button>
@@ -28,3 +28,14 @@
 
   </button>
 </div>
+
+<ng-template #deleteFolderTemplate>
+  <div class="flex justify-end gap-3 pt-8">
+    <button (click)="closeModal()" class="bg-gray-300 p-1 px-2 rounded-md">Close</button>
+    <button (click)="deleteFolder()" class="bg-red-500 text-white p-1 px-2 rounded-md">Delete</button>
+  </div>
+</ng-template>
+
+<ng-template #renameFolderTemplate>
+  <app-renamefolderform (closeForm)="closeModal()" />
+</ng-template>

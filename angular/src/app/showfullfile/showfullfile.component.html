@@ -17,11 +17,11 @@
                   <img class="h-[20px]" src="/icons/icon-upload-outline.svg" />
                   <p class="font-semibold">Download File</p>
                 </div>
-                <div (click)="toggleMoveFile()" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
+                <div (click)="moveFileModal()" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
                   <img class="h-[20px]" src="/icons/icon-transfer-outline.svg" />
                   <p class="font-semibold">Move File</p>
                 </div>
-                <div (click)="confirmDialog(deleteFile, 'Are you sure you want to delete this file?')" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
+                <div (click)="deleteFileModal()" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
                   <img class="h-[20px]" src="/icons/icon-exit-outline.svg" />
                   <p class="font-semibold">Delete File</p>
                 </div>
@@ -101,5 +101,13 @@
   </div>
 </div>
 
-<app-movefilemodal *ngIf="showMoveFile" (toggleMoveFile)="toggleMoveFile()" (getMoveFilePath)="getMoveFileData($event)"></app-movefilemodal>
-<app-confirmdialog *ngIf="isConfirmDialogOpen" (callback)="handleCallback()" (closeConfirmDialog)="closeConfirmDialog()" [dialogMessage]="dialogMessage"></app-confirmdialog>
+<ng-template #deleteFileTemplate>
+  <div class="flex justify-end gap-3 pt-8">
+    <button (click)="closeModal()" class="bg-gray-300 p-1 px-2 rounded-md">Close</button>
+    <button (click)="deleteFile()" class="bg-red-500 text-white p-1 px-2 rounded-md">Delete</button>
+  </div>
+</ng-template>
+
+<ng-template #moveFileTemplate>
+  <app-movefileform [file]="[this.file]" (formSubmit)="moveFileSubmitted()" (closeForm)="closeModal()" />
+</ng-template>

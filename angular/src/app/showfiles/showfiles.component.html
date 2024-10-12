@@ -30,11 +30,11 @@
           <img class="h-[20px]" src="/icons/icon-upload-black-outline.svg" />
           <span>Download Files</span>
         </button>
-        <button (click)="toggleMoveFile()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+        <button (click)="moveFileModal()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
           <img class="h-[20px]" src="/icons/icon-transfer-black-outline.svg" />
           <span>Move Files</span>
         </button>
-        <button (click)="confirmDialog(deleteFileSelection, 'Are you sure you want to delete the selected ' + selectedFiles.length + ' files?')" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+        <button (click)="deleteFileModal()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
           <img class="h-[20px]" src="/icons/icon-exit-black-outline.svg" />
           <span>Delete Files</span>
         </button>
@@ -74,7 +74,16 @@
   </div>  
 </div>
 
+<ng-template #deleteFileTemplate>
+  <div class="flex justify-end gap-3 pt-8">
+    <button (click)="closeModal()" class="bg-gray-300 p-1 px-2 rounded-md">Close</button>
+    <button (click)="deleteFileSelection()" class="bg-red-500 text-white p-1 px-2 rounded-md">Delete</button>
+  </div>
+</ng-template>
+
+<ng-template #moveFileTemplate>
+  <app-movefileform [file]="this.getFilesFromIndex()" (formSubmit)="moveFileSubmitted()" (closeForm)="closeModal()" />
+</ng-template>
+
 <!-- Toggles -->
-  <app-movefilemodal *ngIf="showMoveFile" (toggleMoveFile)="toggleMoveFile()" (getMoveFilePath)="getMoveFileData($event)"></app-movefilemodal>
- <app-showfullfile *ngIf="isShowFullFileOpen" (closeShowFullFile)="closeShowFullFile()" (changeShowFullFile)="changeShowFullFile($event)" [file]="this.fullFile"></app-showfullfile>
- <app-confirmdialog *ngIf="isConfirmDialogOpen" (callback)="handleCallback()" (closeConfirmDialog)="closeConfirmDialog()" [dialogMessage]="dialogMessage"></app-confirmdialog>
+<app-showfullfile *ngIf="isShowFullFileOpen" (closeShowFullFile)="closeShowFullFile()" (changeShowFullFile)="changeShowFullFile($event)" [file]="this.fullFile"></app-showfullfile>

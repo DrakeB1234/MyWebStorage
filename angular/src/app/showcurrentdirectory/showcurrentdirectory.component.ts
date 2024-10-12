@@ -1,16 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FilesService } from '../services/files.service';
+import { ModalService } from '../services/modal.service';
+import { RenamefolderformComponent } from '../forms/renamefolderform/renamefolderform.component';
 
 @Component({
   selector: 'app-showcurrentdirectory',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RenamefolderformComponent],
   templateUrl: './showcurrentdirectory.component.html',
 })
 export class ShowcurrentdirectoryComponent implements OnInit {
 
   filesService = inject(FilesService);
+  modalService = inject(ModalService);
   currentPath: string = "";
   currentPathParse: string = "";
   // Regex to remove last folder in path
@@ -45,10 +48,49 @@ export class ShowcurrentdirectoryComponent implements OnInit {
     this.filesService.refreshAllData();
   }
 
-  // Folder Functions
+  // Folder functions and modals
+  @ViewChild('deleteFolderTemplate', { static: true }) deleteFolderTemplate!: TemplateRef<any>;
+  @ViewChild('renameFolderTemplate', { static: true }) renameFolderTemplate!: TemplateRef<any>;
 
-  deleteFolder () {
-    
+  deleteFolderModal () {
+    let newPath = "";
+    if (this.currentPath !== "My Web Storage") {
+      newPath = `MWS${this.currentPath}`;
+    } else {
+      newPath = this.currentPath;
+    }
+
+    this.modalService.open({ 
+      title: `Delete folder ${newPath}?`,
+      message: `This will delete the folder "${newPath}" ONLY if there is no files or folders inside`, 
+      contentTemplate: this.deleteFolderTemplate
+    }
+    );
+  }
+
+  deleteFolder() {
+    console.log('delete');
+    this.closeModal();
+  }
+
+  renameFolderModal() {
+    let newPath = "";
+    if (this.currentPath !== "My Web Storage") {
+      newPath = `MWS${this.currentPath}`;
+    } else {
+      newPath = this.currentPath;
+    }
+
+    this.modalService.open({ 
+      title: `Rename folder`,
+      message: `${newPath}`, 
+      contentTemplate: this.renameFolderTemplate
+    }
+    );
+  }
+
+  closeModal(): void {
+    this.modalService.close();
   }
 
   // Toggles

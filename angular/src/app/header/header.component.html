@@ -18,12 +18,12 @@
         
         <!-- Functions -->
          <div class="flex flex-col gap-1 p-1 [&>button]:h-[40px] [&>button]:p-2">
-          <button (click)="toggleAddFiles()" class="flex gap-2 items-center
+          <button (click)="addFilesModal()" class="flex gap-2 items-center
           p-4 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
             <img class="max-h-[25px]" src="/icons/icon-fileupload-outline.svg" />
             <span class="text-slate-900 text-sm">Upload Files</span>
           </button>
-          <button (click)="toggleAddFolder()" class="flex gap-2 items-center
+          <button (click)="addFolderModal()" class="flex gap-2 items-center
           p-4 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
             <img class="max-h-[25px]" src="/icons/icon-folderupload-outline.svg" />
             <span class="text-slate-900 text-sm">Add Folder</span>
@@ -56,3 +56,11 @@
   </div>
 
 </header>
+
+<ng-template #addFilesTemplate>
+  <app-addfilesform (closeForm)="closeModal()" />
+</ng-template>
+
+<ng-template #addFolderTemplate>
+  <app-addfolderform (closeForm)="closeModal()" />
+</ng-template>

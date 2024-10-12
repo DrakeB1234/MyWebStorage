@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MovefilemodalComponent } from './movefilemodal.component';
+import { AddfolderformComponent } from './addfolderform.component';
 
-describe('MovefilemodalComponent', () => {
-  let component: MovefilemodalComponent;
-  let fixture: ComponentFixture<MovefilemodalComponent>;
+describe('AddfolderformComponent', () => {
+  let component: AddfolderformComponent;
+  let fixture: ComponentFixture<AddfolderformComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MovefilemodalComponent]
+      imports: [AddfolderformComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MovefilemodalComponent);
+    fixture = TestBed.createComponent(AddfolderformComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

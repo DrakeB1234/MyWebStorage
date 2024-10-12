@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FileData } from '../../Models/filedata.model';
 import { FilesService } from '../services/files.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
@@ -6,19 +6,19 @@ import { firstValueFrom } from 'rxjs';
 
 // Components
 import { ShowfullfileComponent } from '../showfullfile/showfullfile.component';
-import { ConfirmdialogComponent } from '../confirmdialog/confirmdialog.component';
-import { MovefilemodalComponent } from '../movefilemodal/movefilemodal.component';
-import { MoveFile } from '../../Models/movefile.model';
+import { ModalService } from '../services/modal.service';
+import { MovefileformComponent } from "../forms/movefileform/movefileform.component";
 
 @Component({
   selector: 'app-showfiles',
   standalone: true,
-  imports: [AsyncPipe, ShowfullfileComponent, ConfirmdialogComponent, MovefilemodalComponent, CommonModule],
+  imports: [AsyncPipe, ShowfullfileComponent, CommonModule, MovefileformComponent],
   templateUrl: './showfiles.component.html',
 })
 export class ShowfilesComponent implements OnInit {
 
   filesService = inject(FilesService);
+  modalService = inject(ModalService);
   apiEndpoints: typeof this.filesService.apiEndpoints = this.filesService.apiEndpoints;
   files: FileData[] = [];
 
@@ -52,27 +52,52 @@ export class ShowfilesComponent implements OnInit {
     });
   }
 
-  // Confirm Dialog
-  isConfirmDialogOpen: boolean = false;
-  confirmDialogRes: boolean = false;
-  callbackFn: Function | null= null;
-  dialogMessage: string = "";
+  // Multiselect functions and modals
+  @ViewChild('deleteFileTemplate', { static: true }) deleteFileTemplate!: TemplateRef<any>;
+  @ViewChild('moveFileTemplate', { static: true }) moveFileTemplate!: TemplateRef<any>;
 
-  confirmDialog(callbackFn: Function, dialogMessage: string) {
-    this.callbackFn = callbackFn;
-    this.dialogMessage = dialogMessage;
-    this.isConfirmDialogOpen = true;
+  deleteFileModal () {
+    if (this.selectedFiles.length > 0) {
+      this.modalService.open({ 
+        title: `Delete all selected ${this.selectedFiles.length} files?`,
+        message: `This will delete all of the selected ${this.selectedFiles.length} files, there is no way to revert this action`, 
+        contentTemplate: this.deleteFileTemplate
+      }
+      );
+    }
   }
 
-  closeConfirmDialog() {
-    this.isConfirmDialogOpen = false;
+  moveFileModal () {
+    if (this.selectedFiles.length > 0) {
+      this.modalService.open({ 
+        title: `Move all selected ${this.selectedFiles.length} files`,
+        contentTemplate: this.moveFileTemplate
+      }
+      );
+    }
   }
 
-  handleCallback() {
-    if (this.callbackFn) this.callbackFn();
+  moveFileSubmitted(): void {
+    // Close full file and refresh data
+    this.filesService.refreshAllData();
   }
 
-  // Multiselect
+  getFilesFromIndex(): FileData[] | null {
+    if (this.selectedFiles.length > 0) {
+      let filesList: FileData[] = [];
+      this.selectedFiles.forEach((e: number) => {
+        filesList.push(this.files[e]);
+      });
+
+      return filesList;
+    }
+    return null;
+  }
+
+  closeModal() {
+    this.modalService.close();
+  }
+
   isMultiSelectOpen: boolean = false;
   isMultiSelectOptionsOpen: boolean = false;
   selectedFiles: number[] = [];
@@ -139,36 +164,6 @@ export class ShowfilesComponent implements OnInit {
     this.closeMultiSelect();
   }
 
-  moveFileSelection(fileDestination: any): void {
-
-    this.selectedFiles.forEach(async e => {
-      const file = this.files[e];
-      const formData = { 
-        FileName: file.fileName, 
-        FilePath: file.fileDirectoryName,
-        FileDestination: fileDestination 
-      } as MoveFile;
-      
-      try {
-        const data = await firstValueFrom(this.filesService.moveFile(formData));
-        this.selectedFileCurrCount++;
-      } catch (error: any) {
-        // Append error message
-        this.errorMessage.push(error.error.message);
-        this.selectedFileCurrCount++;
-      }
-    });
-
-    // At end of function, reset values, refresh files
-    this.closeMultiSelect();
-    this.showMoveFile = false;
-    this.filesService.refreshAllData();
-  }
-
-  getMoveFileData(fileDestination: any) {
-    this.moveFileSelection(fileDestination);
-  }
-
   deleteFileSelection() {
     this.selectedFiles.forEach(async e => {
       const file = this.files[e];
@@ -185,6 +180,7 @@ export class ShowfilesComponent implements OnInit {
     // At end of function, reset values, refresh files
     this.filesService.refreshFiles();
     this.closeMultiSelect();
+    this.closeModal();
   }
 
   resetFileSelection() {
@@ -195,13 +191,6 @@ export class ShowfilesComponent implements OnInit {
   isShowFullFileOpen: boolean = false;
   fullFile: FileData | null = null;
   fullFileIndex: number | null = null;
-  showMoveFile: boolean = false;
-
-  toggleMoveFile() {
-    if (this.selectedFiles.length > 0) {
-      this.showMoveFile = !this.showMoveFile;
-    }
-  }
   
   openShowFullFile(file: FileData, index: number) {
     this.fullFile = file;
