@@ -18,6 +18,7 @@ export class ShowfullfileComponent implements OnInit {
 
   filesService = inject(FilesService);
   modalService = inject(ModalService);
+  videoUrl: string = "";
 
   fileCreationDate: Date | null = null;
   timeOptions: Intl.DateTimeFormatOptions = {
@@ -30,6 +31,39 @@ export class ShowfullfileComponent implements OnInit {
     // Convert file.fileCreationDate to date
     if (this.file !== null) {
       this.fileCreationDate = new Date(this.file.fileCreationDate);
+
+      // If file is document, then make api call to get file
+      // if (this.file.fileType === "document") {
+      //   this.filesService.getFile(this.file.fileName).subscribe({
+      //     next: (blob: any) => {
+      //       const reader = new FileReader();
+      //       reader.onload = () => {
+      //         this.documentFile = reader.result as string; 
+      //       };
+      //       reader.onerror = () => {
+      //         this.documentFile = `Failed to read file ${this.file?.fileName}`;
+      //       };
+      //       reader.readAsText(blob); // Read the blob as text
+      //     },
+      //     error: (err: any) => {
+      //       console.log(err)
+      //       this.documentFile = `Failed to retrieve file ${this.file?.fileName}`;
+      //     }
+      //   })
+      // }
+
+      // If file is video, then make api call to get file
+      if (this.file.fileType === "video") {
+        this.filesService.getVideo(this.file.fileName).subscribe({
+          next: (blob: any) => {
+            this.videoUrl = URL.createObjectURL(blob);
+            console.log(this.videoUrl)
+          },
+          error: (err: any) => {
+            console.log(err)
+          }
+        })
+      }
     }
   }
 

@@ -19,21 +19,21 @@
         <!-- Functions -->
          <div class="flex flex-col gap-1 p-1 [&>button]:h-[40px] [&>button]:p-2">
           <button (click)="addFilesModal()" class="flex gap-2 items-center
-          p-4 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+          p-4 hover:bg-gray-200 rounded-md transition-colors ease-in duration-75">
             <img class="max-h-[25px]" src="/icons/icon-fileupload-outline.svg" />
             <span class="text-slate-900 text-sm">Upload Files</span>
           </button>
           <button (click)="addFolderModal()" class="flex gap-2 items-center
-          p-4 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+          p-4 hover:bg-gray-200 rounded-md transition-colors ease-in duration-75">
             <img class="max-h-[25px]" src="/icons/icon-folderupload-outline.svg" />
             <span class="text-slate-900 text-sm">Add Folder</span>
           </button>
         </div>
 
         <!-- Stats -->
-        <div class="flex flex-col gap-1 p-1 [&>button]:h-[40px] [&>button]:p-2">
+        <div (click)="toggleServerInfo()" class="flex flex-col gap-1 p-1 [&>button]:h-[40px] [&>button]:p-2">
           <button class="flex gap-2 items-center
-          p-4 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+          p-4 hover:bg-gray-200 rounded-md transition-colors ease-in duration-75">
             <img class="max-h-[25px]" src="/icons/icon-server-outline.svg" />
             <span class="text-slate-900 text-sm">Server Info</span>
           </button>
@@ -42,7 +42,7 @@
         <!-- Signout -->
         <div class="flex flex-col gap-1 p-1 [&>button]:h-[40px] [&>button]:p-2">
           <button (click)="this.authService.deleteLocalToken()" class="flex gap-2 items-center
-          p-4 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
+          p-4 hover:bg-gray-200 rounded-md transition-colors ease-in duration-75">
             <img class="max-h-[25px]" src="/icons/icon-signout-outline.svg" />
             <span class="text-slate-900 text-sm">Sign Out</span>
           </button>
@@ -56,6 +56,8 @@
   </div>
 
 </header>
+
+<app-serverinfo *ngIf="isServerInfoOpen" (toggleServerInfo)="toggleServerInfo()" />
 
 <ng-template #addFilesTemplate>
   <app-addfilesform (closeForm)="closeModal()" />

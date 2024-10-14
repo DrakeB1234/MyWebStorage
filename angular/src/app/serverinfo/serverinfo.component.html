@@ -1,0 +1,63 @@
+<div class="absolute inset-0 bg-black/50 overflow-hidden z-30">
+  <div class="flex justify-center p-2 md:p-4 md:pt-[5%]">
+    <div class="flex flex-col bg-white rounded-md w-screen max-w-[500px] pb-4 shadow-md">
+
+      <div class="flex justify-between items-center text-lg p-4 pb-2 rounded-md">
+        <p>Server Console</p>
+        <div (click)="closeServerInfo()" class="p-2 cursor-pointer hover:bg-gray-200 rounded-md">
+          <img class="max-h-[18px]" src="/icons/icon-exit-black-outline.svg" />
+        </div>
+      </div>
+      <div class="flex items-end gap-1 border-b-2 p-4 rounded-md">
+        <img class="max-h-[30px]" src="/icons/icons8-raspberry-pi.svg" />
+        <p>Raspberry Pi 4 2gb</p>
+      </div>
+
+      @if (!serverInfo?.serverCurrentStorage) {
+        <div class="flex flex-col justify-center gap-1 border-gray-100 border-b-2 p-4 rounded-md font-light">
+          <div class="flex gap-1">
+            <img class="max-h-[20px]" src="/icons/icon-folder-outline.svg" />
+            <p>Storage</p>
+          </div>
+
+          <p class="text-blue-700 font-normal mt-2 text-sm">{{serverInfo?.serverCurrentStorageFormat}} / {{serverInfo?.serverMaxStorageFormat}}</p>
+          <!-- Progress bar -->
+          <div class="w-full bg-gray-200 rounded-full mt-2">
+            <div class="bg-blue-500 p-1 rounded-full text-xs leading-none text-center" [style.width.%]="(118 / 500) * 100"></div>
+          </div>
+        </div>
+        <div class="flex flex-col justify-center gap-1 border-gray-100 border-b-2 p-4 rounded-md font-light">
+          <div class="flex gap-1">
+            <img class="max-h-[20px]" src="/icons/icon-fileupload-outline.svg" />
+            <p>Stored Files</p>
+          </div>
+
+          <p class="text-blue-800 font-normal mt-2">{{serverInfo?.storedFiles}} files</p>
+        </div>
+
+        <div class="flex flex-col justify-center gap-1 border-gray-100 border-b-2 p-4 rounded-md font-light">
+          <div class="flex gap-1">
+            <img class="max-h-[20px]" src="/icons/icon-temp-outline.svg" />
+            <p>Server Temperture</p>
+          </div>
+          <p class="text-red-700 font-normal">{{serverInfo?.serverTemperture}}&deg;c</p>
+        </div>
+        <div class="flex flex-col justify-center gap-1 border-gray-100 border-b-2 p-4 rounded-md font-light">
+          <div class="flex gap-1">
+            <img class="max-h-[20px]" src="/icons/icon-time-outline.svg" />
+            <p>Uptime</p>
+          </div>
+
+          <p class="text-blue-800 font-normal mt-2">00:00:00:00</p>
+        </div>
+      }
+      @else {
+        <div class="flex flex-col items-center justify-center gap-1 border-gray-100 border-b-2 p-4 rounded-md font-light">
+
+          <p class="text-blue-800 font-normal mt-2">Failed to get server info</p>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

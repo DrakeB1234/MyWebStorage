@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FilesService } from '../services/files.service';
 import { AuthService } from '../services/auth.service';
 import { ModalService } from '../services/modal.service';
 import { AddfilesformComponent } from "../forms/addfilesform/addfilesform.component";
 import { AddfolderformComponent } from "../forms/addfolderform/addfolderform.component";
+import { ServerinfoComponent } from "../serverinfo/serverinfo.component";
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, AddfilesformComponent, AddfolderformComponent],
+  imports: [CommonModule, AddfilesformComponent, AddfolderformComponent, ServerinfoComponent],
   templateUrl: './header.component.html',
 })
 export class HeaderComponent implements OnInit {
@@ -19,6 +20,7 @@ export class HeaderComponent implements OnInit {
   modalService = inject(ModalService);
   currentPath = "";
   isDropdownOpen: boolean = false;
+  isServerInfoOpen: boolean = false;
 
   ngOnInit(): void {
     this.currentPath = this.filesService.getCurrentPath();
@@ -74,6 +76,11 @@ export class HeaderComponent implements OnInit {
 
   closeModal(): void {
     this.modalService.close();
+  }
+
+  toggleServerInfo() {
+    this.isServerInfoOpen = !this.isServerInfoOpen;
+    this.toggleDropdown();
   }
 
   @HostListener('document:click', ['$event'])

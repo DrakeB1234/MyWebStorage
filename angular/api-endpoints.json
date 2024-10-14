@@ -1,7 +1,8 @@
 {
   "getAllFilePaths": "Files/GetAllFilePaths/",
   "getCompressedImage": "Files/GetCompressedImage/",
-  "getFullImage": "Files/getFullImage/",
+  "getFile": "Files/GetFile/",
+  "getVideo": "Files/GetFile/",
   "addFile": "Files/AddFile",
   "getAllDirectories": "Folder/GetAllDirectories/",
   "getAllRootDirectories": "Folder/GetAllRootDirectories",
@@ -12,5 +13,6 @@
   "downloadFile": "Files/DownloadFile/",
   "deleteFile": "Files/DeleteFile",
   "signIn": "Auth/Signin",
-  "authenticate": "Auth/Authenticate"
+  "authenticate": "Auth/Authenticate",
+  "serverInfo": "Files/ServerInfo"
 }

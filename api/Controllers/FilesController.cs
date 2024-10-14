@@ -2,12 +2,15 @@ using System.Net;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using LibreHardwareMonitor.Hardware;
 using api.Models;
 using api.Helpers;
 
@@ -24,6 +27,10 @@ namespace api.Controllers
         private readonly string? rootPath;
         private readonly TimeSpan ImageCacheTimeDays;
         private readonly double ImageCacheTimeSeconds;
+        private readonly List<string> imageExtensions;
+        private readonly List<string> videoExtensions;
+        private readonly List<string> documentExtensions;
+
         
         public FilesController()
         {
@@ -38,9 +45,11 @@ namespace api.Controllers
             // Convert cache time into days, then seconds
             this.ImageCacheTimeDays = TimeSpan.FromDays(config.GetValue<int>("ImageCacheTimeDays"));
             this.ImageCacheTimeSeconds = this.ImageCacheTimeDays.TotalSeconds;
-        }
 
-        // HAVE TO HAVE WAY TO FIX ENTERING IN SUB DIRS!!!
+            this.imageExtensions = config.GetSection("ImageExtensions").Get<List<string>>();
+            this.videoExtensions = config.GetSection("VideoExtensions").Get<List<string>>();
+            this.documentExtensions = config.GetSection("DocumentExtensions").Get<List<string>>();
+        }
         
         [HttpGet("GetAllFilePaths/{_paramspath?}")]
         public IActionResult GetAllFilePaths(string? _paramspath)
@@ -60,11 +69,8 @@ namespace api.Controllers
                 let filename = Path.GetFileName(filePath)
                 select filename;
 
-            var imageExtensions = config.GetSection("ImageExtensions").Get<List<string>>();
-            var videoExtensions = config.GetSection("VideoExtensions").Get<List<string>>();
-
             // Check for null extensions (sastifies complier ig)
-            if (imageExtensions == null || videoExtensions == null) {
+            if (imageExtensions == null || videoExtensions == null || documentExtensions == null) {
                 return StatusCode(500, new { Files = fileList, Message = "Internal Server Error: App config is not properly set up" });
             }
 
@@ -81,6 +87,10 @@ namespace api.Controllers
                 else if (videoExtensions.Contains(fileExtension))
                 {
                     fileExtension = "video";
+                }
+                else if (documentExtensions.Contains(fileExtension))
+                {
+                    fileExtension = "document";
                 }
                 else {
                     fileExtension = "file";
@@ -101,18 +111,6 @@ namespace api.Controllers
 
         // FIX THIS, temp fix to allow frontend to make req as <img> src tags do not allow headers for auth
         // Potential solution, use blob urls for frontend (PITA)
-        [AllowAnonymous]
-        [HttpGet("GetFullImage/{_paramspath}")]
-        public IActionResult GetFullImage(string _paramspath)
-        {
-            // Decode url encoding from _parampath to make readable by code
-            _paramspath = WebUtility.UrlDecode(_paramspath);
-
-            var image = System.IO.File.OpenRead(rootPath + "/" + _paramspath);
-
-            return File(image, "image/jpeg", _paramspath);
-        }
-
         [AllowAnonymous]
         [HttpGet("GetCompressedImage/{_paramspath}")]
         public IActionResult GetCompressedImage(string _paramspath)
@@ -156,6 +154,58 @@ namespace api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = $"Error processing image: {ex.Message}" });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("GetFile/{_paramspath}")]
+        public async Task<IActionResult> GetFile(string _paramspath)
+        {
+            // Decode url encoding from _parampath to make readable by code
+            _paramspath = WebUtility.UrlDecode(_paramspath);
+            var loadFilePath = rootPath + "/" + _paramspath;
+
+            try
+            {
+                // Check if the file exists
+                if (!System.IO.File.Exists(loadFilePath))
+                {
+                    return NotFound(new { message = "File not found" });
+                }
+
+                byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(loadFilePath);
+
+                return File(fileBytes, "application/octet-stream", _paramspath);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Error processing file: {ex.Message}" });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("GetVideo/{_paramspath}")]
+        public async Task<IActionResult> GetVideo(string _paramspath)
+        {
+            // Decode url encoding from _parampath to make readable by code
+            _paramspath = WebUtility.UrlDecode(_paramspath);
+            var loadFilePath = rootPath + "/" + _paramspath;
+
+            try
+            {
+                // Check if the file exists
+                if (!System.IO.File.Exists(loadFilePath))
+                {
+                    return NotFound(new { message = "Video not found" });
+                }
+
+                byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(loadFilePath);
+
+                return File(fileBytes, "video/mp4", _paramspath);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Error processing video: {ex.Message}" });
             }
         }
 
@@ -212,13 +262,15 @@ namespace api.Controllers
             // Decode url encoding from _parampath to make readable by code
             downloadPath = WebUtility.UrlDecode(downloadPath);
             var checkPath = rootPath + $"/{downloadPath}";
+            string fileExtension = Path.GetExtension(downloadPath);
 
             // Check if file exists
             if (System.IO.File.Exists(checkPath))
             {
                 var image = System.IO.File.OpenRead(rootPath + $"/{downloadPath}");
 
-                return File(image, "image/jpeg", downloadPath);
+                // Uses this MIME type to allow different file types to be downloaded and not forced to one type
+                return File(image, "application/octet-stream", downloadPath);
             }
             else
             {
@@ -249,6 +301,93 @@ namespace api.Controllers
             {
                 return NotFound(new { message = "File does not exist" });
             }        
+        }
+
+        [HttpGet("ServerInfo")]
+        public IActionResult ServerInfo()
+        {       
+            // Try to get server current storage data
+            var currentServerInfo = new ServerInfoModel();     
+            try
+            {
+                string driveLetter = Regex.Match(rootPath, @"^[a-zA-Z]:").Value;
+
+                // Check if drive letter is valid
+                if (!driveLetter.EndsWith(":")) 
+                {
+                    driveLetter += ":";
+                }
+
+                // Create a DriveInfo object for the specified drive
+                DriveInfo drive = new DriveInfo(driveLetter);
+
+                if (!drive.IsReady)
+                {
+                    return BadRequest("Drive is not ready.");
+                }
+
+                // Assign Values
+                long totalSpace = drive.TotalSize;
+                long freeSpace = drive.TotalFreeSpace;
+                long usedSpace = totalSpace - freeSpace;
+
+                currentServerInfo.ServerCurrentStorage = usedSpace;
+                currentServerInfo.ServerMaxStorage = totalSpace;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Error getting storage data: {ex.Message}" });
+            }
+
+            // Get total amount of files from root 
+            try
+            {
+                // Check if the directory exists
+                if (!Directory.Exists(rootPath))
+                {
+                    return NotFound($"Directory '{rootPath}' not found.");
+                }
+
+                var files = Directory.GetFiles(rootPath, "*", SearchOption.AllDirectories);
+
+                currentServerInfo.StoredFiles = files.Length;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Error getting amount of files from root: {ex.Message}" });
+            }
+
+            // Get server cpu temp 
+            try
+            {
+                var computer = new Computer
+                {
+                    IsCpuEnabled = true // Enable CPU sensors
+                };
+                computer.Open();
+
+                foreach (var hardware in computer.Hardware)
+                {
+                    if (hardware.HardwareType == HardwareType.Cpu)
+                    {
+                        hardware.Update(); // Update sensor data
+
+                        foreach (var sensor in hardware.Sensors)
+                        {
+                            if (sensor.SensorType == SensorType.Temperature)
+                            {
+                                currentServerInfo.ServerTemperture = sensor.Value;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Error getting amount of cpu temp from server: {ex.Message}" });
+            }
+
+            return Ok(new { data = currentServerInfo });
         }
     }
 }

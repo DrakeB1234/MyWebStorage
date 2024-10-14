@@ -6,6 +6,7 @@ import { FileData } from '../../Models/filedata.model';
 import { FolderData } from '../../Models/folderdata.model';
 import { environment } from '../../environments/environment.development';
 import { MoveFile } from '../../Models/movefile.model';
+import { ServerInfo } from '../../Models/serverinfo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,26 @@ export class FilesService {
     return this.http.get<FileData[]>(this.apiUrl + apiEndpoints.getAllFilePaths + encodeURIComponent(this.currentPath));
   }
 
+  // Return file by filename (documents)
+  getFile(fileName: string): Observable<any> {
+    // If no path, then root is assumed
+    if (this.currentPath == "") {
+      return this.http.get(this.apiUrl + apiEndpoints.getFile + fileName, { responseType: 'blob'});
+    }
+    // Encode URI after endpoint to ensure GET req can read data
+    return this.http.get(this.apiUrl + apiEndpoints.getFile + encodeURIComponent(this.currentPath + "/" + fileName), { responseType: 'blob' });
+  }
+
+  // Return video by filename
+  getVideo(fileName: string): Observable<any> {
+    // If no path, then root is assumed
+    if (this.currentPath == "") {
+      return this.http.get(this.apiUrl + apiEndpoints.getVideo + fileName, { responseType: 'blob'});
+    }
+    // Encode URI after endpoint to ensure GET req can read data
+    return this.http.get(this.apiUrl + apiEndpoints.getVideo + encodeURIComponent(this.currentPath + "/" + fileName), { responseType: 'blob' });
+  }
+
   addFile(data: any): Observable<any> {
     const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
     return this.http.post(this.apiUrl + apiEndpoints.addFile, data, { headers });
@@ -73,13 +94,8 @@ export class FilesService {
     return this.apiUrl + apiEndpoints.getCompressedImage + encodeURIComponent(this.currentPath + "/" + fileName);
   }
 
-  getFullImage(fileName: string): string {
-    // Used by <img> src to get image
-    if (this.currentPath == "") {
-      return this.apiUrl + apiEndpoints.getFullImage + fileName;
-    }
-    // Encode URI after endpoint to ensure GET req can read data
-    return this.apiUrl + apiEndpoints.getFullImage + encodeURIComponent(this.currentPath + "/" + fileName);
+  getServerInfo(): Observable<ServerInfo> {
+    return this.http.get<ServerInfo>(this.apiUrl + apiEndpoints.serverInfo);
   }
 
   // Folders

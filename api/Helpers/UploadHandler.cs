@@ -104,8 +104,6 @@ namespace api.Helpers
             {
                 uploadPath = rootPath + folderData.FolderPath;
 
-                Console.WriteLine(uploadPath);
-
                 // Check if provided folder path already exists to prevent creating sub dirs
                 if (!Directory.Exists(uploadPath))
                 {

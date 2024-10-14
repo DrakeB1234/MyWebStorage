@@ -1,0 +1,13 @@
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-inside-1_542_2" fill="white">
+<path d="M18 8C18 4.68629 20.6863 2 24 2V2C27.3137 2 30 4.68629 30 8V29H18V8Z"/>
+</mask>
+<path d="M15 8C15 3.02944 19.0294 -1 24 -1C28.9706 -1 33 3.02944 33 8H27C27 6.34315 25.6569 5 24 5C22.3431 5 21 6.34315 21 8H15ZM30 29H18H30ZM15 29V8C15 3.02944 19.0294 -1 24 -1V5C22.3431 5 21 6.34315 21 8V29H15ZM24 -1C28.9706 -1 33 3.02944 33 8V29H27V8C27 6.34315 25.6569 5 24 5V-1Z" fill="#263041" mask="url(#path-1-inside-1_542_2)"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M21 26.4141C16.383 27.7199 13 31.9649 13 37C13 43.0751 17.9249 48 24 48C30.0751 48 35 43.0751 35 37C35 31.9649 31.617 27.7199 27 26.4141V29.5815C29.9318 30.7683 32 33.6426 32 37C32 41.4183 28.4183 45 24 45C19.5817 45 16 41.4183 16 37C16 33.6426 18.0682 30.7683 21 29.5815V26.4141Z" fill="#263041"/>
+<circle cx="24" cy="37" r="6" fill="#263041"/>
+<rect x="23" y="7" width="2" height="26" rx="1" fill="#263041"/>
+<rect x="32" y="9" width="2" height="8" rx="1" transform="rotate(-90 32 9)" fill="#263041"/>
+<rect x="32" y="21" width="2" height="8" rx="1" transform="rotate(-90 32 21)" fill="#263041"/>
+<rect x="32" y="13" width="2" height="6" rx="1" transform="rotate(-90 32 13)" fill="#263041"/>
+<rect x="32" y="17" width="2" height="6" rx="1" transform="rotate(-90 32 17)" fill="#263041"/>
+</svg>

@@ -46,18 +46,43 @@
   gap-[0.1rem] place-self-center"
   >
       @for(file of files; track $index) {
-        <div class="relative flex-auto max-w-[180px] md:max-w-[250px] cursor-pointer" (click)="!isMultiSelectOpen ? openShowFullFile(file, $index) : addFileToSelection($index)">
+        <div [ngClass]="file.fileType === 'image' ? 
+        'relative flex-auto max-w-[180px] md:max-w-[250px] overflow-hidden cursor-pointer' : 
+        'relative flex-auto w-[125px] overflow-hidden cursor-pointer'" 
+        (click)="!isMultiSelectOpen ? openShowFullFile(file, $index) : addFileToSelection($index)">
 
           @if(file.fileType === "image") {
           <img
+            loading="lazy"
             class="object-cover rounded-md min-w-[100px] h-[120px] md:h-[150px] w-full"
             src="{{this.filesService.getCompressedImage(file.fileName)}}"
             alt="{{file.fileName}}"
             priority
           />
           }
+          @else if (file.fileType === "video") {
+            <div class="flex flex-col justify-center rounded-md h-[120px] md:h-[150px] w-full p-1 bg-white">
+              <img
+              loading="lazy"
+              class="h-[80px] self-center"
+              src="/pictures/icon-video-outline.png"
+              alt="{{file.fileName}}"
+              priority
+              />
+              <p class="overflow-hidden truncate text-center">{{file.fileName}}</p>
+            </div>
+          }
           @else {
-            <p>{{file.fileName}}</p>
+            <div class="flex flex-col justify-center rounded-md h-[120px] md:h-[150px] w-full p-1 bg-white">
+              <img
+              loading="lazy"
+              class="h-[80px] self-center"
+              src="/pictures/icon-document-outline.png"
+              alt="{{file.fileName}}"
+              priority
+              />
+              <p class="overflow-hidden truncate text-center">{{file.fileName}}</p>
+            </div>
           }
 
           <!-- If file is selected in multiselect, then show selection -->

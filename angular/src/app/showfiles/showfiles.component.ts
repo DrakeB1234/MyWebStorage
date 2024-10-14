@@ -43,6 +43,7 @@ export class ShowfilesComponent implements OnInit {
     this.filesService.getFiles().subscribe({
       next: (data: any) => {
         this.files = data.files;
+
         // Everytime data is refreshed, close multiselect
         this.closeMultiSelect();
       },
@@ -165,21 +166,25 @@ export class ShowfilesComponent implements OnInit {
   }
 
   deleteFileSelection() {
+    this.selectedFileCurrCount = 0;
     this.selectedFiles.forEach(async e => {
       const file = this.files[e];
       try {
         const data = await firstValueFrom(this.filesService.deleteFile(file.fileName));
         this.selectedFileCurrCount++;
+
       } catch (error: any) {
         // Append error message
         this.errorMessage.push(error.error.message);
         this.selectedFileCurrCount++;
       }
-    });
 
-    // At end of function, reset values, refresh files
-    this.filesService.refreshFiles();
-    this.closeMultiSelect();
+      // At end of function, reset values, refresh files
+      if (this.selectedFiles.length === this.selectedFileCurrCount) {
+        this.closeMultiSelect();
+        this.filesService.refreshFiles();
+      }
+    });
     this.closeModal();
   }
 
