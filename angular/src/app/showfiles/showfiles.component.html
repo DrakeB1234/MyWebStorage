@@ -3,7 +3,7 @@
   <div class="flex justify-between items-end">
     <p>Files</p>
     <div (click)="toggleMultiSelect()" class="flex gap-2 items-center p-1 pr-3 pl-3 rounded-md bg-blue-400 cursor-pointer hover:bg-blue-500">
-      <img class="h-[18px]" src="/icons/icon-select-outline.svg" alt="[]" />
+      <img class="h-[18px]" src="assets/icons/icon-select-outline.svg" alt="[]" />
       <p class="text-sm text-white font-medium">Select</p>
     </div>
   </div>
@@ -12,7 +12,7 @@
     <div class="flex items-center gap-2">
 
       <div (click)="resetFileSelection()" class="flex items-center gap-1 border-2 border-slate-200 hover:bg-slate-100 p-1 pr-2 pl-2 rounded-full cursor-pointer">
-        <img class="h-[15px]" src="/icons/icon-exit-black-outline.svg" alt="[]" />
+        <img class="h-[15px]" src="assets/icons/icon-exit-black-outline.svg" alt="[]" />
         <p>{{selectedFiles.length}} selected</p>
       </div>
       <div (click)="addAllToSelection()" class="flex items-center gap-2 border-2 border-slate-200 hover:bg-slate-100 p-1 pr-2 pl-2 rounded-full cursor-pointer">
@@ -21,21 +21,21 @@
       
     </div>
     <div (click)="toggleMultiSelectOptions()" class="relative flex items-center gap-2 hover:bg-slate-100 p-2 rounded-md cursor-pointer">
-      <img class="h-[15px]" src="/icons/icon-info-black-outline.svg" alt="[]" />
+      <img class="h-[15px]" src="assets/icons/icon-info-black-outline.svg" alt="[]" />
 
       <!-- Multi select options -->
        <div *ngIf="isMultiSelectOptionsOpen" class="flex flex-col absolute top-8 right-0 rounded-md bg-white shadow-md shadow-black/50 p-2 
        cursor-default w-screen max-w-[175px] text-sm font-normal">
        <button (click)="downloadFileSelection()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
-          <img class="h-[20px]" src="/icons/icon-upload-black-outline.svg" />
+          <img class="h-[20px]" src="assets/icons/icon-upload-black-outline.svg" />
           <span>Download Files</span>
         </button>
         <button (click)="moveFileModal()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
-          <img class="h-[20px]" src="/icons/icon-transfer-black-outline.svg" />
+          <img class="h-[20px]" src="assets/icons/icon-transfer-black-outline.svg" />
           <span>Move Files</span>
         </button>
         <button (click)="deleteFileModal()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
-          <img class="h-[20px]" src="/icons/icon-exit-black-outline.svg" />
+          <img class="h-[20px]" src="assets/icons/icon-exit-black-outline.svg" />
           <span>Delete Files</span>
         </button>
        </div>
@@ -65,7 +65,7 @@
               <img
               loading="lazy"
               class="h-[80px] self-center"
-              src="/pictures/icon-video-outline.png"
+              src="assets/pictures/icon-video-outline.png"
               alt="{{file.fileName}}"
               priority
               />
@@ -77,7 +77,7 @@
               <img
               loading="lazy"
               class="h-[80px] self-center"
-              src="/pictures/icon-document-outline.png"
+              src="assets/pictures/icon-document-outline.png"
               alt="{{file.fileName}}"
               priority
               />
@@ -88,7 +88,7 @@
           <!-- If file is selected in multiselect, then show selection -->
            <div *ngIf="selectedFiles.includes($index)" class="absolute top-1 right-1">
             <div class="rounded-full p-1 border-2 border-white bg-blue-500">
-              <img class="h-[15px] text-white" src="/icons/icon-checkmark-outline.svg" alt="[]" />
+              <img class="h-[15px] text-white" src="assets/icons/icon-checkmark-outline.svg" alt="[]" />
             </div>
            </div>
 

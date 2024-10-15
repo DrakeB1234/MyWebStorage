@@ -4,25 +4,25 @@
     <div class="flex justify-between w-full bg-zinc-800 text-white p-3">
       <div class="flex gap-2 z-[31]">
         <div (click)="toggleShowFileFunctions()" class="p-2 rounded-md hover:bg-zinc-700 cursor-pointer transition-colors ease-in duration-75">
-          <img class="h-[20px]" src="/icons/icon-info-outline.svg" />
+          <img class="h-[20px]" src="assets/icons/icon-info-outline.svg" />
           
           <!-- File Functions Dropdown -->
           <div *ngIf="showFileFunctions" class="absolute bg-zinc-600 top-[60px] left-[0] w-screen max-w-[250px] cursor-default">
             <div class="flex flex-col gap-2 p-2 pb-4 sm:text-sm z-[32]">
               @if (this.file !== null) {
                 <div class="flex justify-end cursor-pointer p-2 pb-0 rounded-md">
-                  <img class="h-[20px]" src="/icons/icon-exit-outline.svg" />
+                  <img class="h-[20px]" src="assets/icons/icon-exit-outline.svg" />
                 </div>
                 <div (click)="downloadFile()" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
-                  <img class="h-[20px]" src="/icons/icon-upload-outline.svg" />
+                  <img class="h-[20px]" src="assets/icons/icon-upload-outline.svg" />
                   <p class="font-semibold">Download File</p>
                 </div>
                 <div (click)="moveFileModal()" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
-                  <img class="h-[20px]" src="/icons/icon-transfer-outline.svg" />
+                  <img class="h-[20px]" src="assets/icons/icon-transfer-outline.svg" />
                   <p class="font-semibold">Move File</p>
                 </div>
                 <div (click)="deleteFileModal()" class="flex items-center gap-2 p-3 rounded-md hover:bg-zinc-500 cursor-pointer transition-colors ease-in duration-75">
-                  <img class="h-[20px]" src="/icons/icon-exit-outline.svg" />
+                  <img class="h-[20px]" src="assets/icons/icon-exit-outline.svg" />
                   <p class="font-semibold">Delete File</p>
                 </div>
               }
@@ -33,7 +33,7 @@
           </div>
         </div>
         <div (click)="toggleShowFileDetail()" class="relative p-2 rounded-md hover:bg-zinc-700 cursor-pointer transition-colors ease-in duration-75">
-          <img class="h-[20px]" src="/icons/icon-details-outline.svg" />
+          <img class="h-[20px]" src="assets/icons/icon-details-outline.svg" />
 
             <!-- File Details Dropdown -->
             <div *ngIf="showFileDetails" class="absolute bg-zinc-600 top-[48px] left-[-56px] w-screen max-w-[300px] cursor-default">
@@ -41,7 +41,7 @@
                 @if (this.file !== null) {
                   <div class="flex justify-between gap-2">
                     <p class="font-bold">{{file.fileName}}</p>
-                    <img class="h-[20px] cursor-pointer" src="/icons/icon-exit-outline.svg" />
+                    <img class="h-[20px] cursor-pointer" src="assets/icons/icon-exit-outline.svg" />
                   </div>
                   <p class="font-light mb-2">{{file.fileDirectoryName}}</p>
                   <p class="font-bold">Size</p>
@@ -58,7 +58,7 @@
         </div>
       </div>
       <div (click)="this.toggleShowFullFile()" class="p-2 rounded-md hover:bg-zinc-700 cursor-pointer transition-colors ease-in duration-75 z-[31]">
-        <img class="h-[20px]" src="/icons/icon-exit-outline.svg" />
+        <img class="h-[20px]" src="assets/icons/icon-exit-outline.svg" />
       </div>
     </div>
     <!-- Image -->
@@ -85,7 +85,7 @@
           <div class="flex flex-col justify-center items-center h-full p-1 md:p-4 lg:p-6 pt-4 pb-4">
             <img
               class="object-contain max-h-[700px]"
-              src="/pictures/icon-document-outline.png"
+              src="assets/pictures/icon-document-outline.png"
               alt="{{file.fileName}}"
               priority
             />

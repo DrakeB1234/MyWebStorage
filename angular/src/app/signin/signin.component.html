@@ -1,6 +1,6 @@
 <section class="flex flex-col items-center h-screen p-2 pb-6 bg-slate-100">
   <div class="flex justify-center items-center gap-2 w-full p-2 pb-4">
-    <img src="pictures/MyWebStorage.png" class="h-12" />
+    <img src="assets/pictures/MyWebStorage.png" class="h-12" />
     <p class="text-xl font-semibold text-gray-950">MyWebStorage</p>
   </div>
   <form [formGroup]="loginForm" (ngSubmit)="submitLogin()"
@@ -31,10 +31,10 @@
       <!-- Password show toggle -->
       <div (click)="toggleShowPassword()" class="absolute right-[1px] top-[33px] flex items-center h-[47px] pr-2 pl-2 rounded-r-md cursor-pointer hover:bg-gray-100">
         @if (!showPassword) {
-          <img class="h-8" src="/icons/icon-eyeshow-outline.svg" />
+          <img class="h-8" src="assets/icons/icon-eyeshow-outline.svg" />
         }
         @else {
-          <img class="h-8" src="/icons/icon-eyehidden-outline.svg" />
+          <img class="h-8" src="assets/icons/icon-eyehidden-outline.svg" />
         }
       </div>
     </div>

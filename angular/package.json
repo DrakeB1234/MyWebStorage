@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "watch": "ng build",
     "test": "ng test",
     "serve:ssr:MyWebStorage": "node dist/my-web-storage/server/server.mjs"
   },
@@ -21,6 +21,7 @@
     "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.5",
+    "@nguniversal/express-engine": "^7.0.1",
     "exif-js": "^2.3.0",
     "express": "^4.18.2",
     "rxjs": "~7.8.0",

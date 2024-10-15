@@ -4,8 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import apiEndpoints from '../../../api-endpoints.json';
 import { FileData } from '../../Models/filedata.model';
 import { FolderData } from '../../Models/folderdata.model';
-import { environment } from '../../environments/environment.development';
-import { MoveFile } from '../../Models/movefile.model';
+import { environment } from '../../environments/environment';
 import { ServerInfo } from '../../Models/serverinfo.model';
 
 @Injectable({

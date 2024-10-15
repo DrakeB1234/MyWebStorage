@@ -1,8 +1,8 @@
 <div class="flex items-center bg-slate-300 text-slate-900 text-md p-1 px-2 md:px-6 w-full">
   <button *ngIf="currentPath !== 'My Web Storage'" (click)="previousPath()" class="p-2 mr-2 rounded-md hover:bg-slate-200">
-    <img src="icons/icon-left-outline.svg" class="h-[18px]"/>
+    <img src="assets/icons/icon-left-outline.svg" class="h-[18px]"/>
   </button>
-  <img src="icons/icon-folder-outline.svg" class="h-[18px]"/>
+  <img src="assets/icons/icon-folder-outline.svg" class="h-[18px]"/>
   <div class="p-2">
     @if (currentPath == "My Web Storage") {
       <p>{{currentPath}}</p>
@@ -12,16 +12,16 @@
     }
   </div>
   <button (click)="toggleFolderFunctions()" *ngIf="currentPath !== 'My Web Storage'" class="relative p-2 rounded-md hover:bg-slate-200 ml-auto md:mr-6">
-    <img src="icons/icon-info-black-outline.svg" class="h-[18px]"/>
+    <img src="assets/icons/icon-info-black-outline.svg" class="h-[18px]"/>
 
     <!-- Folder Functions -->
      <div *ngIf="isFolderFunctionsOpen" class="absolute top-[42px] right-0 p-2 bg-white w-screen max-w-[175px] rounded-md shadow-md text-sm">
         <button (click)="renameFolderModal()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md w-full">
-          <img class="h-[20px]" src="/icons/icon-folder-outline.svg" />
+          <img class="h-[20px]" src="assets/icons/icon-folder-outline.svg" />
           <span class="text-slate-900">Rename Folder</span>
         </button>
         <button (click)="deleteFolderModal()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md w-full">
-          <img class="h-[20px]" src="/icons/icon-exit-black-outline.svg" />
+          <img class="h-[20px]" src="assets/icons/icon-exit-black-outline.svg" />
           <span class="text-slate-900">Delete Folder</span>
         </button>
      </div>

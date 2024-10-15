@@ -5,14 +5,14 @@
       <div (click)="toggleDropdown()" class="p-3 cursor-pointer
       transition-background ease-in duration-150 bg-none hover:bg-slate-200
       ">
-        <img class="h-[18px]" src="/icons/icon-menu-outline.svg" alt="[]" />
+        <img class="h-[18px]" src="assets/icons/icon-menu-outline.svg" alt="[]" />
       </div>
 
       <div *ngIf="isDropdownOpen" class="absolute w-screen max-w-[300px]
       bg-white rounded-r-md shadow-xl shadow-black/60 cursor-default z-20 [&>:not(:last-child)]:border-b-[1px] [&>:not(:first-child)]:py-3">
 
       <div class="flex items-center gap-2 p-3 bg-slate-200 rounded-tr-md">
-        <img src="favicon.ico" class="h-10" />
+        <img src="assets/favicon.ico" class="h-10" />
         <p class="text-base text-gray-950">My Web Storage</p>
       </div>
         
@@ -20,12 +20,12 @@
          <div class="flex flex-col gap-1 p-1 [&>button]:h-[40px] [&>button]:p-2">
           <button (click)="addFilesModal()" class="flex gap-2 items-center
           p-4 hover:bg-gray-200 rounded-md transition-colors ease-in duration-75">
-            <img class="max-h-[25px]" src="/icons/icon-fileupload-outline.svg" />
+            <img class="max-h-[25px]" src="assets/icons/icon-fileupload-outline.svg" />
             <span class="text-slate-900 text-sm">Upload Files</span>
           </button>
           <button (click)="addFolderModal()" class="flex gap-2 items-center
           p-4 hover:bg-gray-200 rounded-md transition-colors ease-in duration-75">
-            <img class="max-h-[25px]" src="/icons/icon-folderupload-outline.svg" />
+            <img class="max-h-[25px]" src="assets/icons/icon-folderupload-outline.svg" />
             <span class="text-slate-900 text-sm">Add Folder</span>
           </button>
         </div>
@@ -34,7 +34,7 @@
         <div (click)="toggleServerInfo()" class="flex flex-col gap-1 p-1 [&>button]:h-[40px] [&>button]:p-2">
           <button class="flex gap-2 items-center
           p-4 hover:bg-gray-200 rounded-md transition-colors ease-in duration-75">
-            <img class="max-h-[25px]" src="/icons/icon-server-outline.svg" />
+            <img class="max-h-[25px]" src="assets/icons/icon-server-outline.svg" />
             <span class="text-slate-900 text-sm">Server Info</span>
           </button>
         </div>
@@ -43,7 +43,7 @@
         <div class="flex flex-col gap-1 p-1 [&>button]:h-[40px] [&>button]:p-2">
           <button (click)="this.authService.deleteLocalToken()" class="flex gap-2 items-center
           p-4 hover:bg-gray-200 rounded-md transition-colors ease-in duration-75">
-            <img class="max-h-[25px]" src="/icons/icon-signout-outline.svg" />
+            <img class="max-h-[25px]" src="assets/icons/icon-signout-outline.svg" />
             <span class="text-slate-900 text-sm">Sign Out</span>
           </button>
         </div>

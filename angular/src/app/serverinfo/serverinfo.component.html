@@ -5,18 +5,18 @@
       <div class="flex justify-between items-center text-lg p-4 pb-2 rounded-md">
         <p>Server Console</p>
         <div (click)="closeServerInfo()" class="p-2 cursor-pointer hover:bg-gray-200 rounded-md">
-          <img class="max-h-[18px]" src="/icons/icon-exit-black-outline.svg" />
+          <img class="max-h-[18px]" src="assets/icons/icon-exit-black-outline.svg" />
         </div>
       </div>
       <div class="flex items-end gap-1 border-b-2 p-4 rounded-md">
-        <img class="max-h-[30px]" src="/icons/icons8-raspberry-pi.svg" />
+        <img class="max-h-[30px]" src="assets/icons/icons8-raspberry-pi.svg" />
         <p>Raspberry Pi 4 2gb</p>
       </div>
 
       @if (!serverInfo?.serverCurrentStorage) {
         <div class="flex flex-col justify-center gap-1 border-gray-100 border-b-2 p-4 rounded-md font-light">
           <div class="flex gap-1">
-            <img class="max-h-[20px]" src="/icons/icon-folder-outline.svg" />
+            <img class="max-h-[20px]" src="assets/icons/icon-folder-outline.svg" />
             <p>Storage</p>
           </div>
 
@@ -28,7 +28,7 @@
         </div>
         <div class="flex flex-col justify-center gap-1 border-gray-100 border-b-2 p-4 rounded-md font-light">
           <div class="flex gap-1">
-            <img class="max-h-[20px]" src="/icons/icon-fileupload-outline.svg" />
+            <img class="max-h-[20px]" src="assets/icons/icon-fileupload-outline.svg" />
             <p>Stored Files</p>
           </div>
 
@@ -37,14 +37,14 @@
 
         <div class="flex flex-col justify-center gap-1 border-gray-100 border-b-2 p-4 rounded-md font-light">
           <div class="flex gap-1">
-            <img class="max-h-[20px]" src="/icons/icon-temp-outline.svg" />
+            <img class="max-h-[20px]" src="assets/icons/icon-temp-outline.svg" />
             <p>Server Temperture</p>
           </div>
           <p class="text-red-700 font-normal">{{serverInfo?.serverTemperture}}&deg;c</p>
         </div>
         <div class="flex flex-col justify-center gap-1 border-gray-100 border-b-2 p-4 rounded-md font-light">
           <div class="flex gap-1">
-            <img class="max-h-[20px]" src="/icons/icon-time-outline.svg" />
+            <img class="max-h-[20px]" src="assets/icons/icon-time-outline.svg" />
             <p>Uptime</p>
           </div>
 
