@@ -76,7 +76,7 @@ namespace api.Controllers
             {
                 if (ex.Message.Contains("Could not find a part of the path"))
                 {
-                    return StatusCode(404, $"Could not find any directories under the path {Path.Combine(rootPath, _paramspath)}");
+                    return StatusCode(404, $"Could not find any directories under the path {rootPath + _paramspath}");
                 }
                 return StatusCode(500, ex.Message);
             }

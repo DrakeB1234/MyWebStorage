@@ -1,16 +1,18 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FilesService } from '../services/files.service';
 import { FolderData } from '../../Models/folderdata.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-showfolders',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './showfolders.component.html',
 })
 export class ShowfoldersComponent implements OnInit {
   filesService = inject(FilesService);
   folders: FolderData[] = [];
+  currentPath = "";
 
   ngOnInit(): void {
     this.getFoldersData();
@@ -19,6 +21,7 @@ export class ShowfoldersComponent implements OnInit {
     this.filesService.refreshFolders$.subscribe((shouldRefresh) => {
       if (shouldRefresh) {
         this.getFoldersData();
+        this.currentPath = this.filesService.getCurrentPath();
       }
     });
   }
@@ -39,8 +42,5 @@ export class ShowfoldersComponent implements OnInit {
 
     // Refresh data across app
     this.filesService.refreshAllData();
-  }
-
-  openFolderSettings(): void {
   }
 }

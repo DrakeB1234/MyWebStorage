@@ -1,0 +1,45 @@
+services:
+  angular-app:
+    build:
+      context: ./angular
+    container_name: angular-app
+    environment:
+      NODE_ENV: production
+    networks:
+      - ssr-network
+    ports:
+      - "4000:4000"
+
+  dotnet-api:
+    build:
+      context: ./api
+    container_name: dotnet-api
+    networks:
+      - ssr-network
+    ports:
+      - "5000:5000"
+    # Volume for host machine files, so api can read them
+    # Must also change dotnet appsettings to match this new path
+    volumes:
+      - C:/Photos:/system-files
+    env_file:
+      - ./api/.env
+    environment:
+      - ASPNETCORE_URLS=http://+:5000  # Set the app to listen on port 5000
+
+  proxy:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - angular-app
+      - dotnet-api
+    networks:
+      - ssr-network
+
+networks:
+  ssr-network:
+    driver: bridge

@@ -13,10 +13,9 @@ Env.Load();
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var apiKey = Environment.GetEnvironmentVariable("API_KEY");
 var frontendURL = Environment.GetEnvironmentVariable("FRONTEND_URL");
-var apiURL = Environment.GetEnvironmentVariable("API_URL");
 
 // Check for null config values, don't build app if there is any null values
-if (jwtSettings == null || apiKey == null || frontendURL == null || apiURL == null) {
+if (jwtSettings == null || apiKey == null || frontendURL == null) {
     return;
 }
 
@@ -58,11 +57,6 @@ builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
     }));
 
 var app = builder.Build();
-
-// Change the URL the API listens on
-if (apiURL != "") {
-    app.Urls.Add(apiURL);
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

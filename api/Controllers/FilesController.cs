@@ -63,6 +63,12 @@ namespace api.Controllers
 
             // Used to determine file type
             var provider = new FileExtensionContentTypeProvider();
+
+            // Check if directory exists
+            if (!Directory.Exists(getPath))
+            {
+                return BadRequest(new { Message = "Directory does not exist" });
+            }
      
             // LINQ
             var fileNames = from filePath in Directory.GetFiles(getPath, "*", SearchOption.TopDirectoryOnly)

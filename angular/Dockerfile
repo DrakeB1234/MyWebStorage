@@ -1,8 +1,8 @@
-# Stage 1
+# Stage 1, build angular image
 FROM node:18-alpine
 
 # Set the working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./

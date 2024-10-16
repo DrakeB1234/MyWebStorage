@@ -8,7 +8,7 @@
     </div>
   </div>
   
-  <div *ngIf="isMultiSelectOpen" class="flex justify-between items-center bg-white rounded-md shadow-md shadow-black/50 sticky top-2 p-2 text-sm font-medium z-10">
+  <div *ngIf="isMultiSelectOpen" class="flex justify-between items-center bg-white rounded-md shadow-sm shadow-black/30 sticky top-2 p-2 text-sm font-medium z-10">
     <div class="flex items-center gap-2">
 
       <div (click)="resetFileSelection()" class="flex items-center gap-1 border-2 border-slate-200 hover:bg-slate-100 p-1 pr-2 pl-2 rounded-full cursor-pointer">
@@ -24,7 +24,7 @@
       <img class="h-[15px]" src="assets/icons/icon-info-black-outline.svg" alt="[]" />
 
       <!-- Multi select options -->
-       <div *ngIf="isMultiSelectOptionsOpen" class="flex flex-col absolute top-8 right-0 rounded-md bg-white shadow-md shadow-black/50 p-2 
+       <div *ngIf="isMultiSelectOptionsOpen" class="flex flex-col absolute top-8 right-0 rounded-md bg-white shadow-md shadow-black/30 p-2 
        cursor-default w-screen max-w-[175px] text-sm font-normal">
        <button (click)="downloadFileSelection()" class="flex gap-2 items-center p-2 hover:bg-slate-200 rounded-md transition-colors ease-in duration-75">
           <img class="h-[20px]" src="assets/icons/icon-upload-black-outline.svg" />
