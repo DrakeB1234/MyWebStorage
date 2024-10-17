@@ -1,19 +1,43 @@
 <h1 align="center" style="font-weight: bold;">My Web Storage 💻</h1>
 
 <p align="center">
- <a href="#tech">Technologies</a> • 
+ <a href="#technologies">Technologies</a> • 
+  <a href="#environment">Environment</a> • 
   <a href="#routes">API Endpoints</a>
 </p>
 
 <p align="center">
-    <b>This repo includes both frontend and backend services to allow users to deploy their own server at home and save files to a directory of their choosing. I personally created this for my own use and hosting on a raspberry pi!</b>
+    <b>This repo includes both frontend and backend services to allow users to deploy their own server at home and save files to a directory of their choosing. 
+    I personally created this for my own use and hosting on a raspberry pi using docker!</b>
 </p>
 <hr>
 <h2 id="technologies">💻 Technologies</h2>
 
 - Angular 18
-- ASPNET WEB API
+- ASPNET API 8
 - Tailwind
+- Docker
+
+<hr>
+<h2 id="environment">🗄️ Environment</h2>
+
+<h4>Angular app</h4>
+
+- apiUrl - The url for the dotnet api (must be followed by /api/ to work properly)
+- example <code>apiUrl: http:localhost:4000/api/</code>     
+
+<h4>Dotnet api</h4>
+
+- MWS_USER - The username to login to the api
+- MWS_PASS - The password to login to the api
+- API_KEY - The secret for generating JWT tokens (must be at least 32 characters long)
+- FRONTEND_URL - The url for the angular app, sets this ip for dotnet to listen to
+
+<h4>Docker</h4>
+
+- docker-compose.yml
+  - May have to change the volume for the dotnet api to have access to host machine files
+  - example <code>volumes: C:/Photos:/system-files</code>     
 
 <hr>
 <h2 id="routes">📍 API Endpoints</h2>
@@ -195,6 +219,50 @@
 > | http code     | content-type                             | response                                                            |
 > |---------------|------------------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json`        | `{"code":"200","message":"Folder added successfully to {path}"}`                             |
+> | `400`         | `application/json`                       | `{"code":"400","message":"Bad Request"}`                            |
+
+</details><br><br>
+
+<code>/api/Folders/RenameDirectory</code> 
+<sub>Renames a specified folder</sub>
+
+<details>
+ <summary><code>PATCH</code></summary>
+
+##### Parameters
+
+> | name      |  type     | data type               | description                                                           |
+> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
+> | New Folder Name      |  required | string   | Name to change the existing folder  |
+> | Folder Path      |  required | string   | path of the old folder  |
+
+##### Responses
+
+> | http code     | content-type                             | response                                                            |
+> |---------------|------------------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`        | `{"code":"200","message":"Folder renamed successfully to {newFolderName}"}`                             |
+> | `400`         | `application/json`                       | `{"code":"400","message":"Bad Request"}`                            |
+
+</details><br><br>
+
+<code>/api/Folders/DeleteDirectory</code> 
+<sub>Deletes a specified folder</sub>
+
+<details>
+ <summary><code>DELETE</code></summary>
+
+##### Parameters
+
+> | name      |  type     | data type               | description                                                           |
+> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
+> | Folder Name      |  required | string   | Name of the folder to delete  |
+> | Folder Path      |  required | string   | path of the folder to delete  |
+
+##### Responses
+
+> | http code     | content-type                             | response                                                            |
+> |---------------|------------------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`        | `{"code":"200","message":"Folder deleted successfully}`                             |
 > | `400`         | `application/json`                       | `{"code":"400","message":"Bad Request"}`                            |
 
 </details><br><br>
